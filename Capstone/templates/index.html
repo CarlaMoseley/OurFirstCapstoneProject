@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-do list</title>
+    <link rel="stylesheet" href="static/style.css">
+
+    <!-- <script>
+        async function populateExcelSheetData() {
+            try {
+                document.getElementById('data-items').innerHTML = 'Loading Data...'
+
+                const data = await fetch('static', {
+                    method: 'GET',
+                    mode: 'cors'
+                }).then(res => res.json());
+
+                document.getElementById('data-items').innerHTML = JSON.stringify(data, null, 2);
+            } catch (e) {
+                alert('There was error');
+            }
+        }
+    </script> -->
+</head>
+ 
+<body>
+    
+    <div class="container">
+        <div class="section1">
+            <h1 id="title">TO DO LIST</h1>
+            <h3 for="new-task">Add Tasks</h3>
+            <p>
+                <input id="new-task" type="text">
+                <button id="addButton">Add</button>
+            </p>
+        </div>
+        <div class="section2">
+            <h3>To-do</h3>
+            <ul id="incomplete-tasks">
+ 
+            </ul>
+        </div>
+        <div class="section3">
+            <h3>Completed Tasks</h3>
+            <ul id="completed-tasks">
+                <!-- Initial completed task (you can remove this if not needed) -->
+            </ul>
+        </div>
+        <div class="section4">
+            <button id="clear">
+                <p>Clear</p>
+            </button>
+            <button id="dark_mode">
+                <p>
+                    Toggle dark mode
+                </p>
+            </button>
+            <button id="data-items" onclick="populateExcelSheetData()">
+                <p>
+                    Upload
+                </p>
+            </button>
+        </div>
+    </div>
+    <script src="static/script.js"></script>
+    <script src="static/darkmode.js"></script>
+
+</body>
+</html>
+
+ 
