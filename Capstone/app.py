@@ -1,8 +1,8 @@
 import pandas as pd
 from flask import Flask, jsonify, render_template, redirect, url_for, request, session, flash
-from src.connect import get_snowflake_connection
+#from src.connect import get_snowflake_connection
 from datetime import timedelta
-# from connect import get_snowflake_connection
+#from connect import get_snowflake_connection
 
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
@@ -63,38 +63,18 @@ def insert_data():
 
 
 @app.route("/")
-def home():
-    return render_template("login.html")
-
-
-@app.route("/file", methods=['GET'])
-def upload():
-    try:
-        filePath = 'first-flask-app\\todo_tasks_data.xlsx'
-        df = pd.read_excel(filePath)
-        rawData = df.values.tolist()
-
-        list = []
-
-        for data in rawData:
-            splitTask = data[0].split(", ")
-
-            task_map = {
-                "Task Name": splitTask[0],
-                "Date Created": splitTask[1],
-                "Date Completed": splitTask[2],
-                "Completion Status": splitTask[3],
-                "Priority": splitTask[4],
-                "Time to Complete": splitTask[5]
-            }
-
-            list.append(task_map)
-        return jsonify(list)
-
-    except Exception as e:
-        error_message = f"Error: {str(e)}"
-        return render_template('index.html', error=error_message)
-
+def start():
+    return render_template("start.html")
+@app.route("/start",  methods=['POST'])
+def handleButton():
+    user = request.json
+    print(user["buttonClicked"])
+    return user
+#Edit from here tomorrow
+@app.route('/login')
+def login():
+    # Check for redirects in the login route
+    return redirect(url_for('home'))
 
 @app.route('/index', methods=['POST'])
 def index():
@@ -125,10 +105,7 @@ def logout():
     return redirect(url_for('home'))
 
 
-@app.route('/login')
-def login():
-    # Check for redirects in the login route
-    return redirect(url_for('home'))
+
 
 
 app.run(debug=True)
