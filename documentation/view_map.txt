@@ -8,6 +8,7 @@
                 /payments – list of payments for given unit
             /createunit – create new unit page
             /expenses – collected expenses for all units
+            /createexpense - create new expense
             /payments – collected payments for all units
     /tenant – base url for tenant activities
         /login – login page for tenant
