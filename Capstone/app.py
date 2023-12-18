@@ -64,7 +64,6 @@ def insert_data():
 
 @app.route("/")
 def home():
-    insert_data()
     return render_template("login.html")
 
 
