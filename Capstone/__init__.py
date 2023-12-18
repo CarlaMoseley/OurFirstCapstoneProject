@@ -10,9 +10,9 @@ def create_app():
 
     with app.app_context():
         # import parts of the application
-        from .home import routes
-        from .tenant import routes
-        from .landlord import routes
+        from .home import routes as home
+        from .tenant import routes as tenant
+        from .landlord import routes as landlord
         from .assets import compile_static_assets
 
         # register blueprints
@@ -21,6 +21,6 @@ def create_app():
         app.register_blueprint(landlord.landlord_bp)
 
         # compile static assets
-        compile_static_assets(assets)
+        # compile_static_assets(assets)
 
         return app

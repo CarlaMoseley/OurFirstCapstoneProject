@@ -12,4 +12,4 @@ home_bp = Blueprint(
 def home():
     # insert logic for home page
     # user selects tenant or landlord 
-    pass
+    return "home"

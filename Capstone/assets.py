@@ -23,7 +23,7 @@ def compile_static_assets(assets):
     assets.register('home_style_bundle', home_style_bundle)
     assets.register('landlord_style_bundle', landlord_style_bundle)
     assets.register('tenant_style_bundle', tenant_style_bundle)
-    if app.config['FLASK_ENV'] == 'development':
+    if app.config['ENVIRONMENT'] == 'development':
         common_style_bundle.build()
         home_style_bundle.build()
         landlord_style_bundle.build()
