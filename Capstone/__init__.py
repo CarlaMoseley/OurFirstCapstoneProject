@@ -1,5 +1,9 @@
 from flask import Flask
 from flask_assets import Environment
+from flask_sqlalchemy import SQLAlchemy
+
+
+db = SQLAlchemy()
 
 def create_app():
     # create flask application
@@ -8,6 +12,8 @@ def create_app():
     assets = Environment() # create assets environment
     assets.init_app(app) # initialize flask-assets
 
+    db.init_app(app)
+    
     with app.app_context():
         # import parts of the application
         from .home import routes as home
