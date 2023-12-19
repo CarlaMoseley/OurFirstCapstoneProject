@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en"> 
-
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>Login Page</title> 
-    <link rel="stylesheet" href="static\loginstyle.css"> 
-</head> 
-
-<body> 
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <!--link rel="stylesheet" href="static\loginstyle.css"-->
+</head>
+ 
+<body>
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% for category, message in messages %}
          <div class="{{category}}" >
@@ -16,15 +16,15 @@
       {% endfor %}
     {% endwith %}
     <h1 id="title">Login</h1>
-    <button>Back</button>
-    
-    <form action="/Login-Handler" method="post">
+    <button id="Back">Back</button>
+   
+    <form action="/login_handler" method="post">
         <p><input type="text" id="username" name="username" class ="enter"placeholder="Username" required="Yes"></p>
         <p><input type="password" id="password" name="password" class="enter"placeholder="Password" required="Yes"></p>
         <p><input type="submit" id="Login" value="Login"></p>
     </form>
     <p id="signup">Not a User? Sign Up</p>
-    <script src= "static\loginscript.js"></script> 
-</body> 
-
-</html> 
+    <script src="{{ url_for('static', filename='loginscript.js') }}"></script>
+</body>
+ 
+</html>

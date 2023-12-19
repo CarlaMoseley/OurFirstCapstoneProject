@@ -2,21 +2,28 @@ const options = document.querySelectorAll('.option');
 options.forEach(element => {
     element.addEventListener('click', function handleClick(event) {
         const buttonClicked = event.target.id;
-        async function postData(url = "", data = {}) {
-            const response = await fetch(url, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify(data)
-            });
-            return response.json();
-          }
-          
-          postData("/start", {buttonClicked})
-            .then((data) => {
-              console.log(data);
-            });
-      element.setAttribute('style', 'background-color: yellow;');
+        fetch("/start", {
+            method: "post",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ button: buttonClicked })
+        })
+        .then(response => {
+            if (response.ok) {
+                // Redirect to the "/login" page
+                window.location.href = '/login/' + buttonClicked;
+            } else {
+                console.error('Failed to handle the response:', response);
+            }
+        })
+        .catch(error => {
+            console.error('Error during fetch:', error);
+        });
+ 
+        // Set background color to yellow
+        element.setAttribute('style', 'background-color: yellow;');
     });
-  });
+});
+ 
