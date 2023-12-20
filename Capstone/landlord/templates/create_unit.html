@@ -9,7 +9,7 @@
 
   <h1>Create New Unit</h1>
 
-  <form action="{{ url_for('create_unit', landlord_id=landlord.id) }}" method="POST">
+  <form action="{{ url_for('landlord_bp.create_unit', landlord_id=landlord.id) }}" method="POST">
     <!-- Unit Number (String) -->
     <label for="unit_number">Unit Number:</label>
     <input type="text" id="unit_number" name="unit_number" required>

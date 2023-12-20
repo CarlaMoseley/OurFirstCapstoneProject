@@ -74,7 +74,7 @@ def create_unit(landlord_id):
     # render create unit page
     landlord=Landlord.query.filter_by(id=landlord_id).first()
     if request.method == 'GET':
-        return render_template('PLACEHOLDER', landlord=landlord)
+        return render_template('create_unit.html', landlord=landlord)
     elif request.method=='POST':
         unit_number = request.form.get('unit_number')
         address = request.form.get('address')

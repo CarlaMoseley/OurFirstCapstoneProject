@@ -13,5 +13,5 @@ home_bp = Blueprint(
 @home_bp.route('/')
 def home():
     # insert logic for home page
-    # user selects tenant or landlord 
+    # user selects tenant or landlord
     return render_template('index.html')
