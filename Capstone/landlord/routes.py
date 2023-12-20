@@ -68,6 +68,17 @@ def landlord_profile(landlord_id):
 
     return render_template('landlordhome.html', landlord=landlord, units=units)
 
+
+@landlord_bp.route('/landlord/<int:landlord_id>/tenants', methods=['GET'])
+def landlord_tenants(landlord_id):
+    landlord = Landlord.query.filter_by(id=landlord_id).first()
+    tenants = []
+    for unit in landlord.units:
+        tenants.extend(unit.tenants)
+    
+    return render_template('PLACEHOLDER', landlord=landlord, tenants=tenants)
+
+
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>', methods=['GET'])
 def landlord_unit_page(landlord_id, unit_id):
     # render landlord unit page for a given unit
@@ -99,7 +110,7 @@ def create_unit(landlord_id):
     # render create unit page
     landlord=Landlord.query.filter_by(id=landlord_id).first()
     if request.method == 'GET':
-        return render_template('PLACEHOLDER', landlord=landlord)
+        return render_template('create_unit.html', landlord=landlord)
     elif request.method=='POST':
         unit_number = request.form.get('unit_number')
         address = request.form.get('address')
