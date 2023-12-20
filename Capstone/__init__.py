@@ -25,7 +25,7 @@ def create_app():
         app.register_blueprint(tenant.tenant_bp)
         app.register_blueprint(landlord.landlord_bp)
 
-        db.create_all()
+        # db.create_all()
         # compile static assets
         # compile_static_assets(assets)
 
