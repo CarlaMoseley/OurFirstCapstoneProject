@@ -32,7 +32,16 @@ def landlord_profile(landlord_id):
     landlord = Landlord.query.filter_by(id=landlord_id).first()
     units = landlord.units
 
-    return render_template('PLACEHOLDER', landlord=landlord, units=units)
+    return render_template('landlord_profile.html', landlord=landlord, units=units)
+
+@landlord_bp.route('/landlord/<int:landlord_id>/tenants', methods=['GET'])
+def landlord_tenants(landlord_id):
+    landlord = Landlord.query.filter_by(id=landlord_id).first()
+    tenants = []
+    for unit in landlord.units:
+        tenants.extend(unit.tenants)
+    
+    return render_template('PLACEHOLDER', landlord=landlord, tenants=tenants)
 
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>', methods=['GET'])
 def landlord_unit_page(landlord_id, unit_id):

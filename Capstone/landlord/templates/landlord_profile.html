@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landlord Information</title>
+</head>
+<body>
+
+  <h1>Landlord Information</h1>
+
+  <!-- Display Landlord Information -->
+  <h2>Landlord Details</h2>
+  <p><strong>Name:</strong> {{ landlord.first_name }} {{ landlord.last_name }}</p>
+  <p><strong>Email:</strong> {{ landlord.email }}</p>
+  <p><strong>Phone:</strong> {{ landlord.phone_number }}</p>
+  <!-- Add more attributes as needed -->
+
+  <!-- Display Unit Information in a Table -->
+  <h2>Unit Information</h2>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Unit Number</th>
+        <th>Address</th>
+        <th>Rent</th>
+        <th>Lease Start</th>
+        <th>Payment Date</th>
+        <!-- Add more unit attributes as needed -->
+      </tr>
+    </thead>
+    <tbody>
+      {% for unit in units %}
+        <tr>
+          <td>{{ unit.unit_number }}</td>
+          <td>{{ unit.address }}</td>
+          <td>{{ unit.rent }}</td>
+          <td>{{ unit.lease_start }}</td>
+          <td>{{ unit.rent_due }}</td>
+          <!-- Add more unit attributes as needed -->
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Button to Add a New Unit -->
+  <h2>Add New Unit</h2>
+  <a href="{{ url_for('create_unit', landlord_id=landlord.id) }}"><button>Add New Unit</button></a>
+
+</body>
+</html>
