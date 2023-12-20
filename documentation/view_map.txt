@@ -1,0 +1,20 @@
+/ - Selection page [Landlord/Tenant]
+    /landlord – Base url for landlord activities
+        /Login – login page for landlord
+        /signup – create new user for landlord -> redirect to {id}
+        /{id} – user profile page/home page with units table
+            /{unit_id} – unit information page
+                /expenses – list of expenses for given unit
+                /payments – list of payments for given unit
+            /createunit – create new unit page
+            /expenses – collected expenses for all units
+            /createexpense - create new expense
+            /payments – collected payments for all units
+    /tenant – base url for tenant activities
+        /login – login page for tenant
+        /signup – create new user for tenant with unit id -> redirect to {id}
+        /{id} – user profile/home page
+            /payments – list of payments/due payments for unit
+            /unit – unit information page
+            /makepayment – payment portal for tenant
+            /{payment_id} – payment details for given payment
