@@ -5,23 +5,24 @@
     <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>Tenant Sign Up</title> 
-    <link rel="stylesheet" href="static\loginstyle.css"> 
+    <!--<link rel="stylesheet" href="static\loginstyle.css">--> 
 </head> 
 
 <body> 
     <h1 id="title">Tenant Sign Up</h1>
-    <button>Back</button>
-    <form action="/Tenant-Handler" method="post">
+    <button id="menu">Back</button>
+    <form action="/tenant_handler" method="post">
         <p><input type="text" id="name" name="name" class ="enter"placeholder="Name" required="Yes"></p>
-        <p><input type="text" id="phonenumber" name="phonenumber" class="enter"placeholder="Phone #" required="Yes"></p>
-        <p><input type="text" id="email" name="email" class ="enter"placeholder="Email" required="Yes"></p>
+        <p><input type="number" id="phonenumber" name="phonenumber" class="enter"placeholder="Phone #" required="Yes"></p>
+        <p><input type="email" id="email" name="email" class ="enter"placeholder="Email" required="Yes"></p>
         <p><input type="text" id="id" name="id" class ="enter"placeholder="ID" required="Yes"></p>
         <p><input type="username" id="username" name="username" class ="enter"placeholder="Username" required="No"></p>
         <p><input type="password" id="password" name="password" class="enter"placeholder="Password" required="Yes"></p>
         <p><input type="password" id="confirmpassword" name="confirmpassword" class="enter"placeholder="Confirm Password" required="Yes"></p>
         <p><input type="submit" id="Sign Up" value="Sign Up"></p>
     </form>
-    <script src= "static\tenantscript.js"></script> 
+    <div id = "login"> Already have an account? Login.</div>
+    <script src= "static\backscript.js"></script> 
 </body> 
 
 </html> 

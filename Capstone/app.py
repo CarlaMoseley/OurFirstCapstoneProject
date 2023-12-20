@@ -36,4 +36,36 @@ def login_handler():
     print(password)
     return username
  
+@app.route('/tenant_handler', methods=['POST'])
+def tenant_handler():
+    name = request.form['name']
+    phonenumber = request.form['phonenumber']
+    email = request.form['email']
+    id = request.form['id']
+    username = request.form['username']
+    if username.strip() == "":
+        username = email
+    password = request.form['password'] 
+    if password == request.form['confirmpassword'] and password.strip() != "":
+        print(f'{name} , {phonenumber}, {email}, {id}, {username}, {password}')
+        return password
+    else:
+        flash("Passwords Don't Match", 'error')
+        return redirect(url_for('login', button_clicked = 'tenant'))   
+
+@app.route('/landlord_handler', methods=['POST'])
+def landlord_handler():
+    name = request.form['name']
+    phonenumber = request.form['phonenumber']
+    email = request.form['email']
+    username = request.form['username']
+    password = request.form['password']
+    if username.strip() == "":
+        username = email
+    if password == request.form['confirmpassword']:
+        print(f'{name} , {phonenumber}, {email}, {username}, {password}')
+        return password
+    else:
+        flash("Passwords Don't Match", 'error')
+        return redirect(url_for('login', button_clicked = 'landlord'))   
 app.run(debug=True)
