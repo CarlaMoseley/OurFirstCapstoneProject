@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-from flask import Blueprint, render_template, redirect, url_for, request
-=======
-from flask import Blueprint, request, render_template, redirect, url_for
->>>>>>> ac4be49d0adb048bc8c93e38397459653ea2c0c0
+from flask import Blueprint, render_template, redirect, url_for, request, session, flash
 from flask import current_app as app
 from ..db import db
 from ..models import Landlord, Unit, Expense
@@ -14,29 +10,63 @@ landlord_bp = Blueprint(
     static_folder='static'
 )
 
+
+def check_credentials(username, password):
+    landlord = Landlord.query.filter_by(username=username).first()
+    if not landlord:
+        return False, None
+    if landlord.password == password:
+        return True, landlord.id
+    else:
+        return False, None
+
+
+
 @landlord_bp.route('/landlord')
 def landlord_redirect():
     # if user is logged in, redirect to user profile page
     # else, redirect to tenant login page
     pass
 
-@landlord_bp.route('/landlord/login')
+
+@landlord_bp.route('/landlord/login', methods=['GET', 'POST'])
 def landlord_login():
-    # landlord login page
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        # Check if the user exists in the database
+        user_exists, landlord_id = check_credentials(username, password)
+
+        if user_exists:
+            # Store the landlord_id in the session for future use
+            session['landlord_id'] = landlord_id
+
+            # Redirect to the landlord profile page with the landlord_id
+            return redirect(url_for('landlord_bp.landlord_profile', landlord_id=landlord_id))
+        else:
+            # User does not exist or incorrect credentials, show an error message
+            error_message = "Invalid credentials. Please try again."
+            flash(error_message, 'error')
+            return render_template('login.html', error_message=error_message)
+
+    # Render the login page for GET requests
     return render_template('login.html')
+
 
 @landlord_bp.route('/landlord/signup')
 def landlord_signup():
     # landlord sign up page
     pass
 
-@landlord_bp.route('/landlord/<int:landlord_id>', methods=['GET'])
+
+@landlord_bp.route('/landlord/<int:landlord_id>', methods=['GET','POST'])
 def landlord_profile(landlord_id):
     # render landlord profile page with units table
     landlord = Landlord.query.filter_by(id=landlord_id).first()
     units = landlord.units
 
-    return render_template('PLACEHOLDER', landlord=landlord, units=units)
+    return render_template('landlordhome.html', landlord=landlord, units=units)
 
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>', methods=['GET'])
 def landlord_unit_page(landlord_id, unit_id):
@@ -92,6 +122,7 @@ def create_unit(landlord_id):
         unit = Unit.query.filter(landlord_id=landlord.id).filter(unit_number=unit).filter(address=address).first()
         
         return redirect(url_for('landlord_unit_page', landlord_id=unit.landlord_id, unit_id=unit.id))
+
 
 @landlord_bp.route('/landlord/<int:landlord_id>/expenses', methods=['GET'])
 def landlord_expenses(landlord_id):

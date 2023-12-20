@@ -4,8 +4,10 @@ from .db import db
 
 
 def create_app():
+
     # create flask application
     app = Flask(__name__, instance_relative_config=False)
+    app.config['SECRET_KEY'] = 'ShusshItsaSecret'
     app.config.from_object('config.Config')
     # assets = Environment() # create assets environment
     # assets.init_app(app) # initialize flask-assets

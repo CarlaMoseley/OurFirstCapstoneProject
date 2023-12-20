@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session
 from flask import current_app as app
+from ..models import Tenant
 
 # Blueprint for tenant
 tenant_bp = Blueprint(
@@ -10,7 +11,11 @@ tenant_bp = Blueprint(
 
 
 def check_credentials(username, password):
+    tenant = Tenant.query.filter_by(username=username).first()
+    if tenant.password == password:
+        return True, tenant.id
 
+    return False, None
 
 
 @tenant_bp.route('/tenant')
@@ -26,7 +31,7 @@ def tenant_login():
         password = request.form.get('password')
 
         # Check if the user exists in the database
-        user_exists, tenant_id = check_user_credentials(username, password)
+        user_exists, tenant_id = check_credentials(username, password)
 
         if user_exists:
             # Store the tenant_id in the session for future use
