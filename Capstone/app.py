@@ -51,7 +51,7 @@ def tenant_handler():
         return password
     else:
         flash("Passwords Don't Match", 'error')
-        return redirect(url_for('login', button_clicked = 'tenant'))   
+        return redirect(url_for('tenant_signup', button_clicked = 'tenant'))   
 
 @app.route('/landlord_handler', methods=['POST'])
 def landlord_handler():
@@ -67,5 +67,5 @@ def landlord_handler():
         return password
     else:
         flash("Passwords Don't Match", 'error')
-        return redirect(url_for('login', button_clicked = 'landlord'))   
+        return redirect(url_for('landlord_signup', button_clicked = 'landlord'))   
 app.run(debug=True)

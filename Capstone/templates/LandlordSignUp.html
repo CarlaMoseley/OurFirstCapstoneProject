@@ -11,6 +11,12 @@
 <body> 
     <h1 id="title">Landlord Sign Up</h1>
     <button id="menu">Back</button>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+       <div class="{{category}}" >
+          {{message}}<span class="closebtn" onclick="this.parentElement.style.display='none';">x</span></div>
+    {% endfor %}
+    {% endwith %}
     <form action="/landlord_handler" method="post">
         <p><input type="text" id="name" name="name" class ="enter"placeholder="Name" required="Yes"></p>
         <p><input type="number" id="phonenumber" name="phonenumber" class="enter"placeholder="Phone #" required="Yes"></p>
