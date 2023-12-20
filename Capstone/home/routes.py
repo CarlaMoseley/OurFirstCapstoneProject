@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask import current_app as app
+from ..models import Tenant, Landlord
+from ..db import db
 
 
 # Blueprint for home
@@ -8,8 +10,6 @@ home_bp = Blueprint(
     template_folder='templates',
     static_folder='static'
 )
-
-
 
 
 @home_bp.route('/', methods=['GET', 'POST'])

@@ -1,5 +1,7 @@
 from flask import Flask
 # from flask_assets import Environment
+from .db import db
+
 
 def create_app():
     # create flask application
@@ -7,7 +9,9 @@ def create_app():
     app.config.from_object('config.Config')
     # assets = Environment() # create assets environment
     # assets.init_app(app) # initialize flask-assets
-
+    
+    db._engine_options=app.config['SNOWFLAKE_CONNECTION_ARGS']
+    db.init_app(app)
     with app.app_context():
         # import parts of the application
         from .home import routes as home
@@ -20,6 +24,7 @@ def create_app():
         app.register_blueprint(tenant.tenant_bp)
         app.register_blueprint(landlord.landlord_bp)
 
+        db.create_all()
         # compile static assets
         # compile_static_assets(assets)
 

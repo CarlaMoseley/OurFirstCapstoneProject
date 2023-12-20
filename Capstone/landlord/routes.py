@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, request
 from flask import current_app as app
+from ..models import Landlord
 
 # Blueprint for landlord
 landlord_bp = Blueprint(
@@ -27,7 +28,8 @@ def landlord_signup():
 @landlord_bp.route('/landlord/<int:landlord_id>', methods=['GET'])
 def landlord_profile(landlord_id):
     # render landlord profile page with units table
-    pass
+    landlord = Landlord.query.filter_by(id=landlord_id).first()
+    units = landlord.units
 
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>', methods=['GET'])
 def landlord_unit_page(landlord_id, unit_id):
