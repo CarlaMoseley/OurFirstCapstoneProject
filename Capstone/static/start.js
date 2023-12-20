@@ -34,7 +34,7 @@ options.forEach(element => {
         .then(response => {
             if (response.ok) {
                 // Redirect to the "/login" page
-                window.location.href = '/login/' + buttonClicked;
+                window.location.href = buttonClicked + '/login' ;
             } else {
                 console.error('Failed to handle the response:', response);
             }
@@ -42,11 +42,6 @@ options.forEach(element => {
         .catch(error => {
             console.error('Error during fetch:', error);
         });
- 
-
     });
 });
 
-
-
- 
