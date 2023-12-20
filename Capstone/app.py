@@ -46,7 +46,7 @@ def tenant_handler():
     if username.strip() == "":
         username = email
     password = request.form['password'] 
-    if password == request.form['confirmpassword'] and password.strip() != "":
+    if password == request.form['confirmpassword'] and password.strip() != "" and name.strip()!= "" and email.strip()!= "" and id.strip() != "":
         print(f'{name} , {phonenumber}, {email}, {id}, {username}, {password}')
         return password
     else:
@@ -62,7 +62,7 @@ def landlord_handler():
     password = request.form['password']
     if username.strip() == "":
         username = email
-    if password == request.form['confirmpassword']:
+    if password == request.form['confirmpassword'] and password.strip() != "" and name.strip()!= "" and email.strip()!= "":
         print(f'{name} , {phonenumber}, {email}, {username}, {password}')
         return password
     else:
