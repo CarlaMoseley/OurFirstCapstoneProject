@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login Page</title>
+    <!--<link rel="stylesheet" href="static\start.css">-->
 </head>
 <body>
-    {% if tenants %}
-        <ul>
-            {% for tenant in tenants %}
-                <li>{{ tenant.first_name }} - {{ tenant.email }}</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No tenants found.</p>
-    {% endif %}
+    <button id ="tenant" class="option">tenant</button>
+    <div id = "words">I am a...</div>
+    <button id = "landowner" class="option">landowner</button>
 </body>
+<script src= "static\start.js"></script>
 </html>

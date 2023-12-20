@@ -29,8 +29,9 @@ def tenant_signup():
 def tenant_profile(tenant_id):
     # render tenant profile page
     tenant = Tenant.query.filter_by(id=tenant_id).first()
+    unit = Unit.query.filter_by(id=tenant.unit_id).first()
 
-    return render_template('PLACEHOLDER', tenant=tenant)
+    return render_template('tenant_profile.html', tenant=tenant, unit=unit)
 
 @tenant_bp.route('/tenant/<int:tenant_id>/payments')
 def tenant_payments(tenant_id):

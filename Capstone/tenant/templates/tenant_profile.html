@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenant Information</title>
+</head>
+<body>
+
+  <h1>Tenant Information</h1>
+
+  <!-- Display Landlord Information -->
+  <h2>Tenant Details</h2>
+  <p><strong>Name:</strong> {{ tenant.first_name }} {{ tenant.last_name }}</p>
+  <p><strong>Email:</strong> {{ tenant.email }}</p>
+  <p><strong>Phone:</strong> {{ tenant.phone_number }}</p>
+  <!-- Add more attributes as needed -->
+
+  <!-- Display Unit Information in a Table -->
+  <h2>Unit Information</h2>
+  {% if unit.unit_number %}
+  <p><strong>Unit Number:</strong> {{ unit.unit_number }}</p>
+  {% endif %}
+  <p><strong>Address:</strong> {{ unit.address }}</p>
+  <p><strong>Rent:</strong> {{ unit.rent }}</p>
+  <p><strong>Lease Start:</strong> {{ unit.lease_start }}</p>
+  <p><strong>Rent Due:</strong> {{ unit.rent_due }}</p>
+
+
+</body>
+</html>
