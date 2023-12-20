@@ -1,16 +1,14 @@
 from flask import Flask
 from flask_assets import Environment
-from flask_sqlalchemy import SQLAlchemy
+from .db import db
 
-
-db = SQLAlchemy()
 
 def create_app():
     # create flask application
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object('config.Config')
-    assets = Environment() # create assets environment
-    assets.init_app(app) # initialize flask-assets
+    # assets = Environment() # create assets environment
+    # assets.init_app(app) # initialize flask-assets
     
     db._engine_options=app.config['SNOWFLAKE_CONNECTION_ARGS']
     db.init_app(app)

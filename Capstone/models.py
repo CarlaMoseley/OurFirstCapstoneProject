@@ -1,9 +1,10 @@
-from Capstone import db
+from .db import db
+from sqlalchemy import Sequence
 
 
 class User(db.Model):
     __abstract__ = True
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, Sequence('andrewm_id_increment'), primary_key=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -20,7 +21,7 @@ class Landlord(User):
 
 class Unit(db.Model):
     __tablename__ = 'unit'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, Sequence('andrewm_id_increment'), primary_key=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
     landlord_id = db.Column(db.Integer, db.ForeignKey('landlord.id'), nullable=False)
@@ -39,7 +40,7 @@ class Tenant(User):
 
 class Expense(db.Model):
     __tablename__ = 'expense'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, Sequence('andrewm_id_increment'), primary_key=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
@@ -51,7 +52,7 @@ class Expense(db.Model):
 
 class Payment(db.Model):
     __tablename__ = 'payment'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, Sequence('andrewm_id_increment'), primary_key=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
     tenant_id = db.Column(db.Integer, db.ForeignKey('tenant.id'), nullable=False)
