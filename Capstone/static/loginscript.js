@@ -1,6 +1,6 @@
 document.getElementById('Back').addEventListener('click', function goBack(){
-    window.location ='/'
-})
+    window.location ='/';
+});
 document.getElementById('signup').addEventListener('click', function signup(){
     const path = window.location.pathname.split('/')
     if(path[2]=== 'tenant'){

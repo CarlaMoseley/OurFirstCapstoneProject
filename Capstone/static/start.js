@@ -1,7 +1,28 @@
+const overlay = document.getElementById('overlay');
+const words = document.getElementById('words');
+
+overlay.addEventListener('click', function off() {
+    overlay.style.display = 'none';
+    words.style.display= 'none';
+
+    // Disable click event after first click
+    overlay.removeEventListener('click', off);
+
+});
+
+
 const options = document.querySelectorAll('.option');
 options.forEach(element => {
     element.addEventListener('click', function handleClick(event) {
-        const buttonClicked = event.target.id;
+        console.dir(event.currentTarget.classList)
+        var buttonClicked = '';
+        if (event.currentTarget.classList.contains('tenant')){
+            buttonClicked = 'tenant';
+        }else if(event.currentTarget.classList.contains('landlord')){
+            buttonClicked = 'landlord';
+        }else{
+            buttonClicked = 'error'
+        }
         fetch("/start", {
             method: "post",
             headers: {
@@ -22,8 +43,10 @@ options.forEach(element => {
             console.error('Error during fetch:', error);
         });
  
-        // Set background color to yellow
-        element.setAttribute('style', 'background-color: yellow;');
+
     });
 });
+
+
+
  
