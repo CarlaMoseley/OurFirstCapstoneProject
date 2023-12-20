@@ -13,7 +13,7 @@ def create_app():
         from .home import routes as home
         from .tenant import routes as tenant
         from .landlord import routes as landlord
-        from .assets import compile_static_assets
+        # from .assets import compile_static_assets
 
         # register blueprints
         app.register_blueprint(home.home_bp)

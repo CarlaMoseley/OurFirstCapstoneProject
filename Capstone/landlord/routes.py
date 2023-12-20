@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, render_template, redirect, url_for
 from flask import current_app as app
 
 # Blueprint for landlord
@@ -17,7 +17,7 @@ def landlord_redirect():
 @landlord_bp.route('/landlord/login')
 def landlord_login():
     # landlord login page
-    pass
+    return render_template('login.html')
 
 @landlord_bp.route('/landlord/signup')
 def landlord_signup():
