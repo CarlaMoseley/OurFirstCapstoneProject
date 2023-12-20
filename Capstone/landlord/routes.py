@@ -1,6 +1,7 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, render_template, redirect, url_for
 from flask import current_app as app
-from ..models import Landlord
+from ..db import db
+from ..models import Landlord, Unit
 
 # Blueprint for landlord
 landlord_bp = Blueprint(
@@ -31,32 +32,70 @@ def landlord_profile(landlord_id):
     landlord = Landlord.query.filter_by(id=landlord_id).first()
     units = landlord.units
 
+    return render_template('PLACEHOLDER', landlord=landlord, units=units)
+
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>', methods=['GET'])
 def landlord_unit_page(landlord_id, unit_id):
     # render landlord unit page for a given unit
-    pass
+    landlord=Landlord.query.filter_by(id=landlord_id).first()
+    unit=Unit.query.filter_by(id=unit_id).first()
+
+    return render_template('PLACEHOLDER', landlord=landlord, unit=unit)
 
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>/expenses', methods=['GET'])
 def landlord_unit_expenses(landlord_id, unit_id):
     # render expenses for given unit
-    pass
+    landlord=Landlord.query.filter_by(id=landlord_id).first()
+    unit=Unit.query.filter_by(id=unit_id).first()
+    expenses=unit.expenses
+
+    return render_template('PLACEHOLDER', landlord=landlord, unit=unit, expenses=expenses)
 
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>/payments', methods=['GET'])
 def landlord_unit_payments(landlord_id, unit_id):
     # render payments for given unit
-    pass
+    landlord=Landlord.query.filter_by(id=landlord_id).first()
+    unit=Unit.query.filter_by(id=unit_id).first()
+    payments=unit.payments
+
+    return render_template('PLACEHOLDER', landlord=landlord, unit=unit, payments=payments)
 
 @landlord_bp.route('/landlord/<int:landlord_id>/createunit', methods=['GET', 'POST'])
 def create_unit(landlord_id):
     # render create unit page
-    pass
+    landlord=Landlord.query.filter_by(id=landlord_id).first()
+    if request.method == 'GET':
+        return render_template('PLACEHOLDER', landlord=landlord)
+    elif request.method=='POST':
+        unit_number = request.form.get('unit_number')
+        address = request.form.get('address')
+        rent = request.form.get('rent')
+        lease_start=request.form.get('lease_start')
+        rent_due=request.form.get('rent_due')
+
+        new_unit = Unit(
+            landlord_id=landlord.id,
+            unit_number=unit_number,
+            address=address,
+            rent=rent,
+            lease_start=lease_start,
+            rent_due=rent_due,
+        )
+
+        db.session.add(new_unit)
+        db.session.commit()
+
+        unit = Unit.query.filter(landlord_id=landlord.id).filter(unit_number=unit).filter(address=address).first()
+        
+        return redirect(url_for('landlord_unit_page', landlord_id=unit.landlord_id, unit_id=unit.id))
 
 @landlord_bp.route('/landlord/<int:landlord_id>/expenses', methods=['GET'])
 def landlord_expenses(landlord_id):
     # render all expenses for given landlord
-    pass
+    landlord = Landlord.query.filter_by(id=landlord_id).first()
+    
 
-@landlord_bp.route('/landlord/<int:landlord_id>/createexpense', methods=['POST'])
+@landlord_bp.route('/landlord/<int:landlord_id>/createexpense', methods=['GET', 'POST'])
 def create_expense(landlord_id):
     # create an expense, select unit from drop down menu
     pass
