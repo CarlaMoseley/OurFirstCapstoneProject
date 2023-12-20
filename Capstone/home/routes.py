@@ -1,5 +1,6 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 from flask import current_app as app
+from ..models import Tenant 
 
 # Blueprint for home
 home_bp = Blueprint(
@@ -12,4 +13,5 @@ home_bp = Blueprint(
 def home():
     # insert logic for home page
     # user selects tenant or landlord 
-    return "home"
+    tenants = Tenant.query.all()
+    return render_template('index.html', tenants=tenants)

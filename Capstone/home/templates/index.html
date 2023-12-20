@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% if tenants %}
+        <ul>
+            {% for tenant in tenants %}
+                <li>{{ tenant.first_name }} - {{ tenant.email }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tenants found.</p>
+    {% endif %}
+</body>
+</html>

@@ -1,7 +1,14 @@
 from Capstone import db
 from sqlalchemy.ext.declarative import declarative_base
+from flask_sqlalchemy import BaseQuery
 
-Base = declarative_base()
+class CustomBaseQuery(BaseQuery):
+    pass
+
+class CustomBase:
+    query_class = CustomBaseQuery
+
+Base = declarative_base(cls=CustomBase)
 
 class BaseModel(Base):
     __abstract__ = True

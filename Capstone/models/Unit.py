@@ -1,7 +1,11 @@
-from BaseModel import BaseModel
+from .BaseModel import BaseModel
 from Capstone import db
 
-class Unit(BaseModel):
+class Unit(db.Model):
+    __tablename__ = 'unit'
+    id = db.Column(db.Integer, primary_key=True)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
     landlord_id = db.Column(db.Integer, db.ForeignKey('landlord.id'), nullable=False)
     unit_number = db.Column(db.String(10), nullable=True)
     address = db.Column(db.String(100), nullable=False)
