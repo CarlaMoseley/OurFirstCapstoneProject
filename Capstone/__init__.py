@@ -1,18 +1,19 @@
 from flask import Flask
-from flask_assets import Environment
+# from flask_assets import Environment
 from .db import db
 
 
 def create_app():
+
     # create flask application
     app = Flask(__name__, instance_relative_config=False)
+    app.config['SECRET_KEY'] = 'ShusshItsaSecret'
     app.config.from_object('config.Config')
     # assets = Environment() # create assets environment
     # assets.init_app(app) # initialize flask-assets
     
     db._engine_options=app.config['SNOWFLAKE_CONNECTION_ARGS']
     db.init_app(app)
-    
     with app.app_context():
         # import parts of the application
         from .home import routes as home
