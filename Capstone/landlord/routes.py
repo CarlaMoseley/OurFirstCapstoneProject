@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for
 from flask import current_app as app
 from ..db import db
-from ..models import Landlord, Unit
+from ..models import Landlord, Unit, Expense
 
 # Blueprint for landlord
 landlord_bp = Blueprint(
@@ -93,14 +93,48 @@ def create_unit(landlord_id):
 def landlord_expenses(landlord_id):
     # render all expenses for given landlord
     landlord = Landlord.query.filter_by(id=landlord_id).first()
+    units = landlord.units
+
+    expenses = []
+    for unit in units:
+        expenses.extend(unit.expenses)
+
+    return render_template('PLACEHOLDER', landlord=landlord, units=units, expenses=expenses)
     
 
 @landlord_bp.route('/landlord/<int:landlord_id>/createexpense', methods=['GET', 'POST'])
 def create_expense(landlord_id):
     # create an expense, select unit from drop down menu
-    pass
+    landlord = Landlord.query.filter_by(id=landlord_id).first()
+    units = landlord.units
+    if request.method == 'GET':
+        return render_template('PLACEHOLDER', landlord=landlord, units=units)
+    elif request.method == 'POST':
+        unit_id = request.form.get('unit_id')
+        cost = request.form.get('cost')
+        description = request.form.get('description')
+        contractor = request.form.get('contractor')
+        contractor_contact = request.form.get('contractor_contact')
+        date = request.form.get('date')
+
+        new_expense = Expense(
+            unit_id=unit_id,
+            cost=cost,
+            description=description,
+            contractor=contractor,
+            contractor_contact=contractor_contact,
+            date=date
+        )
+
+        db.session.add(new_expense)
+        db.session.commit()
+
+        return redirect(url_for('landlord_profile', landlord_id=landlord.id))
 
 @landlord_bp.route('/landlord/<int:landlord_id>/payments', methods=['GET'])
 def landlord_payments(landlord_id):
     # render payments table for all units
-    pass
+    landlord = Landlord.query.filter_by(id=landlord_id).first()
+    payments=landlord.payments
+
+    return render_template('PLACEHOLDER', landlord=landlord, payments=payments)
