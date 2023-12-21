@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Unit Expenses{% endblock %}
+
+{% block content %}
+  <h2>Unit Information</h2>
+  <p>Unit Number: {{ unit.unit_number }}</p>
+  <p>Address: {{ unit.address }}</p>
+
+  <h2>Payments</h2>
+  <table id="unitExpensesTable" class="sortable">
+    <thead>
+      <tr>
+        <th data-column="unit_number">Unit Number</th>
+          <th data-column="address">Address</th>
+          <th data-column="cost">Cost</th>
+          <th data-column="description">Description</th>
+          <th data-column="contractor">Contractor</th>
+          <th data-column="contractor_contact">Contractor Contact</th>
+          <th data-column="date">Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for expense in expenses %}
+        <tr>
+          <td>{{ expense.unit.unit_number }}</td>
+            <td>{{ expense.unit.address }}</td>
+            <td>${{ expense.cost }}</td>
+            <td>{{ expense.description }}</td>
+            <td>{{ expense.contractor }}</td>
+            <td>{{ expense.contractor_contact }}</td>
+            <td>{{ expense.date }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <script src="{{ url_for('static', filename='sorttable.js') }}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      makeSortable(document.getElementById('unitExpensesTable'));
+    });
+  </script>
+{% endblock %}

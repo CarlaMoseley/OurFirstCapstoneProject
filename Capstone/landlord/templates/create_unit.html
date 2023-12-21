@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Unit</title>
-</head>
-<body>
+{% extends "base.html" %}
 
+{% block title %}Create Unit{% endblock %}
+
+{% block content %}
   <h1>Create New Unit</h1>
 
   <form action="{{ url_for('landlord_bp.create_unit', landlord_id=landlord.id) }}" method="POST">
@@ -42,6 +38,4 @@
 
     <button type="submit">Create Unit</button>
   </form>
-
-</body>
-</html>
+{% endblock %}

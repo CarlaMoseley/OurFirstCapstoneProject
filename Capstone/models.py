@@ -32,6 +32,7 @@ class Unit(db.Model):
     rent_due = db.Column(db.Integer, nullable=True)
     tenants = db.relationship('Tenant', backref='unit', lazy=True)
     payments = db.relationship('Payment', backref='unit', lazy=True)
+    expenses = db.relationship('Expense', backref='unit', lazy=True)
 
 class Tenant(User):
     __tablename__ = 'tenant'

@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, sessio
 from flask import current_app as app
 from ..db import db
 from ..models import Landlord, Unit, Expense
+import hashlib
 
 # Blueprint for landlord
 landlord_bp = Blueprint(
@@ -66,17 +67,18 @@ def landlord_profile(landlord_id):
     landlord = Landlord.query.filter_by(id=landlord_id).first()
     units = landlord.units
 
-    return render_template('landlordhome.html', landlord=landlord, units=units)
+    return render_template('landlord_profile.html', landlord=landlord, units=units)
 
 
 @landlord_bp.route('/landlord/<int:landlord_id>/tenants', methods=['GET'])
 def landlord_tenants(landlord_id):
     landlord = Landlord.query.filter_by(id=landlord_id).first()
+    units = landlord.units
     tenants = []
-    for unit in landlord.units:
+    for unit in units:
         tenants.extend(unit.tenants)
     
-    return render_template('PLACEHOLDER', landlord=landlord, tenants=tenants)
+    return render_template('landlord_tenants.html', landlord=landlord, tenants=tenants, units=units)
 
 
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>', methods=['GET'])
@@ -85,7 +87,7 @@ def landlord_unit_page(landlord_id, unit_id):
     landlord=Landlord.query.filter_by(id=landlord_id).first()
     unit=Unit.query.filter_by(id=unit_id).first()
 
-    return render_template('PLACEHOLDER', landlord=landlord, unit=unit)
+    return render_template('landlord_unit_page.html', landlord=landlord, unit=unit)
 
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>/expenses', methods=['GET'])
 def landlord_unit_expenses(landlord_id, unit_id):
@@ -94,7 +96,7 @@ def landlord_unit_expenses(landlord_id, unit_id):
     unit=Unit.query.filter_by(id=unit_id).first()
     expenses=unit.expenses
 
-    return render_template('PLACEHOLDER', landlord=landlord, unit=unit, expenses=expenses)
+    return render_template('landlord_unit_expenses.html', landlord=landlord, unit=unit, expenses=expenses)
 
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>/payments', methods=['GET'])
 def landlord_unit_payments(landlord_id, unit_id):
@@ -103,7 +105,7 @@ def landlord_unit_payments(landlord_id, unit_id):
     unit=Unit.query.filter_by(id=unit_id).first()
     payments=unit.payments
 
-    return render_template('PLACEHOLDER', landlord=landlord, unit=unit, payments=payments)
+    return render_template('landlord_unit_payments.html', landlord=landlord, unit=unit, payments=payments)
 
 @landlord_bp.route('/landlord/<int:landlord_id>/createunit', methods=['GET', 'POST'])
 def create_unit(landlord_id):
@@ -145,7 +147,7 @@ def landlord_expenses(landlord_id):
     for unit in units:
         expenses.extend(unit.expenses)
 
-    return render_template('PLACEHOLDER', landlord=landlord, units=units, expenses=expenses)
+    return render_template('landlord_expenses.html', landlord=landlord, units=units, expenses=expenses)
     
 
 @landlord_bp.route('/landlord/<int:landlord_id>/createexpense', methods=['GET', 'POST'])
@@ -183,4 +185,4 @@ def landlord_payments(landlord_id):
     landlord = Landlord.query.filter_by(id=landlord_id).first()
     payments=landlord.payments
 
-    return render_template('PLACEHOLDER', landlord=landlord, payments=payments)
+    return render_template('landlord_payments.html', landlord=landlord, payments=payments)

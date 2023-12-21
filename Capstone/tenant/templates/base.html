@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Tenant Information{% endblock %}</title>
+</head>
+<body>
+
+<header>
+    <h1>Tenant Information</h1>
+    <p>
+        <strong>First Name:</strong> {{ tenant.first_name }}<br>
+        <strong>Last Name:</strong> {{ tenant.last_name }}<br>
+        <strong>Phone Number:</strong> {{ tenant.phone_number }}<br>
+        <strong>Email:</strong> {{ tenant.email }}
+    </p>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="{{ url_for('tenant_bp.tenant_profile', tenant_id=tenant.id) }}">Home</a></li>
+        <li><a href="{{ url_for('tenant_bp.tenant_payments', tenant_id=tenant.id) }}">Payments</a></li>
+        <li><a href="{{ url_for('tenant_bp.make_payment', tenant_id=tenant.id) }}">Make Payment</a></li>
+    </ul>
+</nav>
+
+<div id="content">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

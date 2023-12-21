@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Details{% endblock %}
+
+{% block content %}
+  <h2>Payment Details</h2>
+  <div>
+    <strong>Amount:</strong> {{ payment.amount }}<br>
+    <strong>Paid:</strong> {% if payment.paid %}Yes{% else %}<a href="{{ url_for('make_payment', payment_id=payment.id) }}">Make Payment</a>{% endif %}<br>
+    <strong>Date:</strong> {{ payment.date }}<br>
+    <strong>Landlord:</strong> {{ payment.landlord.first_name }} {{ payment.landlord.last_name }}<br>
+    <strong>Contact:</strong> {{ payment.landlord.phone_number }}<br>
+    <strong>Email:</strong> {{ payment.landlord.email }}<br>
+    {% if payment.unit.unit_number %}
+      <strong>Unit Number:</strong> {{ payment.unit.unit_number }}<br>
+    {% endif %}
+    <strong>Address:</strong> {{ payment.unit.address }}<br>
+  </div>
+{% endblock %}
