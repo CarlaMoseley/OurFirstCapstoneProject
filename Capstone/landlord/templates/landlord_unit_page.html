@@ -1,33 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unit Information</title>
-    <style>
-        .container {
-            margin-top: 20px;
-        }
-        .info {
-            margin-bottom: 10px;
-        }
-        button {
-            margin-top: 20px;
-            padding: 10px;
-            font-size: 16px;
-        }
-    </style>
-</head>
-<body>
+{% extends "landlord_base.html" %}
 
-  
-
-</body>
-</html>
-
-{% extends "base.html" %}
-
-{% block title %}Home{% endblock %}
+{% block title %}Unit {{ unit.id }}{% endblock %}
 
 {% block content %}
   <h2>Unit {{ unit.id }}</h2>

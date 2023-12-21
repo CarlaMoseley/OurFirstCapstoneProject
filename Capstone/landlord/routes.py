@@ -124,17 +124,17 @@ def create_unit(landlord_id):
             landlord_id=landlord.id,
             unit_number=unit_number,
             address=address,
-            rent=rent,
-            lease_start=lease_start,
-            rent_due=rent_due,
+            rent=rent if rent else None,
+            lease_start=lease_start if lease_start else None,
+            rent_due=rent_due if rent_due else None,
         )
 
         db.session.add(new_unit)
         db.session.commit()
 
-        unit = Unit.query.filter(landlord_id=landlord.id).filter(unit_number=unit).filter(address=address).first()
+        unit = new_unit
         
-        return redirect(url_for('landlord_unit_page', landlord_id=unit.landlord_id, unit_id=unit.id))
+        return redirect(url_for('landlord_bp.landlord_unit_page', landlord_id=unit.landlord_id, unit_id=unit.id))
 
 
 @landlord_bp.route('/landlord/<int:landlord_id>/expenses', methods=['GET'])
@@ -156,7 +156,7 @@ def create_expense(landlord_id):
     landlord = Landlord.query.filter_by(id=landlord_id).first()
     units = landlord.units
     if request.method == 'GET':
-        return render_template('PLACEHOLDER', landlord=landlord, units=units)
+        return render_template('create_expense.html', landlord=landlord, units=units)
     elif request.method == 'POST':
         unit_id = request.form.get('unit_id')
         cost = request.form.get('cost')
@@ -177,7 +177,7 @@ def create_expense(landlord_id):
         db.session.add(new_expense)
         db.session.commit()
 
-        return redirect(url_for('landlord_profile', landlord_id=landlord.id))
+        return redirect(url_for('landlord_bp.landlord_profile', landlord_id=landlord.id))
 
 @landlord_bp.route('/landlord/<int:landlord_id>/payments', methods=['GET'])
 def landlord_payments(landlord_id):

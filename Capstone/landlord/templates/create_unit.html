@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "landlord_base.html" %}
 
 {% block title %}Create Unit{% endblock %}
 
@@ -8,7 +8,7 @@
   <form action="{{ url_for('landlord_bp.create_unit', landlord_id=landlord.id) }}" method="POST">
     <!-- Unit Number (String) -->
     <label for="unit_number">Unit Number:</label>
-    <input type="text" id="unit_number" name="unit_number" required>
+    <input type="text" id="unit_number" name="unit_number">
 
     <br>
 
