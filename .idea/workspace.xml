@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="047f6c1c-d90a-4cc0-a17c-499490e820a7" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/OurFirstCapstoneProject.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/todolist-flask-.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/toolchains.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/home/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/home/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/landlord/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/landlord/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/models/Landlord.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/models/Landlord.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/static/backscript.js" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/static/backscript.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/static/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/static/login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/static/loginscript.js" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/static/loginscript.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/static/start.js" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/static/start.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/templates/LandlordSignUp.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/templates/LandlordSignUp.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/templates/LoginPage.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/templates/TenantSignUp.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/templates/TenantSignUp.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/tenant/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/tenant/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="2ZrCuK3fSlKqcBqXmnKNd4Nqlvj" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "manan"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="047f6c1c-d90a-4cc0-a17c-499490e820a7" name="Changes" comment="" />
+      <created>1703171032862</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1703171032862</updated>
+    </task>
+    <servers />
+  </component>
+</project>

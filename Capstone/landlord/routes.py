@@ -54,10 +54,40 @@ def landlord_login():
     return render_template('login.html')
 
 
-@landlord_bp.route('/landlord/signup')
+@landlord_bp.route('/landlord/signup', methods=['GET', 'POST'])
 def landlord_signup():
-    # landlord sign up page
-    pass
+    if request.method == 'POST':
+        f_name = request.form.get('f_name')
+        l_name = request.form.get('l_name')
+        phonenumber = request.form.get('phonenumber')
+        email = request.form.get('email')
+        username = request.form.get('username')
+        password = request.form.get('password')
+        confirmpassword = request.form.get('confirmpassword')
+
+        if password != confirmpassword:
+            error_message = "Password does not match"
+            flash(error_message, 'error')
+            #redirect back to signup page
+            return redirect(url_for('landlord_bp.landlord_signup'))
+
+        new_landlord = Landlord(
+            first_name=f_name,
+            last_name=l_name,
+            phone_number=phonenumber,
+            email=email,
+            username=username,
+            password=password
+        )
+        db.session.add(new_landlord)
+        db.session.commit()
+
+        # Redirect to a success page or another route
+        flash('Landlord registration successful!', 'success')
+
+
+# landlord sign up page
+    return render_template('LandlordSignUp.html')
 
 
 @landlord_bp.route('/landlord/<int:landlord_id>', methods=['GET','POST'])
