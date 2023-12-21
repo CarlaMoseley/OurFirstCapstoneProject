@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"> 
+
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Pay Now</title> 
+    <link rel="stylesheet" href="static\PayNow.css"> 
+</head> 
+
+<body> 
+    
+    <button class="button">Log Out</button>
+
+    <h1 id="title">Payment Method</h1>
+    <div id="Payment Methods">
+        <h2 id="cc">Credit Card</h2>
+        <div id="Credit Card"class="pop-up">
+            <button>X</button>
+            <p id="Payment Total cc">Total is: </p>
+            <form action="/paymenthandler" id="cc" name="cc">
+                <p><input type="text" name="Name" class ="enter"placeholder="Name" required="Yes"></p>
+                <p><input type="number" name="Card Number" class ="enter"placeholder="Card Number" required="Yes"></p>
+                <p><input type="month" name="Exp. Date" class ="enter"placeholder="Expiration Date" required="Yes"></p>
+                <p><input type="number" name="CVV" class ="enter"placeholder="CVV" required="Yes"></p>
+                <p><input type="number" name="ZipCode" class ="enter"placeholder="ZipCode" required="Yes"></p>
+                <p><input type="submit" value="Submit Payment"></p>
+            </form>
+        </div>
+        <h2 id="ach">ACH Transfer</h2>
+        <div id="ACH Transfer"class="pop-up">
+            <button>X</button>
+            <p id="Payment Total ach ">Total is: </p>
+            <form action="/paymenthandler" id="ach" name="ach">
+                <p><input type="text" name=" Account Name" class ="enter"placeholder="Account Name" required="Yes"></p>
+                <p><input type="number" name="Account Number" class ="enter"placeholder="Account Number" required="Yes"></p>
+                <p><input type="number" name="Routing Number" class ="enter"placeholder="Routing Number" required="Yes"></p>
+                <p><input type="submit" value="Submit Payment"></p>
+            </form>
+        </div>
+        <div id="Google Pay"class="pop-up">
+            <button>X</button>
+            <p id="Payment Total google pay">Total is: </p>
+            <form action="/paymenthandler" id="ach" name="ach">
+                <p><input type="submit" value="Submit Payment"></p>
+            </form>
+        </div>
+    </div>
+    <div id="Payment Successful" class="pop-up">
+        <button>X</button>
+        <p>Your payment was successful. A confimation email will be sent to...</p>
+    </div>
+    <div id="Payment Unsuccessful" class="pop-up">
+        <button>X</button>
+        <p>Payment failed. Please try again.</p>
+    </div>
+    <button class="button">Go Back</button>
+    <script src= "static\UpcomingPayments.js"></script> 
+</body> 
+
+</html> 
