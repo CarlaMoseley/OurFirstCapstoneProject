@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-<<<<<<< HEAD
-      <module fileurl="file://$PROJECT_DIR$/.idea/OurFirstCapstoneProject.iml" filepath="$PROJECT_DIR$/.idea/OurFirstCapstoneProject.iml" />
-=======
-      <module fileurl="file://$PROJECT_DIR$/.idea/todolist-flask-.iml" filepath="$PROJECT_DIR$/.idea/todolist-flask-.iml" />
->>>>>>> backend
+      <module fileurl="file://$PROJECT_DIR$/todolist-flask-.iml" filepath="$PROJECT_DIR$/todolist-flask-.iml" />
     </modules>
   </component>
 </project>

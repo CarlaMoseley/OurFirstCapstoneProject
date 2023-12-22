@@ -18,11 +18,11 @@
           {{message}}<span class="closebtn" onclick="this.parentElement.style.display='none';">x</span></div>
     {% endfor %}
     {% endwith %}
-    <form action="/tenant_handler" method="post">
-        <p><input type="text" id="name" name="name" class ="enter"placeholder="Name" required="Yes"></p>
+    <form action="{{ url_for('tenant_bp.tenant_signup') }}" method="post">
+        <p><input type="text" id="f_name" name="f_name" class ="enter"placeholder="First Name" required="Yes"></p>
+        <p><input type="text" id="l_name" name="l_name" class ="enter"placeholder="Last Name" required="Yes"></p>
         <p><input type="number" id="phonenumber" name="phonenumber" class="enter"placeholder="Phone #" required="Yes"></p>
         <p><input type="email" id="email" name="email" class ="enter"placeholder="Email" required="Yes"></p>
-
         <p><input type="text" id="id" name="id" class ="enter"placeholder="ID" required="Yes"></p>
         <p><input type="username" id="username" name="username" class ="enter"placeholder="Username" required="No"></p>
         <p><input type="password" id="password" name="password" class="enter"placeholder="Password" required="Yes"></p>

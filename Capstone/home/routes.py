@@ -27,3 +27,4 @@ def home():
     # insert logic for home page
     # user selects tenant or landlord
     return render_template('start.html')
+
