@@ -1,0 +1,104 @@
+body {
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: 'Times New Roman', Times, serif;
+    color: aliceblue;
+    margin: 0;
+    display: flex;
+    height: 100vh;
+}
+
+.container{
+    background-color: rgba(188, 188, 188, 0.886);
+    padding: 3.5% 12%;
+    border-radius: 10px;
+    text-align: left;
+    width: 21.5%;
+    box-shadow: 5px 5px 5px 5px rgba(218, 217, 217, 0.274);
+}
+
+h1{
+    text-align: left;
+    font-size: xx-large;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+input[type="submit"],#login:hover {
+    cursor: pointer;
+}
+
+input[type="text"],input[type="number"],input[type="email"],input[type="username"],input[type="password"]{
+    padding: 12px;
+    border-radius: 1em 1em;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+    width: 85%; /* Adjust width and subtract padding and margin */
+    max-width: 400px;
+    margin: 2%;
+    transition: width 0.5s ease-in-out;
+}
+
+input:focus {
+    border: 3px solid whitesmoke;
+    width: 100%; /* Adjust width on focus */
+}
+
+#SignUp {
+    text-align: right; /* Align the text to the right */
+    margin-top: 2%; /* Add some top margin for spacing */
+    display: block; /* Ensure it is a block-level element */
+    margin-left: auto; /* Auto margin for horizontal centering */
+    margin-right: 0; /* Reset right margin to override any conflicting styles */
+}
+
+input[type="submit"] {
+    /* Additional styles for the submit button */
+    padding: 12px;
+    border-radius: 1em 1em;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+input[type="submit"]:hover {
+    background-color: #555; /* Change background color on hover */
+    color: white; /* Change text color on hover */
+}
+
+#login{
+    text-decoration-line: underline;
+    text-shadow: 2px 2px 4px #000000;
+    text-align: center;
+}
+
+
+#error-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+}
+
+.error {
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
+    margin-bottom: 15px;
+    text-align: left;
+    width: 100%;
+}
+
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    float: right;
+}
+
+.closebtn:hover {
+    color: black;
+}
