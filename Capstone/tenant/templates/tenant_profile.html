@@ -1,31 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tenant Information</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-  <h1>Tenant Information</h1>
+{% block title %}Home{% endblock %}
 
-  <!-- Display Landlord Information -->
-  <h2>Tenant Details</h2>
-  <p><strong>Name:</strong> {{ tenant.first_name }} {{ tenant.last_name }}</p>
-  <p><strong>Email:</strong> {{ tenant.email }}</p>
-  <p><strong>Phone:</strong> {{ tenant.phone_number }}</p>
-  <!-- Add more attributes as needed -->
-
-  <!-- Display Unit Information in a Table -->
-  <h2>Unit Information</h2>
-  {% if unit.unit_number %}
-  <p><strong>Unit Number:</strong> {{ unit.unit_number }}</p>
-  {% endif %}
-  <p><strong>Address:</strong> {{ unit.address }}</p>
-  <p><strong>Rent:</strong> {{ unit.rent }}</p>
-  <p><strong>Lease Start:</strong> {{ unit.lease_start }}</p>
-  <p><strong>Rent Due:</strong> {{ unit.rent_due }}</p>
-
-
-</body>
-</html>
+{% block content %}
+    <h2>Unit Information</h2>
+    {% if tenant.unit %}
+        <p>
+            {% if tenant.unit.unit_number %}
+                <strong>Unit Number:</strong> {{ tenant.unit.unit_number }}<br>
+            {% endif %}
+            <strong>Address:</strong> {{ tenant.unit.address }}<br>
+            <strong>Rent:</strong> {{ tenant.unit.rent }}<br>
+            <strong>Lease Start:</strong> {{ tenant.unit.lease_start }}<br>
+            <strong>Due Date:</strong> {{ tenant.unit.due_date }}
+        </p>
+    {% else %}
+        <p>No unit information available for this tenant.</p>
+    {% endif %}
+{% endblock %}

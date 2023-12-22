@@ -113,16 +113,7 @@ def tenant_payments(tenant_id):
     tenant = Tenant.query.filter_by(id=tenant_id).first()
     payments = tenant.payments
 
-    return render_template('PLACEHOLDER', tenant=tenant, payments=payments)
-
-
-@tenant_bp.route('/tenant/<int:tenant_id>/unit')
-def tenant_unit(tenant_id):
-    # render tenant unit page
-    tenant = Tenant.query.filter_by(id=tenant_id).first()
-    unit = Unit.query.filter_by(tenant.unit_id).first()
-
-    return render_template('PLACEHOLDER', tenant=tenant, unit=unit)
+    return render_template('tenant_payments.html', tenant=tenant, payments=payments)
 
 
 @tenant_bp.route('/tenant/<int:tenant_id>/makepayment', methods=['GET', 'POST'])
@@ -142,4 +133,4 @@ def tenant_payment(tenant_id, payment_id):
     tenant = Tenant.query.filter_by(id=tenant_id).first()
     payment = Payment.query.filter_by(id=payment_id).first
 
-    return render_template('PLACEHOLDER', tenant=tenant, payment=payment)
+    return render_template('tenant_payment.html', tenant=tenant, payment=payment)

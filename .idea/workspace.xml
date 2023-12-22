@@ -5,7 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="047f6c1c-d90a-4cc0-a17c-499490e820a7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Capstone/landlord/static/sorttable.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Capstone/landlord/templates/create_expense.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Capstone/landlord/templates/landlord_base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Capstone/landlord/templates/landlord_expenses.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Capstone/landlord/templates/landlord_payments.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Capstone/landlord/templates/landlord_tenants.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Capstone/landlord/templates/landlord_unit_expenses.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Capstone/landlord/templates/landlord_unit_page.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Capstone/landlord/templates/landlord_unit_payments.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Capstone/tenant/static/sorttable.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Capstone/tenant/templates/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Capstone/tenant/templates/login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Capstone/tenant/templates/tenant_payment.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Capstone/tenant/templates/tenant_payments.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/home/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/home/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/landlord/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/landlord/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/landlord/templates/create_unit.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/landlord/templates/create_unit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/landlord/templates/landlord_profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/landlord/templates/landlord_profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/landlord/templates/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/tenant/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/tenant/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/tenant/templates/tenant_profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/tenant/templates/tenant_profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wsgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/wsgi.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +62,7 @@
     "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "manan"
+    "git-widget-placeholder": "Merging manan"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

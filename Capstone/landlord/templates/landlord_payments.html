@@ -1,0 +1,40 @@
+{% extends "landlord_base.html" %}
+
+{% block title %}Payments{% endblock %}
+
+{% block content %}
+  <h2>Payments</h2>
+  <table id="paymentsTable" class="sortable">
+    <thead>
+      <tr>
+        <th data-column="amount">Amount</th>
+        <th data-column="paid">Paid</th>
+        <th data-column="date">Date</th>
+        <th data-column="tenant_first_name">Tenant First Name</th>
+        <th data-column="tenant_last_name">Tenant Last Name</th>
+        <th data-column="unit_number">Unit Number</th>
+        <th data-column="address">Address</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for payment in payments %}
+        <tr>
+          <td>${{ payment.amount }}</td>
+          <td>{{ payment.paid }}</td>
+          <td>{{ payment.date }}</td>
+          <td>{{ payment.tenant.first_name }}</td>
+          <td>{{ payment.tenant.last_name }}</td>
+          <td>{{ payment.unit.unit_number }}</td>
+          <td>{{ payment.unit.address }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <script src="{{ url_for('static', filename='sorttable.js') }}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      makeSortable(document.getElementById('paymentsTable'));
+    });
+  </script>
+{% endblock %}
