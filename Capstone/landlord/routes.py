@@ -57,7 +57,7 @@ def landlord_login():
 @landlord_bp.route('/landlord/signup')
 def landlord_signup():
     # landlord sign up page
-    pass
+    return render_template('LandlordSignUp.html')
 
 
 @landlord_bp.route('/landlord/<int:landlord_id>', methods=['GET','POST'])

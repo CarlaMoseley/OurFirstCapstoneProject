@@ -51,7 +51,7 @@ def tenant_login():
 @tenant_bp.route('/tenant/signup')
 def tenant_signup():
     # tenant sign up page
-    pass
+    return render_template('TenantSignUp.html')
 
 @tenant_bp.route('/tenant/<int:tenant_id>')
 def tenant_profile(tenant_id):

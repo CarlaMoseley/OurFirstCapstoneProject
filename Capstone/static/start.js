@@ -23,7 +23,7 @@ options.forEach(element => {
         }else{
             buttonClicked = 'error'
         }
-        fetch("/start", {
+        fetch("/", {
             method: "post",
             headers: {
                 'Accept': 'application/json',
