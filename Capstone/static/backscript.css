@@ -31,7 +31,7 @@ input[type="text"],input[type="number"],input[type="email"],input[type="username
     padding: 12px;
     border-radius: 1em 1em;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
-    width: 85%; /* Adjust width and subtract padding and margin */
+    width: 90%; /* Adjust width and subtract padding and margin */
     max-width: 400px;
     margin: 2%;
     transition: width 0.5s ease-in-out;
@@ -101,4 +101,12 @@ input[type="submit"]:hover {
 
 .closebtn:hover {
     color: black;
+}
+/* Add or update this style in your CSS */
+#passwordMatch {
+    position: absolute;
+    right: 8%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
 }
