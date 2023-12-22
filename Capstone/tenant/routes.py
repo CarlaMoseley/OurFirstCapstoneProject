@@ -1,6 +1,10 @@
-from flask import Blueprint, render_template, redirect, url_for, request, session
+from flask import Blueprint, render_template, redirect, url_for, request, session, jsonify
 from flask import current_app as app
+from datetime import date, datetime
 from ..models import Tenant, Unit, Payment
+from ..payment_processing.PaymentFiservAPI import PaymentService
+from ..utils.email_processor import compose_email
+from ..db import db
 
 
 # Blueprint for tenant
@@ -73,11 +77,36 @@ def tenant_payments(tenant_id):
 def make_payment(tenant_id):
     # render make payment page
     tenant = Tenant.query.filter_by(id=tenant_id).first()
-    if request.method == 'GET':
-        return render_template('PLACEHOLDER', tenant=tenant)
-    elif request.method == 'POST':
-        # insert logic about payment processing here
-        pass
+    if request.method == 'POST':
+        try:
+            # Create an instance of the PaymentService class
+            payment_service = PaymentService()
+
+            # Make the payment request
+            payment_service.make_payment_request()
+
+            print(request)
+
+            new_payment = Payment(
+                tenant_id=tenant.id,
+                unit_id=tenant.unit.id,
+                landlord_id=tenant.unit.landlord.id,
+                paid=True,
+                date=date.today(),
+                amount=tenant.unit.rent
+            )
+
+            db.session.add(new_payment)
+            db.session.commit()
+
+            compose_email(tenant, 'payment_success')
+            compose_email(tenant.unit.landlord, 'landlord_receipt', tenant=tenant)
+
+            return redirect(url_for("tenant_bp.tenant_payments", tenant_id=tenant.id))
+        except Exception as e:
+            return jsonify({"status": "error", "message": str(e)})
+    else:
+        return render_template('makepayment.html', tenant=tenant)
 
 @tenant_bp.route('/tenant/<int:tenant_id>/<int:payment_id>')
 def tenant_payment(tenant_id, payment_id):
