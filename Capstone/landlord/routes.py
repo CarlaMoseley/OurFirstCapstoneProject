@@ -1,8 +1,11 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session, flash
 from flask import current_app as app
+from flask_session import Session
 from ..db import db
 from ..models import Landlord, Unit, Expense
 import hashlib
+from datetime import timedelta
+
 
 # Blueprint for landlord
 landlord_bp = Blueprint(
@@ -10,6 +13,12 @@ landlord_bp = Blueprint(
     template_folder='templates',
     static_folder='static'
 )
+
+# Configure Flask-Session
+SESSION_TYPE = 'filesystem'
+PERMANENT_SESSION_LIFETIME = timedelta(seconds=10)
+app.config.from_object(__name__)
+Session(app)
 
 
 def check_credentials(username, password):
@@ -20,7 +29,6 @@ def check_credentials(username, password):
         return True, landlord.id
     else:
         return False, None
-
 
 
 @landlord_bp.route('/landlord')
@@ -43,16 +51,19 @@ def landlord_login():
             # Store the landlord_id in the session for future use
             session['landlord_id'] = landlord_id
 
+            # Set session timeout
+            session.permanent = True
+
             # Redirect to the landlord profile page with the landlord_id
             return redirect(url_for('landlord_bp.landlord_profile', landlord_id=landlord_id))
         else:
             # User does not exist or incorrect credentials, show an error message
             error_message = "Invalid credentials. Please try again."
             flash(error_message, 'error')
-            return render_template('login.html', error_message=error_message)
+            return render_template('landlord_landlord_login.html', error_message=error_message)
 
     # Render the login page for GET requests
-    return render_template('login.html')
+    return render_template('landlord_login.html')
 
 
 @landlord_bp.route('/landlord/signup', methods=['GET', 'POST'])
@@ -86,7 +97,6 @@ def landlord_signup():
         # Redirect to a success page or another route
         flash('Landlord registration successful!', 'success')
 
-
 # landlord sign up page
     return render_template('LandlordSignUp.html')
 
@@ -119,6 +129,7 @@ def landlord_unit_page(landlord_id, unit_id):
 
     return render_template('landlord_unit_page.html', landlord=landlord, unit=unit)
 
+
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>/expenses', methods=['GET'])
 def landlord_unit_expenses(landlord_id, unit_id):
     # render expenses for given unit
@@ -128,6 +139,7 @@ def landlord_unit_expenses(landlord_id, unit_id):
 
     return render_template('landlord_unit_expenses.html', landlord=landlord, unit=unit, expenses=expenses)
 
+
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>/payments', methods=['GET'])
 def landlord_unit_payments(landlord_id, unit_id):
     # render payments for given unit
@@ -136,6 +148,7 @@ def landlord_unit_payments(landlord_id, unit_id):
     payments=unit.payments
 
     return render_template('landlord_unit_payments.html', landlord=landlord, unit=unit, payments=payments)
+
 
 @landlord_bp.route('/landlord/<int:landlord_id>/createunit', methods=['GET', 'POST'])
 def create_unit(landlord_id):
@@ -209,6 +222,7 @@ def create_expense(landlord_id):
 
         return redirect(url_for('landlord_bp.landlord_profile', landlord_id=landlord.id))
 
+
 @landlord_bp.route('/landlord/<int:landlord_id>/payments', methods=['GET'])
 def landlord_payments(landlord_id):
     # render payments table for all units
@@ -216,3 +230,9 @@ def landlord_payments(landlord_id):
     payments=landlord.payments
 
     return render_template('landlord_payments.html', landlord=landlord, payments=payments)
+
+
+@landlord_bp.route('/landlord/logout')
+def landlord_logout():
+    session.pop('landlord_id', None)  # Remove the landlord_id from the session
+    return redirect(url_for('landlord_bp.landlord_login'))
