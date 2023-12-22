@@ -1,0 +1,41 @@
+{% extends "landlord_base.html" %}
+
+{% block title %}Create Unit{% endblock %}
+
+{% block content %}
+  <h1>Create New Unit</h1>
+
+  <form action="{{ url_for('landlord_bp.create_unit', landlord_id=landlord.id) }}" method="POST">
+    <!-- Unit Number (String) -->
+    <label for="unit_number">Unit Number:</label>
+    <input type="text" id="unit_number" name="unit_number">
+
+    <br>
+
+    <!-- Address (String) -->
+    <label for="address">Address:</label>
+    <input type="text" id="address" name="address" required>
+
+    <br>
+
+    <!-- Rent (Float) -->
+    <label for="rent">Rent:</label>
+    <input type="number" step="0.01" id="rent" name="rent">
+
+    <br>
+
+    <!-- Lease Start (Date) -->
+    <label for="lease_start">Lease Start:</label>
+    <input type="date" id="lease_start" name="lease_start">
+
+    <br>
+
+    <!-- Rent Due (Integer between 1 and 31 with default of 1) -->
+    <label for="rent_due">Rent Due (1-31, default 1):</label>
+    <input type="number" id="rent_due" name="rent_due" min="1" max="31" value="1">
+
+    <br>
+
+    <button type="submit">Create Unit</button>
+  </form>
+{% endblock %}

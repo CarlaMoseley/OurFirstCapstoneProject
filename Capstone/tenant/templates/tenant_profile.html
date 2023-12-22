@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h2>Unit Information</h2>
+    {% if tenant.unit %}
+        <p>
+            {% if tenant.unit.unit_number %}
+                <strong>Unit Number:</strong> {{ tenant.unit.unit_number }}<br>
+            {% endif %}
+            <strong>Address:</strong> {{ tenant.unit.address }}<br>
+            <strong>Rent:</strong> {{ tenant.unit.rent }}<br>
+            <strong>Lease Start:</strong> {{ tenant.unit.lease_start }}<br>
+            <strong>Due Date:</strong> {{ tenant.unit.due_date }}
+        </p>
+    {% else %}
+        <p>No unit information available for this tenant.</p>
+    {% endif %}
+{% endblock %}

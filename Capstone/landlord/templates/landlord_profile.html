@@ -1,0 +1,43 @@
+{% extends "landlord_base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  <h2>Home Page</h2>
+  <h2>Unit Information</h2>
+  <table id="unitsTable" border="1" class="sortable">
+    <thead>
+      <tr>
+        <th data-column="unit_number">Unit Number</th>
+        <th data-column="address">Address</th>
+        <th data-column="rent">Rent</th>
+        <th data-column="lease_start">Lease Start</th>
+        <th data-column="rent_due">Payment Date</th>
+        <!-- Add more unit attributes as needed -->
+      </tr>
+    </thead>
+    <tbody>
+      {% for unit in units %}
+        <tr>
+          <td>{{ unit.unit_number }}</td>
+          <td>{{ unit.address }}</td>
+          <td>{{ unit.rent }}</td>
+          <td>{{ unit.lease_start }}</td>
+          <td>{{ unit.rent_due }}</td>
+          <!-- Add more unit attributes as needed -->
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Button to Add a New Unit -->
+  <h2>Add New Unit</h2>
+  <a href="{{ url_for('landlord_bp.create_unit', landlord_id=landlord.id) }}"><button>Add New Unit</button></a>
+
+  <script src="{{ url_for('static', filename='sorttable.js') }}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      makeSortable(document.getElementById('unitsTable'));
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "landlord_base.html" %}
+
+{% block title %}Unit {{ unit.id }}{% endblock %}
+
+{% block content %}
+  <h2>Unit {{ unit.id }}</h2>
+
+  <div class="container">
+    <h2>Unit Information</h2>
+    <div class="info">
+      <strong>Unit Number:</strong> {{ unit.unit_number }}<br>
+      <strong>Address:</strong> {{ unit.address }}<br>
+      <strong>Rent:</strong> {{ unit.rent }}<br>
+      <strong>Lease Start:</strong> {{ unit.lease_start }}<br>
+      <strong>Rent Due:</strong> {{ unit.rent_due }}
+    </div>
+  </div>
+
+  <a href="{{ url_for('landlord_bp.landlord_unit_payments', landlord_id=landlord.id, unit_id=unit.id) }}"><button>Payments</button></a>
+  <a href="{{ url_for('landlord_bp.landlord_unit_expenses', landlord_id=landlord.id, unit_id=unit.id) }}"><button>Expenses</button></a>
+{% endblock %}
