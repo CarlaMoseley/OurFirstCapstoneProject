@@ -14,7 +14,7 @@ body {
     border-radius: 10px;
     text-align: left;
     width: 21.5%;
-    box-shadow: 5px 5px 5px rgba(218, 217, 217, 0.274);
+    box-shadow: 5px 5px 5px 5px rgba(218, 217, 217, 0.274);
 }
 
 h1{

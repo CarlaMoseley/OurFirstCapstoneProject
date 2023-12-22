@@ -1,0 +1,44 @@
+{% extends "landlord_base.html" %}
+
+{% block title %}Tenants{% endblock %}
+
+{% block content %}
+  <h2>Tenants</h2>
+  <table id="tenantsTable" class="sortable">
+    <thead>
+      <tr>
+        <th data-column="first_name">First Name</th>
+        <th data-column="last_name">Last Name</th>
+        <th data-column="phone_number">Phone Number</th>
+        <th data-column="email">Email</th>
+        <th data-column="unit_number">Unit Number</th>
+        <th data-column="address">Address</th>
+        <th data-column="rent">Rent</th>
+        <th data-column="rent_due">Payment Due</th>
+        <th data-column="lease_start">Lease Start</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for tenant in tenants %}
+        <tr>
+          <td>{{ tenant.first_name }}</td>
+          <td>{{ tenant.last_name }}</td>
+          <td>{{ tenant.phone_number }}</td>
+          <td>{{ tenant.email }}</td>
+          <td>{{ tenant.unit.unit_number }}</td>
+          <td>{{ tenant.unit.address }}</td>
+          <td>{{ tenant.unit.rent }}</td>
+          <td>{{ tenant.unit.rent_due }}</td>
+          <td>{{ tenant.unit.lease_start }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <script src="{{ url_for('static', filename='sorttable.js') }}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      makeSortable(document.getElementById('tenantsTable'));
+    });
+  </script>
+{% endblock %}

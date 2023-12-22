@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, sessio
 from flask import current_app as app
 from ..db import db
 from ..models import Landlord, Unit, Expense
+import hashlib
 
 # Blueprint for landlord
 landlord_bp = Blueprint(
@@ -54,9 +55,37 @@ def landlord_login():
     return render_template('login.html')
 
 
-@landlord_bp.route('/landlord/signup')
+@landlord_bp.route('/landlord/signup', methods=['GET', 'POST'])
 def landlord_signup():
-    # landlord sign up page
+    if request.method == 'POST':
+        f_name = request.form.get('f_name')
+        l_name = request.form.get('l_name')
+        phonenumber = request.form.get('phonenumber')
+        email = request.form.get('email')
+        username = request.form.get('username')
+        password = request.form.get('password')
+        confirmpassword = request.form.get('confirmpassword')
+
+        if password != confirmpassword:
+            error_message = "Password does not match"
+            flash(error_message, 'error')
+            #redirect back to signup page
+            return redirect(url_for('landlord_bp.landlord_signup'))
+
+        new_landlord = Landlord(
+            first_name=f_name,
+            last_name=l_name,
+            phone_number=phonenumber,
+            email=email,
+            username=username,
+            password=password
+        )
+        db.session.add(new_landlord)
+        db.session.commit()
+
+        # Redirect to a success page or another route
+        flash('Landlord registration successful!', 'success')
+# landlord sign up page
     return render_template('LandlordSignUp.html')
 
 
@@ -66,17 +95,18 @@ def landlord_profile(landlord_id):
     landlord = Landlord.query.filter_by(id=landlord_id).first()
     units = landlord.units
 
-    return render_template('landlordhome.html', landlord=landlord, units=units)
+    return render_template('landlord_profile.html', landlord=landlord, units=units)
 
 
 @landlord_bp.route('/landlord/<int:landlord_id>/tenants', methods=['GET'])
 def landlord_tenants(landlord_id):
     landlord = Landlord.query.filter_by(id=landlord_id).first()
+    units = landlord.units
     tenants = []
-    for unit in landlord.units:
+    for unit in units:
         tenants.extend(unit.tenants)
     
-    return render_template('PLACEHOLDER', landlord=landlord, tenants=tenants)
+    return render_template('landlord_tenants.html', landlord=landlord, tenants=tenants, units=units)
 
 
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>', methods=['GET'])
@@ -85,7 +115,7 @@ def landlord_unit_page(landlord_id, unit_id):
     landlord=Landlord.query.filter_by(id=landlord_id).first()
     unit=Unit.query.filter_by(id=unit_id).first()
 
-    return render_template('PLACEHOLDER', landlord=landlord, unit=unit)
+    return render_template('landlord_unit_page.html', landlord=landlord, unit=unit)
 
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>/expenses', methods=['GET'])
 def landlord_unit_expenses(landlord_id, unit_id):
@@ -94,7 +124,7 @@ def landlord_unit_expenses(landlord_id, unit_id):
     unit=Unit.query.filter_by(id=unit_id).first()
     expenses=unit.expenses
 
-    return render_template('PLACEHOLDER', landlord=landlord, unit=unit, expenses=expenses)
+    return render_template('landlord_unit_expenses.html', landlord=landlord, unit=unit, expenses=expenses)
 
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>/payments', methods=['GET'])
 def landlord_unit_payments(landlord_id, unit_id):
@@ -103,7 +133,7 @@ def landlord_unit_payments(landlord_id, unit_id):
     unit=Unit.query.filter_by(id=unit_id).first()
     payments=unit.payments
 
-    return render_template('PLACEHOLDER', landlord=landlord, unit=unit, payments=payments)
+    return render_template('landlord_unit_payments.html', landlord=landlord, unit=unit, payments=payments)
 
 @landlord_bp.route('/landlord/<int:landlord_id>/createunit', methods=['GET', 'POST'])
 def create_unit(landlord_id):
@@ -122,17 +152,17 @@ def create_unit(landlord_id):
             landlord_id=landlord.id,
             unit_number=unit_number,
             address=address,
-            rent=rent,
-            lease_start=lease_start,
-            rent_due=rent_due,
+            rent=rent if rent else None,
+            lease_start=lease_start if lease_start else None,
+            rent_due=rent_due if rent_due else None,
         )
 
         db.session.add(new_unit)
         db.session.commit()
 
-        unit = Unit.query.filter(landlord_id=landlord.id).filter(unit_number=unit).filter(address=address).first()
+        unit = new_unit
         
-        return redirect(url_for('landlord_unit_page', landlord_id=unit.landlord_id, unit_id=unit.id))
+        return redirect(url_for('landlord_bp.landlord_unit_page', landlord_id=unit.landlord_id, unit_id=unit.id))
 
 
 @landlord_bp.route('/landlord/<int:landlord_id>/expenses', methods=['GET'])
@@ -145,7 +175,7 @@ def landlord_expenses(landlord_id):
     for unit in units:
         expenses.extend(unit.expenses)
 
-    return render_template('PLACEHOLDER', landlord=landlord, units=units, expenses=expenses)
+    return render_template('landlord_expenses.html', landlord=landlord, units=units, expenses=expenses)
     
 
 @landlord_bp.route('/landlord/<int:landlord_id>/createexpense', methods=['GET', 'POST'])
@@ -154,7 +184,7 @@ def create_expense(landlord_id):
     landlord = Landlord.query.filter_by(id=landlord_id).first()
     units = landlord.units
     if request.method == 'GET':
-        return render_template('PLACEHOLDER', landlord=landlord, units=units)
+        return render_template('create_expense.html', landlord=landlord, units=units)
     elif request.method == 'POST':
         unit_id = request.form.get('unit_id')
         cost = request.form.get('cost')
@@ -175,7 +205,7 @@ def create_expense(landlord_id):
         db.session.add(new_expense)
         db.session.commit()
 
-        return redirect(url_for('landlord_profile', landlord_id=landlord.id))
+        return redirect(url_for('landlord_bp.landlord_profile', landlord_id=landlord.id))
 
 @landlord_bp.route('/landlord/<int:landlord_id>/payments', methods=['GET'])
 def landlord_payments(landlord_id):
@@ -183,4 +213,4 @@ def landlord_payments(landlord_id):
     landlord = Landlord.query.filter_by(id=landlord_id).first()
     payments=landlord.payments
 
-    return render_template('PLACEHOLDER', landlord=landlord, payments=payments)
+    return render_template('landlord_payments.html', landlord=landlord, payments=payments)

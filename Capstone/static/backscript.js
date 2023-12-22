@@ -8,7 +8,22 @@ document.getElementById('login').addEventListener('click', function returnToLogi
             console.error('Wrong URL PATH or value entered');
         }
 })
+document.getElementById('password').addEventListener('input', checkPasswordMatch);
+document.getElementById('confirmpassword').addEventListener('input', checkPasswordMatch);
 
+function checkPasswordMatch() {
+    var password = document.getElementById('password').value;
+    var confirmPassword = document.getElementById('confirmpassword').value;
+    var checkmarkElement = document.getElementById('passwordMatch');
+
+    if (password === confirmPassword) {
+        checkmarkElement.innerHTML = '&#10004;'; // Display checkmark
+        checkmarkElement.style.color = 'green'; // Set color to green
+    } else {
+        checkmarkElement.innerHTML = '&#10006;'; // Display "X"
+        checkmarkElement.style.color = 'red'; // Set color to red
+    }
+}
 document.addEventListener('DOMContentLoaded', function() {
     // Get the background element (assuming it has an ID of 'background')
     const backgroundElement = document.body;
@@ -44,4 +59,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Optionally, you can also update the background image when the URL changes
     window.addEventListener('popstate', setBackgroundImage);
+
 });
