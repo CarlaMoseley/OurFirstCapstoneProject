@@ -97,7 +97,6 @@ def landlord_signup():
         # Redirect to a success page or another route
         flash('Landlord registration successful!', 'success')
 
-# landlord sign up page
     return render_template('LandlordSignUp.html')
 
 

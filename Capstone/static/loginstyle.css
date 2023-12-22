@@ -1,0 +1,92 @@
+body {
+    background-repeat: no-repeat;
+    background-size: cover;
+    transition: transform 0.5s ease-in-out;
+    font-family:'Times New Roman', Times, serif;
+    color: aliceblue;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: rgba(188, 188, 188, 0.886);
+    padding: 5%;
+    border-radius: 10px;
+    text-align: center;
+    margin: 0;
+}
+
+h2 {
+    font-size: xx-large;
+    margin: 0; /* Remove default margin */
+    text-align: left; /* Align text to the left */
+    text-shadow: 2px 2px 4px #000000;
+}
+button{
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    border-radius: 0.5em 0.5em ;
+    padding: 4px;
+    border: 1px solid rgba(207, 202, 202, 0);
+
+
+}
+button:hover, #signup:hover{
+    cursor: pointer;
+}
+input {
+    padding: 12px;
+    border-radius: 1em 1em;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+    width: 50%;
+    transition: width 0.5s ease-in-out; /* Corrected syntax */
+}
+
+input:focus {
+    border: 3px solid whitesmoke;
+    width: 100%;
+}
+
+#signup{
+    text-decoration-line: underline;
+    text-shadow: 2px 2px 4px #000000;
+}
+#error-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Ensure it's above other elements */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error {
+    padding: 20px;
+    background-color: #f44336; /* Red */
+    color: white;
+    margin-bottom: 15px;
+    text-align: left; /* Center text */
+    width: 100%;
+}
+
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    float: right;
+}
+
+.closebtn:hover {
+    color: black;
+}
+
+

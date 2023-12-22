@@ -5,11 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="047f6c1c-d90a-4cc0-a17c-499490e820a7" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Capstone/home/templates/start.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Capstone/static/backscript.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Capstone/static/loginstyle.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Capstone/app.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Capstone/assets.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/assets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/home/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/home/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/home/templates/index.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Capstone/landlord/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/landlord/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/landlord/templates/landlord_login.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/landlord/templates/landlord_login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/static/backscript.js" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/static/backscript.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/static/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/static/login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/templates/LandlordSignUp.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/templates/LandlordSignUp.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/templates/TenantSignUp.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/templates/TenantSignUp.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/templates/landlordhome.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/templates/landlordhome.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Capstone/tenant/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/tenant/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/tenant/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/tenant/templates/tenant_login.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -43,7 +55,7 @@
     "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "manan"
+    "git-widget-placeholder": "Merging manan"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
