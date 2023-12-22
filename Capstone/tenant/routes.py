@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session, flash
 from flask import current_app as app
+from flask_session import Session
+from datetime import timedelta
 from ..models import Tenant, Unit, Payment
 from ..db import db
 
@@ -9,6 +11,12 @@ tenant_bp = Blueprint(
     template_folder='templates',
     static_folder='static'
 )
+
+# Configure Flask-Session
+SESSION_TYPE = 'filesystem'
+PERMANENT_SESSION_LIFETIME = timedelta(seconds=10)
+app.config.from_object(__name__)
+Session(app)
 
 
 def check_credentials(username, password):
@@ -39,15 +47,18 @@ def tenant_login():
             # Store the tenant_id in the session for future use
             session['tenant_id'] = tenant_id
 
+            # Set session timeout
+            session.permanent = True
+
             # Redirect to the tenant profile page with the tenant_id
             return redirect(url_for('tenant_bp.tenant_profile', tenant_id=tenant_id))
         else:
             # User does not exist or incorrect credentials, show an error message
             error_message = "Invalid credentials. Please try again."
-            return render_template('login.html', error_message=error_message)
+            return render_template('landlord_login.html', error_message=error_message)
 
     # Render the login page for GET requests
-    return render_template('login.html')
+    return render_template('tenant_login.html')
 
 
 @tenant_bp.route('/tenant/signup', methods=['GET', 'POST'])
@@ -67,7 +78,7 @@ def tenant_signup():
             flash(error_message, 'error')
 
             # redirect back to signup page
-            return redirect(url_for('landlord_bp.landlord_signup'))
+            return redirect(url_for('tenant_bp.tenant_signup'))
 
         if unit_id is None:
             flash('Unit ID is required', 'error')
@@ -96,6 +107,7 @@ def tenant_signup():
 
     # tenant sign up page
     return render_template('TenantSignUp.html')
+
 
 @tenant_bp.route('/tenant/<int:tenant_id>')
 def tenant_profile(tenant_id):
@@ -133,3 +145,9 @@ def tenant_payment(tenant_id, payment_id):
     payment = Payment.query.filter_by(id=payment_id).first
 
     return render_template('tenant_payment.html', tenant=tenant, payment=payment)
+
+
+@tenant_bp.route('/tenant/logout')
+def tenant_logout():
+    session.pop('tenant_id', None)  # Remove the tenant_id from the session
+    return redirect(url_for('tenant_bp.tenant_login'))
