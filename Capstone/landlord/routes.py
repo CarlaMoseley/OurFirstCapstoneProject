@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session, flash
 from flask import current_app as app
-from flask_session import Session
 from ..db import db
 from ..models import Landlord, Unit, Expense
 import hashlib
-from datetime import timedelta
+from datetime import datetime, timedelta
+import secrets
 
 
 # Blueprint for landlord
@@ -14,11 +14,30 @@ landlord_bp = Blueprint(
     static_folder='static'
 )
 
-# Configure Flask-Session
-SESSION_TYPE = 'filesystem'
-PERMANENT_SESSION_LIFETIME = timedelta(seconds=10)
-app.config.from_object(__name__)
-Session(app)
+# Add this constant to define the session timeout period (in seconds)
+SESSION_TIMEOUT = 10
+app.secret_key = secrets.token_hex(16)  # This will generate a 32-character hexadecimal key
+
+
+@app.before_request
+def check_session_timeout():
+    # Check if the user is logged in
+    landlord_id = session.get('landlord_id')
+    if landlord_id is not None:
+        # Update the last activity time for the user in the session
+        session.permanent = True
+        app.permanent_session_lifetime = timedelta(seconds=SESSION_TIMEOUT)
+        session['last_activity'] = datetime.utcnow()
+
+    # Check if the session has timed out due to inactivity
+    last_activity = session.get('last_activity')
+    print(last_activity)
+    print(datetime.utcnow())
+    if last_activity is not None and datetime.utcnow() - last_activity > timedelta(seconds=SESSION_TIMEOUT):
+        # Log out the user if the session has timed out
+        session.pop('landlord_id', None)
+        # flash('Session has timed out due to inactivity. Please log in again.', 'error')
+        redirect(url_for('landlord_bp.landlord_redirect'))
 
 
 def check_credentials(username, password):
@@ -31,11 +50,10 @@ def check_credentials(username, password):
         return False, None
 
 
-@landlord_bp.route('/landlord')
+@landlord_bp.route('/landlord', methods=['GET', 'POST'])
 def landlord_redirect():
-    # if user is logged in, redirect to user profile page
-    # else, redirect to tenant login page
-    pass
+    print("wow")
+    return render_template('landlord_login.html')
 
 
 @landlord_bp.route('/landlord/login', methods=['GET', 'POST'])
@@ -48,11 +66,8 @@ def landlord_login():
         user_exists, landlord_id = check_credentials(username, password)
 
         if user_exists:
-            # Store the landlord_id in the session for future use
+            # Set the landlord_id in the session after successful login
             session['landlord_id'] = landlord_id
-
-            # Set session timeout
-            session.permanent = True
 
             # Redirect to the landlord profile page with the landlord_id
             return redirect(url_for('landlord_bp.landlord_profile', landlord_id=landlord_id))
@@ -60,7 +75,7 @@ def landlord_login():
             # User does not exist or incorrect credentials, show an error message
             error_message = "Invalid credentials. Please try again."
             flash(error_message, 'error')
-            return render_template('landlord_landlord_login.html', error_message=error_message)
+            return render_template('landlord_login.html', error_message=error_message)
 
     # Render the login page for GET requests
     return render_template('landlord_login.html')
@@ -155,7 +170,7 @@ def create_unit(landlord_id):
     landlord=Landlord.query.filter_by(id=landlord_id).first()
     if request.method == 'GET':
         return render_template('create_unit.html', landlord=landlord)
-    elif request.method=='POST':
+    elif request.method =='POST':
         unit_number = request.form.get('unit_number')
         address = request.form.get('address')
         rent = request.form.get('rent')
