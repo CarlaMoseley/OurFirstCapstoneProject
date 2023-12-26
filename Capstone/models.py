@@ -30,6 +30,7 @@ class Unit(db.Model):
     rent = db.Column(db.Float, nullable=True)
     lease_start = db.Column(db.Date, nullable=True)
     rent_due = db.Column(db.Integer, nullable=True)
+    tenant_password = db.Column(db.String(10), nullable=True)
     tenants = db.relationship('Tenant', backref='unit', lazy=True)
     payments = db.relationship('Payment', backref='unit', lazy=True)
     expenses = db.relationship('Expense', backref='unit', lazy=True)

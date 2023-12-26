@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{url_for('static', filename='base.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-" crossorigin="anonymous" />
+
 </head>
 <body>
   <div id="sidenav" class="sidenav">
@@ -22,6 +24,20 @@
         <a href="{{ url_for('landlord_bp.landlord_profile', landlord_id=landlord.id) }}#create_expense">Create Expense</a>
         <a href="{{ url_for('landlord_bp.landlord_profile', landlord_id=landlord.id) }}#create_unit">Create Unit</a>
       </div>
+    </div>
+    <span id="profile" onclick="showProfile()"><i class="fa fa-user" aria-hidden="true"></i></span>
+    <div id="User-Pop-up" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p>Profile</p>
+        {% if landlord %}
+          <h1>{{ landlord.first_name }} {{ landlord.last_name }}</h1>
+          <p>{{landlord.phone_number}}</p>
+          <p>{{landlord.email}}</p>
+        {% endif %}
+      </div>
+    
     </div>
   </section>
   

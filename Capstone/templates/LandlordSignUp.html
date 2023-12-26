@@ -21,7 +21,8 @@
     <div class="container">
         <h1>Landlord Sign Up</h1>
         <form action="{{ url_for('landlord_bp.landlord_signup') }}" method="post">
-            <input type="text" id="name" name="name" class ="enter"placeholder="Name" required="Yes">
+            <input type="text" id="f_name" name="f_name" class ="enter"placeholder="First Name" required="Yes">
+            <input type="text" id="l_name" name="l_name" class ="enter"placeholder="Last Name" required="Yes">
             <input type="number" id="phonenumber" name="phonenumber" class="enter"placeholder="Phone #" required="Yes">
             <input type="email" id="email" name="email" class ="enter"placeholder="Email" required="Yes">
             <input type="username" id="username" name="username" class ="enter"placeholder="Username" required="No">
