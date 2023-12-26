@@ -3,7 +3,8 @@
 {% block title %}Tenants{% endblock %}
 
 {% block content %}
-  <h2>Tenants</h2>
+<section id="Greeting"><h1>Tenants</h1></section>
+<div id="Unit-Information">
   <table id="tenantsTable" class="sortable">
     <thead>
       <tr>
@@ -41,4 +42,5 @@
       makeSortable(document.getElementById('tenantsTable'));
     });
   </script>
+</div> 
 {% endblock %}

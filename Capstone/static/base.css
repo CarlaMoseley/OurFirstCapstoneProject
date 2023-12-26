@@ -1,0 +1,227 @@
+body{
+    background-color: rgb(235, 235, 235);
+    font-family: 'Times New Roman', Times, serif;
+
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #f7f7f7;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+  }
+  
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #0f0f0f;
+    display: block;
+    transition: 0.3s;
+}
+  
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+  
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+} 
+#header {
+    min-height: 200px; /* Adjust the height as needed */
+    width: 100%; /* You can set a fixed width or use percentage based on your layout */
+    background-repeat: no-repeat;
+    background-size:  100% 100%; 
+    object-fit: cover;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5)
+}
+
+#Greeting{
+    padding: 1%;
+    font-size: x-large;
+    align-items: center;
+
+}
+
+#Unit-Information {
+    background-color: #f7f7f7;
+    box-shadow: 2px 2px 2px 2px #727070;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* Center the div horizontally */
+    justify-content: center;  /* Center the div vertically */
+    border-radius: 1em 1em;
+    width: 95%;  /* Adjust the width as needed */
+    margin: auto;  /* Center the div horizontally */
+    margin-bottom: 2%;
+}
+
+#Unit-Information h2 {
+    padding: 1%;
+    margin-left: 1%;
+    font-size: x-large;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 0;
+}
+
+#Unit-Information table {
+    border-collapse: collapse;
+    width: 90%;
+    align-self: center;
+    justify-self: center;
+    margin-bottom: 3%;
+    margin-top: 3%;
+}
+
+#Unit-Information table, #Unit-Information table tr, #Unit-Information table td,#Unit-Information table th {
+    border: 1px solid rgb(95, 95, 95);
+}
+#Unit-Information table td{
+    text-align: center;
+}
+#Unit-Information table td{
+    text-align: center;
+    padding: 1%;
+}
+#Unit-Information table tr:hover {
+    background-color: rgba(2, 255, 137, 0.719);
+}
+#Suggested-Tasks{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;  /* Center the div vertically */
+    border-radius: 1em 1em;
+    margin: auto;  /* Center the div horizontally */
+}
+#Suggested-Tasks h2{
+    padding: 1%;
+    margin-left: 1%;
+    font-size: x-large;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+}
+.task {
+    background-color: #f7f7f7;
+    box-shadow: 2px 2px 2px 2px #727070;
+    width: 46%;
+    margin-left: 2%;
+    margin-right: 2%;
+    border-radius: 1em 1em;
+    padding: 1%;
+    box-sizing: border-box;
+    overflow: hidden; /* Clear float inside .task */
+}
+.task label,
+.task input[type="text"],
+.task select,
+.task textarea {
+    display: block; /* Ensure each label and input is on its own line */
+    padding:1%;
+    width: 90%;
+    box-sizing: border-box;
+    margin-bottom: 1%; /* Add some space between each label and input */
+    margin-left: 5%;
+}
+
+.task label{
+    margin-left: 3%;
+}
+
+.task input[type="number"], .task input[type="date"]{
+    margin-left: 5%;
+    display: block;
+    box-sizing: border-box;
+    margin-bottom: 1%; /* Add some space between each label and input */
+    padding:1%;
+}
+
+.task {
+    position: relative;
+}
+
+.task button {
+    position: absolute;
+    bottom: 1%;
+    right: 1%;
+    margin: 10px;
+    text-decoration: none;
+    border:#727070;
+    border-radius: 1em 1em;
+    box-shadow: 1px 1px 1px #2c2b2b;
+    padding: 3%;
+}
+
+.task select, .task button:hover{
+    cursor: pointer;
+}
+
+/* Add this CSS to your existing stylesheet */
+#top-menu {
+    min-height: 35px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+}
+
+#top-menu span,
+.dropdown span {
+    font-size: 20px;
+    cursor: pointer;
+    border-right: solid 1px #727070;
+    display: flex;
+    padding: 15px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+    align-items: center; /* Align text vertically in the middle */
+    height: 100%;
+}
+
+
+.dropdown:hover #suggestedTasksDropdown {
+    display: block;
+}
+
+.Suggested-Tasks-Quick-Links {
+    display: none;
+    position: absolute;
+    background-color: #f7f7f7;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+    min-width: 160px;
+    z-index: 1;
+    margin-top: 8px; /* Adjust this value to align the dropdown with the span */
+}
+
+.Suggested-Tasks-Quick-Links a {
+    display: block;
+    color: #0f0f0f;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 16px;
+    text-align: left;
+}
+
+.Suggested-Tasks-Quick-Links a:hover {
+    background-color: #ddd;
+    color: #000;
+}
+input[type="date"]{
+    cursor: text;
+}

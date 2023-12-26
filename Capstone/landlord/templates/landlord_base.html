@@ -3,51 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Landlord Portal{% endblock %}</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #333;
-            padding: 10px;
-            color: white;
-            text-align: center;
-        }
-        nav {
-            background-color: #f2f2f2;
-            padding: 10px;
-        }
-        nav a {
-            margin-right: 20px;
-            text-decoration: none;
-            color: #333;
-        }
-    </style>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='base.css')}}">
 </head>
 <body>
-
-  <header>
-    <h1>Landlord Portal</h1>
-    {% if landlord %}
-      <p>Welcome, {{ landlord.first_name }} {{ landlord.last_name }}!</p>
-    {% endif %}
-  </header>
-
-  <nav>
+  <div id="sidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <a href="{{ url_for('landlord_bp.landlord_profile', landlord_id=landlord.id) }}">Home</a>
-    <a href="{{ url_for('landlord_bp.landlord_tenants', landlord_id=landlord.id) }}">Tenants</a>
     <a href="{{ url_for('landlord_bp.landlord_expenses', landlord_id=landlord.id) }}">Expenses</a>
+    <a href="{{ url_for('landlord_bp.landlord_tenants', landlord_id=landlord.id) }}">Tenants</a>
     <a href="{{ url_for('landlord_bp.landlord_payments', landlord_id=landlord.id) }}">Payments</a>
-    <a href="{{ url_for('landlord_bp.create_unit', landlord_id=landlord.id) }}">Add Unit</a>
-    <a href="{{ url_for('landlord_bp.create_expense', landlord_id=landlord.id) }}">Add Expense</a>
-  </nav>
-
+  </div>
+  <section id="top-menu">
+    <span onclick="openNav()">&#9776; Menu </span>
+    <div class="dropdown">
+      <span onclick="toggleDropdown()">Suggested Tasks</span>
+      <div class="Suggested-Tasks-Quick-Links" id="suggestedTasksDropdown">
+        <a href="{{ url_for('landlord_bp.landlord_profile', landlord_id=landlord.id) }}#create_expense">Create Expense</a>
+        <a href="{{ url_for('landlord_bp.landlord_profile', landlord_id=landlord.id) }}#create_unit">Create Unit</a>
+      </div>
+    </div>
+  </section>
+  
+  <div class="w3-overlay" id="myOverlay"></div>
+  <div id="header"></div>
+ 
+  <!--Different information from here-->
   <main>
     {% block content %}{% endblock %}
   </main>
-
+  <script src="{{url_for('static', filename='base.js')}}"></script>
 </body>
 </html>
