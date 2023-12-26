@@ -2,9 +2,15 @@ from flask import Blueprint, render_template, redirect, url_for, request, sessio
 from flask import current_app as app
 from ..db import db
 from ..models import Landlord, Unit, Expense
+<<<<<<< HEAD
 import hashlib
 from datetime import datetime, timedelta
 import secrets
+=======
+from ..utils.password_hash import hash_password
+from ..utils.inputblacklist import sanitize_input
+from datetime import timedelta
+>>>>>>> 6bac631c31733831ae3f94fc398a9583066ddea9
 
 
 # Blueprint for landlord
@@ -62,8 +68,16 @@ def landlord_login():
         username = request.form.get('username')
         password = request.form.get('password')
 
+        try: 
+            sanitize_input(password, username)
+        except ValueError as e:
+            error_message = f"Invalid credentials: {str(e)}"
+            return render_template('tenant_login.html', error_message=error_message)
+
+        secured_hash_password = hash_password(password) 
+
         # Check if the user exists in the database
-        user_exists, landlord_id = check_credentials(username, password)
+        user_exists, landlord_id = check_credentials(username, secured_hash_password)
 
         if user_exists:
             # Set the landlord_id in the session after successful login
@@ -92,7 +106,16 @@ def landlord_signup():
         password = request.form.get('password')
         confirmpassword = request.form.get('confirmpassword')
 
-        if password != confirmpassword:
+        try: 
+            sanitize_input(password, username)
+        except ValueError as e:
+            error_message = f"Invalid credentials: {str(e)}"
+            return redirect(url_for('tenant_bp.tenant_signup', error_message=error_message))
+        
+        secured_password = hash_password(password)
+        secured_ConfirmPassword = hash_password(confirmpassword)
+
+        if secured_password != secured_ConfirmPassword:
             error_message = "Password does not match"
             flash(error_message, 'error')
             #redirect back to signup page
@@ -104,7 +127,7 @@ def landlord_signup():
             phone_number=phonenumber,
             email=email,
             username=username,
-            password=password
+            password=secured_password
         )
         db.session.add(new_landlord)
         db.session.commit()

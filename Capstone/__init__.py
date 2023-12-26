@@ -1,6 +1,11 @@
 from flask import Flask
+from sqlalchemy import inspect
 # from flask_assets import Environment
 from .db import db
+
+def tables_exist():
+    inspector = inspect(db.engine)
+    return all(inspector.get_table_names())
 
 
 def create_app():
@@ -26,6 +31,7 @@ def create_app():
         app.register_blueprint(tenant.tenant_bp)
         app.register_blueprint(landlord.landlord_bp)
 
+        
         db.create_all()
         # compile static assets
         # compile_static_assets(assets)

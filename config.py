@@ -13,7 +13,7 @@ class Config:
     TEMPLATES_FOLDER = "templates"
     SNOWFLAKE_PARAMETERS = {
         'user':'dev_snowflake_training_svc',
-        'private_key_file':r'Capstone/dev_snowflake_training_rsa_key.p8',
+        'private_key_file':r'./Capstone/dev_snowflake_training_rsa_key.p8',
         'private_key_file_pwd':'B7GX$en3Pz#fSw8yi!pv',
         'account':'fiservbanksolutionsawslow1.us-east-1.privatelink',
         'database':'TECHNICAL_TRAINEE',
