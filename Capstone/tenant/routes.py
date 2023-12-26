@@ -26,7 +26,7 @@ Session(app)
 
 def check_credentials(username, secured_hash_password):
     tenant = Tenant.query.filter_by(username=username).first()
-    if tenant.secured_password == secured_hash_password:
+    if tenant.password == secured_hash_password:
         return True, tenant.id
     return False, None
 
@@ -52,7 +52,7 @@ def tenant_login():
             return render_template('tenant_login.html', error_message=error_message)
         
         #Hashing appliccation
-        secured_hash_password: hash_password(password) 
+        secured_hash_password = hash_password(password) 
         
         # Check if the user exists in the database
         user_exists, tenant_id = check_credentials(username, secured_hash_password)

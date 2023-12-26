@@ -2,5 +2,5 @@
 import hashlib
 
 def hash_password(password):
-    hash_password = hashlib.sha256(password.enconde('utf-8'))
+    hash_password = hashlib.sha256(password.encode('utf-8'))
     return hash_password.hexdigest()

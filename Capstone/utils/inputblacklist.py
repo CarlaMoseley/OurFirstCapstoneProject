@@ -3,5 +3,3 @@ def sanitize_input(password, username):
     for black_list_item in black_list:
         if black_list_item.lower() in username.lower() or black_list_item.lower() in password.lower():
             raise ValueError("black list error")
-        return True
-    return False
