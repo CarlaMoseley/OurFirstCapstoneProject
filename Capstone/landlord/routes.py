@@ -120,11 +120,25 @@ def landlord_signup():
 
 @landlord_bp.route('/landlord/<int:landlord_id>', methods=['GET','POST'])
 def landlord_profile(landlord_id):
-    # render landlord profile page with units table
     landlord = Landlord.query.filter_by(id=landlord_id).first()
-    units = landlord.units
+    if request.method == 'POST':
+        f_name = request.form.get('f_name')
+        l_name = request.form.get('l_name')
+        phonenumber = request.form.get('phonenumber')
+        email = request.form.get('email')
 
-    return render_template('landlord_profile.html', landlord=landlord, units=units)
+        landlord.first_name = f_name
+        landlord.last_name = l_name
+        landlord.phone_number = phonenumber
+        landlord.email = email
+
+        db.session.commit()
+
+        redirect(url_for('landlord_bp.landlord_profile', landlord_id=landlord.id))
+    else:
+        # render landlord profile page with units table
+        units = landlord.units
+        return render_template('landlord_profile.html', landlord=landlord, units=units)
 
 
 @landlord_bp.route('/landlord/<int:landlord_id>/tenants', methods=['GET'])

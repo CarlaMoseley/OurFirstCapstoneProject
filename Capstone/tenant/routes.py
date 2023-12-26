@@ -139,9 +139,23 @@ def tenant_signup():
 def tenant_profile(tenant_id):
     # render tenant profile page
     tenant = Tenant.query.filter_by(id=tenant_id).first()
-    unit = Unit.query.filter_by(id=tenant.unit_id).first()
+    if request.method == 'POST':
+        f_name = request.form.get('f_name')
+        l_name = request.form.get('l_name')
+        phonenumber = request.form.get('phonenumber')
+        email = request.form.get('email')
 
-    return render_template('tenant_profile.html', tenant=tenant, unit=unit)
+        tenant.first_name = f_name
+        tenant.last_name = l_name
+        tenant.phone_number = phonenumber
+        tenant.email = email
+
+        db.session.commit()
+
+        redirect(url_for('tenant_bp.tenant_profile', tenant_id=tenant.id))
+    else:
+        unit = Unit.query.filter_by(id=tenant.unit_id).first()
+        return render_template('tenant_profile.html', tenant=tenant, unit=unit)
 
 
 @tenant_bp.route('/tenant/<int:tenant_id>/payments')
