@@ -29,20 +29,22 @@
     <div id="User-Pop-up" class="modal">
       <!-- Modal content -->
       <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <p>Profile</p>
-        {% if landlord %}
+        <div class="modal-header">
+          <span class="close" onclick="closeModal()">&times;</span>
+          <h1 id="profile-center">Profile</h1>
+        </div>
+        <div class="modal-body">        
+          {% if landlord %}
           <h1>{{ landlord.first_name }} {{ landlord.last_name }}</h1>
           <p>{{landlord.phone_number}}</p>
           <p>{{landlord.email}}</p>
         {% endif %}
+        </div>
       </div>
     
     </div>
   </section>
-  
-  <div class="w3-overlay" id="myOverlay"></div>
-  <div id="header"></div>
+    <div id="header"></div>
  
   <!--Different information from here-->
   <main>

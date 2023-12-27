@@ -4,30 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Tenant Information{% endblock %}</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='base.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-" crossorigin="anonymous" />
 </head>
+
 <body>
+    <div id="sidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="{{ url_for('tenant_bp.tenant_profile', tenant_id=tenant.id) }}">Home</a>
+        <a href="{{ url_for('tenant_bp.tenant_payments', tenant_id=tenant.id) }}">Payments</a>
+        <a href="{{ url_for('tenant_bp.make_payment', tenant_id=tenant.id) }}">Make A Payment</a>
+      </div>
+      <section id="top-menu">
+        <span onclick="openNav()">&#9776; Menu </span>
+        <div class="dropdown">
+          <span onclick="toggleDropdown()">Suggested Tasks</span>
+          <div class="Suggested-Tasks-Quick-Links" id="suggestedTasksDropdown">
+            <a href="{{ url_for('tenant_bp.make_payment', tenant_id=tenant.id) }}">Make A Payment</a>
+          </div>
+        </div>
+        <span id="profile" onclick="showProfile()"><i class="fa fa-user" aria-hidden="true"></i></span>
+        <div id="User-Pop-up" class="modal">
+          <!-- Modal content -->
+          <div class="modal-content">
+            <div class="modal-header">
+              <span class="close" onclick="closeModal()">&times;</span>
+              <h1 id="profile-center">Profile</h1>
+            </div>
+            <div class="modal-body">        
+              {% if tenant %}
+              <h1>{{ tenant.first_name }} {{ tenant.last_name }}</h1>
+              <p>{{tenant.phone_number}}</p>
+              <p>{{tenant.email}}</p>
+            {% endif %}
+            </div>
+          </div>       
+        </div>
+      </section>
+        <div id="header"></div>
 
-<header>
-    <h1>Tenant Information</h1>
-    <p>
-        <strong>First Name:</strong> {{ tenant.first_name }}<br>
-        <strong>Last Name:</strong> {{ tenant.last_name }}<br>
-        <strong>Phone Number:</strong> {{ tenant.phone_number }}<br>
-        <strong>Email:</strong> {{ tenant.email }}
-    </p>
-</header>
 
-<nav>
-    <ul>
-        <li><a href="{{ url_for('tenant_bp.tenant_profile', tenant_id=tenant.id) }}">Home</a></li>
-        <li><a href="{{ url_for('tenant_bp.tenant_payments', tenant_id=tenant.id) }}">Payments</a></li>
-        <li><a href="{{ url_for('tenant_bp.make_payment', tenant_id=tenant.id) }}">Make Payment</a></li>
-    </ul>
-</nav>
 
-<div id="content">
+<main>
     {% block content %}{% endblock %}
-</div>
-
+</main>
+<script src="{{url_for('static', filename='base.js')}}"></script>
 </body>
 </html>
