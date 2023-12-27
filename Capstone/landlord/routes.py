@@ -5,6 +5,7 @@ from ..db import db
 from ..models import Landlord, Unit, Expense
 from ..utils.password_hash import hash_password
 from ..utils.inputblacklist import sanitize_input
+from ..utils.date_scan import scan_units
 from datetime import timedelta
 
 
@@ -261,6 +262,13 @@ def landlord_payments(landlord_id):
     payments=landlord.payments
 
     return render_template('landlord_payments.html', landlord=landlord, payments=payments)
+
+@landlord_bp.route('/landlord/<int:landlord_id>/payments/scan', methods=['GET'])
+def landlord_scan(landlord_id):
+    landlord = Landlord.query.filter_by(id=landlord_id).first()
+    scan_units(landlord)
+
+    return redirect(url_for('landlord_bp.landlord_payments', landlord_id=landlord.id))
 
 
 @landlord_bp.route('/landlord/logout')

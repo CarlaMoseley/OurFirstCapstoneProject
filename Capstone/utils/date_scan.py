@@ -1,6 +1,6 @@
 from ..models import Payment
 from datetime import datetime, date
-from email_processor import compose_email
+from .email_processor import compose_email
 from ..db import db
 
 def scan_units(landlord):
@@ -24,7 +24,8 @@ def check_for_late_payments(unit, due_date):
             unit_id = unit.id,
             tenant_id = tenant.id,
             amount = unit.rent,
-            paid = False
+            paid = False,
+            date = due_date
         )
         db.session.add(new_payment)
     db.session.commit()
@@ -37,8 +38,9 @@ def warn_of_future_payments(unit, due_date, today):
 
 def generate_due_date(unit, today):
     if unit.rent_due >= today.day:
-        return datetime.date(year=today.year, month=today.month, day=unit.rent_due)
+        due_date = date(year=today.year, month=today.month, day=unit.rent_due)
     elif today.month == 12:
-        return datetime.date(year=today.year+1, month=1, day=unit.rent_due)
+        due_date = date(year=today.year+1, month=1, day=unit.rent_due) 
     else:
-        return datetime.date(year=today.year, month=today.month+1, day=unit.rent_due)
+        due_date = date(year=today.year, month=today.month+1, day=unit.rent_due)
+    return due_date

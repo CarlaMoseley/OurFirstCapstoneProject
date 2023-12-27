@@ -8,6 +8,7 @@ from ..utils.email_processor import compose_email
 from ..db import db
 from ..utils.password_hash import hash_password
 from ..utils.inputblacklist import sanitize_input
+import json
 
 
 # Blueprint for tenant
@@ -172,14 +173,19 @@ def make_payment(tenant_id):
     # render make payment page
     tenant = Tenant.query.filter_by(id=tenant_id).first()
     if request.method == 'POST':
+
         try:
+            amount = tenant.unit.rent
+            card_number = request.form.get('cardNumber')
+            expiration_month = request.form.get('expMonth')
+            expiration_year = request.form.get('expYear')
+            security_code = request.form.get('securityCode')
+
             # Create an instance of the PaymentService class
             payment_service = PaymentService()
 
             # Make the payment request
-            payment_service.make_payment_request()
-
-            print(request)
+            response = payment_service.make_payment_request(amount, card_number, expiration_month, expiration_year, security_code)
 
             new_payment = Payment(
                 tenant_id=tenant.id,
@@ -187,7 +193,7 @@ def make_payment(tenant_id):
                 landlord_id=tenant.unit.landlord.id,
                 paid=True,
                 date=date.today(),
-                amount=tenant.unit.rent
+                amount=
             )
 
             db.session.add(new_payment)
@@ -200,7 +206,8 @@ def make_payment(tenant_id):
         except Exception as e:
             return jsonify({"status": "error", "message": str(e)})
     else:
-        return render_template('makepayment.html', tenant=tenant)
+        unpaid_statements = tenant.payments.filter_by(paid=False).all()
+        return render_template('makepayment.html', tenant=tenant, unpaid_statements=unpaid_statements)
 
 
 @tenant_bp.route('/tenant/<int:tenant_id>/<int:payment_id>')
