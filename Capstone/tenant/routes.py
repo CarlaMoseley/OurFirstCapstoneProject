@@ -8,7 +8,6 @@ from ..utils.email_processor import compose_email
 from ..db import db
 from ..utils.password_hash import hash_password
 from ..utils.inputblacklist import sanitize_input
-from ..utils.date_scan import generate_due_date
 import pyotp
 
 
@@ -72,12 +71,8 @@ def tenant_login():
     # Render the login page for GET requests
     return render_template('tenant_login.html')
 
-<<<<<<< HEAD
-@tenant_bp.route('/tenant/2fa', methods=['GET', 'POST'])
-=======
 
 @app.route('/tenant/2fa', methods=['GET', 'POST'])
->>>>>>> 85aa9b7a1a4232ef634c1f5be5523284fa32396a
 def tenant_two_factor_auth():
     if request.method == 'POST':
         # Verify the entered OTP
@@ -161,7 +156,6 @@ def tenant_signup():
 def tenant_profile(tenant_id):
     # render tenant profile page
     tenant = Tenant.query.filter_by(id=tenant_id).first()
-    due_date = generate_due_date(tenant.unit, date.today())
     if request.method == 'POST':
         f_name = request.form.get('f_name')
         l_name = request.form.get('l_name')
@@ -178,7 +172,7 @@ def tenant_profile(tenant_id):
         redirect(url_for('tenant_bp.tenant_profile', tenant_id=tenant.id))
     else:
         unit = Unit.query.filter_by(id=tenant.unit_id).first()
-        return render_template('tenant_profile.html', tenant=tenant, unit=unit, due_date=due_date)
+        return render_template('tenant_profile.html', tenant=tenant, unit=unit)
 
 
 @tenant_bp.route('/tenant/<int:tenant_id>/payments')
