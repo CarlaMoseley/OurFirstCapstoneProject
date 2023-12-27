@@ -19,18 +19,17 @@ tenant_bp = Blueprint(
     static_folder='static'
 )
 
-# Configure Flask-Session
-SESSION_TYPE = 'filesystem'
-PERMANENT_SESSION_LIFETIME = timedelta(seconds=10)
-app.config.from_object(__name__)
-Session(app)
 
-
-def check_credentials(username, secured_hash_password):
+def check_credentials(username, password):
     tenant = Tenant.query.filter_by(username=username).first()
-    if tenant.password == secured_hash_password:
+
+    if not tenant:
+        return False, None
+
+    if tenant.password == password:
         return True, tenant.id
-    return False, None
+    else:
+        return False, None
 
 
 @tenant_bp.route('/tenant')
@@ -60,23 +59,25 @@ def tenant_login():
         user_exists, tenant_id = check_credentials(username, secured_hash_password)
 
         if user_exists:
-            # Store the tenant_id in the session for future use
             session['tenant_id'] = tenant_id
-
-            # Set session timeout
-            session.permanent = True
-
+            # Redirect to the landlord profile page with the landlord_id
+            session['last_activity'] = datetime.utcnow()
             # Redirect to the tenant profile page with the tenant_id
             return redirect(url_for('tenant_bp.tenant_profile', tenant_id=tenant_id))
         else:
             # User does not exist or incorrect credentials, show an error message
             error_message = "Invalid credentials. Please try again."
-            return render_template('landlord_login.html', error_message=error_message)
+            return render_template('tenant_login.html', error_message=error_message)
 
     # Render the login page for GET requests
     return render_template('tenant_login.html')
 
+<<<<<<< HEAD
 @tenant_bp.route('/tenant/2fa', methods=['GET', 'POST'])
+=======
+
+@app.route('/tenant/2fa', methods=['GET', 'POST'])
+>>>>>>> 85aa9b7a1a4232ef634c1f5be5523284fa32396a
 def tenant_two_factor_auth():
     if request.method == 'POST':
         # Verify the entered OTP
@@ -155,7 +156,6 @@ def tenant_signup():
     # tenant sign up page
     return render_template('TenantSignUp.html')
 
-  
 
 @tenant_bp.route('/tenant/<int:tenant_id>')
 def tenant_profile(tenant_id):
@@ -243,7 +243,7 @@ def tenant_payment(tenant_id, payment_id):
     return render_template('tenant_payment.html', tenant=tenant, payment=payment)
 
 
-@tenant_bp.route('/tenant/logout')
-def tenant_logout():
-    session.pop('tenant_id', None)  # Remove the tenant_id from the session
-    return redirect(url_for('tenant_bp.tenant_login'))
+# @tenant_bp.route('/tenant/logout')
+# def tenant_logout():
+#     session.pop('tenant_id', None)  # Remove the tenant_id from the session
+#     return redirect(url_for('tenant_bp.tenant_login'))
