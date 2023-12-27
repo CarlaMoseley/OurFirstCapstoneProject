@@ -119,7 +119,7 @@ def landlord_signup():
 
     return render_template('LandlordSignUp.html')
 
-@app.route('/landlord/2fa', methods=['GET', 'POST'])
+@landlord_bp.route('/landlord/2fa', methods=['GET', 'POST'])
 def landlord_two_factor_auth():
     if request.method == 'POST':
         # Verify the entered OTP
