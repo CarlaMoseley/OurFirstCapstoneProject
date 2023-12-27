@@ -17,8 +17,6 @@ tenant_bp = Blueprint(
     static_folder='static'
 )
 
-# Configure Flask-Session
-
 
 def check_credentials(username, secured_hash_password):
     tenant = Tenant.query.filter_by(username=username).first()
@@ -54,12 +52,6 @@ def tenant_login():
         user_exists, tenant_id = check_credentials(username, secured_hash_password)
 
         if user_exists:
-            # Store the tenant_id in the session for future use
-            session['tenant_id'] = tenant_id
-
-            # Set session timeout
-            session.permanent = True
-
             # Redirect to the tenant profile page with the tenant_id
             return redirect(url_for('tenant_bp.tenant_profile', tenant_id=tenant_id))
         else:
@@ -194,7 +186,7 @@ def tenant_payment(tenant_id, payment_id):
     return render_template('tenant_payment.html', tenant=tenant, payment=payment)
 
 
-@tenant_bp.route('/tenant/logout')
-def tenant_logout():
-    session.pop('tenant_id', None)  # Remove the tenant_id from the session
-    return redirect(url_for('tenant_bp.tenant_login'))
+# @tenant_bp.route('/tenant/logout')
+# def tenant_logout():
+#     session.pop('tenant_id', None)  # Remove the tenant_id from the session
+#     return redirect(url_for('tenant_bp.tenant_login'))
