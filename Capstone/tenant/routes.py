@@ -18,11 +18,16 @@ tenant_bp = Blueprint(
 )
 
 
-def check_credentials(username, secured_hash_password):
+def check_credentials(username, password):
     tenant = Tenant.query.filter_by(username=username).first()
-    if tenant.password == secured_hash_password:
+
+    if not tenant:
+        return False, None
+
+    if tenant.password == password:
         return True, tenant.id
-    return False, None
+    else:
+        return False, None
 
 
 @tenant_bp.route('/tenant')
@@ -52,12 +57,15 @@ def tenant_login():
         user_exists, tenant_id = check_credentials(username, secured_hash_password)
 
         if user_exists:
+            session['tenant_id'] = tenant_id
+            # Redirect to the landlord profile page with the landlord_id
+            session['last_activity'] = datetime.utcnow()
             # Redirect to the tenant profile page with the tenant_id
             return redirect(url_for('tenant_bp.tenant_profile', tenant_id=tenant_id))
         else:
             # User does not exist or incorrect credentials, show an error message
             error_message = "Invalid credentials. Please try again."
-            return render_template('landlord_login.html', error_message=error_message)
+            return render_template('tenant_login.html', error_message=error_message)
 
     # Render the login page for GET requests
     return render_template('tenant_login.html')
@@ -121,7 +129,6 @@ def tenant_signup():
     # tenant sign up page
     return render_template('TenantSignUp.html')
 
-  
 
 @tenant_bp.route('/tenant/<int:tenant_id>')
 def tenant_profile(tenant_id):
