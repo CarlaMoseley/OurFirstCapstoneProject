@@ -3,6 +3,8 @@ from flask import current_app as app
 from flask_session import Session
 from ..db import db
 from ..models import Landlord, Unit, Expense
+from datetime import datetime, timedelta
+import secrets
 from ..utils.password_hash import hash_password
 from ..utils.inputblacklist import sanitize_input
 from ..utils.date_scan import scan_units
@@ -18,11 +20,45 @@ landlord_bp = Blueprint(
     static_folder='static'
 )
 
-# Configure Flask-Session
+# Add this constant to define the session timeout period (in seconds)
+
+SESSION_TIMEOUT = 20
 SESSION_TYPE = 'filesystem'
-PERMANENT_SESSION_LIFETIME = timedelta(seconds=10)
 app.config.from_object(__name__)
 Session(app)
+
+
+# @landlord_bp.before_request
+# def check_session_timeout():
+#     # Check if the user is logged in
+#     landlord_id = session.get('landlord_id')
+#     print(landlord_id)
+#     if landlord_id is not None:
+#         # Check if the session has timed out due to inactivity
+#         last_activity = session.get('last_activity')
+#         print("last Activity", last_activity)
+#         # Update the last activity time for the user in the session
+#         if last_activity is None:
+#             print("Inside last_activity")
+#             # Log out the user if the session has timed out
+#             session.pop('landlord_id', None)
+#             flash('Session has timed out due to inactivity. Please log in again.', 'error')
+#             return redirect(url_for('landlord_bp.landlord_login'))
+#         else:
+#             # If the session is still active, update the last activity time
+#             session.permanent = True
+#             app.permanent_session_lifetime = timedelta(seconds=SESSION_TIMEOUT)
+#             session['last_activity'] = datetime.utcnow()
+
+@app.before_request
+def check_session_timeout():
+    last_activity = session.get('last_activity')
+
+    if last_activity is not None and datetime.utcnow() > last_activity + timedelta(seconds=SESSION_TIMEOUT):
+        # Log out the user if the session has timed out
+        session.clear()
+        flash('Session has timed out due to inactivity. Please log in again.', 'error')
+        return redirect(url_for('home_bp.home'))
 
 
 def check_credentials(username, password):
@@ -35,7 +71,7 @@ def check_credentials(username, password):
         return False, None
 
 
-@landlord_bp.route('/landlord')
+@landlord_bp.route('/landlord', methods=['GET', 'POST'])
 def landlord_redirect():
     # if user is logged in, redirect to user profile page
     # else, redirect to landlord login page
@@ -60,19 +96,16 @@ def landlord_login():
         user_exists, landlord_id = check_credentials(username, secured_hash_password)
 
         if user_exists:
-            # Store the landlord_id in the session for future use
+            # Set the landlord_id in the session after successful login
             session['landlord_id'] = landlord_id
-
-            # Set session timeout
-            session.permanent = True
-
             # Redirect to the landlord profile page with the landlord_id
+            session['last_activity'] = datetime.utcnow()
             return redirect(url_for('landlord_bp.landlord_profile', landlord_id=landlord_id))
         else:
             # User does not exist or incorrect credentials, show an error message
             error_message = "Invalid credentials. Please try again."
             flash(error_message, 'error')
-            return render_template('landlord_landlord_login.html', error_message=error_message)
+            return render_template('landlord_login.html', error_message=error_message)
 
     # Render the login page for GET requests
     return render_template('landlord_login.html')
@@ -120,7 +153,7 @@ def landlord_signup():
 
     return render_template('LandlordSignUp.html')
 
-@app.route('/landlord/2fa', methods=['GET', 'POST'])
+@landlord_bp.route('/landlord/2fa', methods=['GET', 'POST'])
 def landlord_two_factor_auth():
     if request.method == 'POST':
         # Verify the entered OTP
@@ -143,6 +176,15 @@ def landlord_two_factor_auth():
 
 @landlord_bp.route('/landlord/<int:landlord_id>', methods=['GET','POST'])
 def landlord_profile(landlord_id):
+    logged_in_landlord_id = session.get('landlord_id')
+
+    # Check if the logged-in landlord is authorized to view the requested profile
+    if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
+        flash('You are not authorized to view this profile.', 'error')
+        session.clear()
+        return redirect(url_for('home_bp.home'))
+
+    # render landlord profile page with units table
     landlord = Landlord.query.filter_by(id=landlord_id).first()
     if request.method == 'POST':
         f_name = request.form.get('f_name')
@@ -166,6 +208,13 @@ def landlord_profile(landlord_id):
 
 @landlord_bp.route('/landlord/<int:landlord_id>/tenants', methods=['GET'])
 def landlord_tenants(landlord_id):
+    logged_in_landlord_id = session.get('landlord_id')
+
+    # Check if the logged-in landlord is authorized to view the requested profile
+    if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
+        flash('You are not authorized to view this profile.', 'error')
+        session.clear()
+        return redirect(url_for('landlord_bp.home'))
     landlord = Landlord.query.filter_by(id=landlord_id).first()
     units = landlord.units
     tenants = []
@@ -177,6 +226,13 @@ def landlord_tenants(landlord_id):
 
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>', methods=['GET', 'POST'])
 def landlord_unit_page(landlord_id, unit_id):
+    logged_in_landlord_id = session.get('landlord_id')
+
+    # Check if the logged-in landlord is authorized to view the requested profile
+    if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
+        flash('You are not authorized to view this profile.', 'error')
+        session.clear()
+        return redirect(url_for('home_bp.home'))
     # render landlord unit page for a given unit
     landlord=Landlord.query.filter_by(id=landlord_id).first()
     unit=Unit.query.filter_by(id=unit_id).first()
@@ -208,6 +264,13 @@ def landlord_unit_page(landlord_id, unit_id):
 
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>/expenses', methods=['GET'])
 def landlord_unit_expenses(landlord_id, unit_id):
+    logged_in_landlord_id = session.get('landlord_id')
+
+    # Check if the logged-in landlord is authorized to view the requested profile
+    if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
+        flash('You are not authorized to view this profile.', 'error')
+        session.clear()
+        return redirect(url_for('home_bp.home'))
     # render expenses for given unit
     landlord=Landlord.query.filter_by(id=landlord_id).first()
     unit=Unit.query.filter_by(id=unit_id).first()
@@ -218,6 +281,13 @@ def landlord_unit_expenses(landlord_id, unit_id):
 
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>/payments', methods=['GET'])
 def landlord_unit_payments(landlord_id, unit_id):
+    logged_in_landlord_id = session.get('landlord_id')
+
+    # Check if the logged-in landlord is authorized to view the requested profile
+    if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
+        flash('You are not authorized to view this profile.', 'error')
+        session.clear()
+        return redirect(url_for('landlord_bp.home'))
     # render payments for given unit
     landlord=Landlord.query.filter_by(id=landlord_id).first()
     unit=Unit.query.filter_by(id=unit_id).first()
@@ -228,11 +298,18 @@ def landlord_unit_payments(landlord_id, unit_id):
 
 @landlord_bp.route('/landlord/<int:landlord_id>/createunit', methods=['GET', 'POST'])
 def create_unit(landlord_id):
+    logged_in_landlord_id = session.get('landlord_id')
+
+    # Check if the logged-in landlord is authorized to view the requested profile
+    if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
+        flash('You are not authorized to view this profile.', 'error')
+        session.clear()
+        return redirect(url_for('landlord_bp.home'))
     # render create unit page
     landlord=Landlord.query.filter_by(id=landlord_id).first()
     if request.method == 'GET':
         return render_template('create_unit.html', landlord=landlord)
-    elif request.method=='POST':
+    elif request.method =='POST':
         unit_number = request.form.get('unit_number')
         address = request.form.get('address')
         rent = request.form.get('rent')
@@ -258,6 +335,13 @@ def create_unit(landlord_id):
 
 @landlord_bp.route('/landlord/<int:landlord_id>/expenses', methods=['GET'])
 def landlord_expenses(landlord_id):
+    logged_in_landlord_id = session.get('landlord_id')
+
+    # Check if the logged-in landlord is authorized to view the requested profile
+    if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
+        flash('You are not authorized to view this profile.', 'error')
+        session.clear()
+        return redirect(url_for('landlord_bp.home'))
     # render all expenses for given landlord
     landlord = Landlord.query.filter_by(id=landlord_id).first()
     units = landlord.units
@@ -271,6 +355,13 @@ def landlord_expenses(landlord_id):
 
 @landlord_bp.route('/landlord/<int:landlord_id>/createexpense', methods=['GET', 'POST'])
 def create_expense(landlord_id):
+    logged_in_landlord_id = session.get('landlord_id')
+
+    # Check if the logged-in landlord is authorized to view the requested profile
+    if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
+        flash('You are not authorized to view this profile.', 'error')
+        session.clear()
+        return redirect(url_for('landlord_bp.home'))
     # create an expense, select unit from drop down menu
     landlord = Landlord.query.filter_by(id=landlord_id).first()
     units = landlord.units
@@ -301,6 +392,13 @@ def create_expense(landlord_id):
 
 @landlord_bp.route('/landlord/<int:landlord_id>/payments', methods=['GET'])
 def landlord_payments(landlord_id):
+    logged_in_landlord_id = session.get('landlord_id')
+
+    # Check if the logged-in landlord is authorized to view the requested profile
+    if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
+        flash('You are not authorized to view this profile.', 'error')
+        session.clear()
+        return redirect(url_for('landlord_bp.home'))
     # render payments table for all units
     landlord = Landlord.query.filter_by(id=landlord_id).first()
     payments=landlord.payments
@@ -318,4 +416,4 @@ def landlord_scan(landlord_id):
 @landlord_bp.route('/landlord/logout')
 def landlord_logout():
     session.pop('landlord_id', None)  # Remove the landlord_id from the session
-    return redirect(url_for('landlord_bp.landlord_login'))
+    return redirect(url_for('home_bp.home'))

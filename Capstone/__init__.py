@@ -17,7 +17,7 @@ def create_app():
     # assets = Environment() # create assets environment
     # assets.init_app(app) # initialize flask-assets
     
-    db._engine_options=app.config['SNOWFLAKE_CONNECTION_ARGS']
+    db._engine_options = app.config['SNOWFLAKE_CONNECTION_ARGS']
     db.init_app(app)
     with app.app_context():
         # import parts of the application

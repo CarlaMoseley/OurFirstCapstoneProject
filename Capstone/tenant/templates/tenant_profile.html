@@ -3,18 +3,41 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <h2>Unit Information</h2>
-    {% if tenant.unit %}
-        <p>
-            {% if tenant.unit.unit_number %}
-                <strong>Unit Number:</strong> {{ tenant.unit.unit_number }}<br>
-            {% endif %}
-            <strong>Address:</strong> {{ tenant.unit.address }}<br>
-            <strong>Rent:</strong> {{ tenant.unit.rent }}<br>
-            <strong>Lease Start:</strong> {{ tenant.unit.lease_start }}<br>
-            <strong>Due Date:</strong> {{ tenant.unit.due_date }}
-        </p>
-    {% else %}
-        <p>No unit information available for this tenant.</p>
-    {% endif %}
+    <section id="Greeting">
+        {% if tenant %}
+            <h1>Welcome, {{ tenant.first_name }} {{ tenant.last_name }}!</h1>
+        {% endif %}
+    </section>
+    <div id="Unit-Information">
+        <h2>Unit Information</h2>
+        {% if tenant.unit %}
+            <table id="tenant-unit-table">
+                {% if tenant.unit.unit_number %}
+                    <tr>
+                        <td>Unit Number:</td>
+                        <td>{{ tenant.unit.unit_number }}</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td>Address:</td>
+                    <td>{{ tenant.unit.address }}</td>
+                </tr>
+                <tr>
+                    <td>Rent:</td>
+                    <td>{{ tenant.unit.rent }}</td>
+                </tr>
+                <tr>
+                    <td>Lease Start:</td>
+                    <td>{{ tenant.unit.lease_start }}</td>
+                </tr>
+                <tr>
+                    <td>Due Date:</td>
+                    <td>{{ tenant.unit.due_date }}</td>
+                </tr>
+            </table>
+        {% else %}
+            <p>No unit information available for this tenant.</p>
+        {% endif %}
+    </div>
 {% endblock %}
+

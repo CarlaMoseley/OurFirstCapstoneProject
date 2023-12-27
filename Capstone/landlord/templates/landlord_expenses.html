@@ -3,8 +3,9 @@
 {% block title %}Expenses{% endblock %}
 
 {% block content %}
-  <h2>Expense List</h2>
+<section id="Greeting"><h1>Expense List</h1></section>
 
+<div id="Unit-Information">
   {% if expenses %}
     <table id="expensesTable" class="sortable">
       <thead>
@@ -16,6 +17,7 @@
           <th data-column="contractor">Contractor</th>
           <th data-column="contractor_contact">Contractor Contact</th>
           <th data-column="date">Date</th>
+          <th data-column="unit_id">Unit Link</th>
         </tr>
       </thead>
       <tbody>
@@ -28,6 +30,7 @@
             <td>{{ expense.contractor }}</td>
             <td>{{ expense.contractor_contact }}</td>
             <td>{{ expense.date }}</td>
+            <td>{{expense.unit.id}}</td>
           </tr>
         {% endfor %}
       </tbody>
@@ -35,12 +38,11 @@
   {% else %}
     <p>No expenses to display.</p>
   {% endif %}
-
   <script src="{{ url_for('static', filename='sorttable.js') }}"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       makeSortable(document.getElementById('expensesTable'));
     });
   </script>
-
+  </div>
 {% endblock %}

@@ -1,16 +1,3 @@
-document.getElementById('login').addEventListener('click', function returnToLogin(e){
-        const path = window.location.pathname;
-        if(path.includes('landlord')){
-            window.location = '/landlord/login';
-        }else if(path.includes('tenant')){
-            window.location='/tenant/login';
-        }else{
-            console.error('Wrong URL PATH or value entered');
-        }
-})
-document.getElementById('password').addEventListener('input', checkPasswordMatch);
-document.getElementById('confirmpassword').addEventListener('input', checkPasswordMatch);
-
 function checkPasswordMatch() {
     var password = document.getElementById('password').value;
     var confirmPassword = document.getElementById('confirmpassword').value;
@@ -24,6 +11,23 @@ function checkPasswordMatch() {
         checkmarkElement.style.color = 'red'; // Set color to red
     }
 }
+
+// Your existing event listeners
+document.getElementById('login').addEventListener('click', function returnToLogin(e) {
+    const path = window.location.pathname;
+    if (path.includes('landlord')) {
+        window.location = '/landlord/login';
+    } else if (path.includes('tenant')) {
+        window.location = '/tenant/login';
+    } else {
+        console.error('Wrong URL PATH or value entered');
+    }
+});
+
+document.getElementById('password').addEventListener('input', checkPasswordMatch);
+document.getElementById('confirmpassword').addEventListener('input', checkPasswordMatch);
+
+
 document.addEventListener('DOMContentLoaded', function() {
     // Get the background element (assuming it has an ID of 'background')
     const backgroundElement = document.body;
