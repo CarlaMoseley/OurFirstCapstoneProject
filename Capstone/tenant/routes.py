@@ -103,7 +103,7 @@ def tenant_signup():
         username = request.form.get('username')
         password = request.form.get('password')
         confirmpassword = request.form.get('confirmpassword')
-        unit_id = request.form.get('id')
+        unit_password = request.form.get('id')
         
         #Check user input against blacklist 
         try: 
@@ -123,14 +123,14 @@ def tenant_signup():
             # redirect back to signup page
             return redirect(url_for('tenant_bp.tenant_signup'))
 
-        if unit_id is None:
-            flash('Unit ID is required', 'error')
+        if unit_password is None:
+            flash('One Time Unit Password from landlord is required', 'error')
             return redirect(url_for('tenant_bp.tenant_signup'))
 
         # Check if the unit_id exists in the Unit table
-        unit = Unit.query.filter_by(id=unit_id).first()
+        unit = Unit.query.filter_by(tenant_password=unit_password).first()
         if unit is None:
-            flash(f'Unit with ID {unit_id} does not exist', 'error')
+            flash(f'Unit with One Time Password {unit_password} does not exist', 'error')
             return redirect(url_for('tenant_bp.tenant_signup'))
 
         new_tenant = Tenant(
@@ -140,9 +140,10 @@ def tenant_signup():
             email=email,
             username=username,
             password=secured_password,
-            unit_id=unit_id
+            unit_id=unit.id
         )
         db.session.add(new_tenant)
+        unit.tenant_password = None
         db.session.commit()
 
         # Redirect to a success page or another route
