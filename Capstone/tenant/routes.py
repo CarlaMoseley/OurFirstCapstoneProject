@@ -224,7 +224,7 @@ def make_payment(tenant_id):
         except Exception as e:
             return jsonify({"status": "error", "message": str(e)})
     else:
-        unpaid_statements = Payment.query.filter_by(paid=False).filter(tenant_id=tenant.id).all()
+        unpaid_statements = Payment.query.filter_by(paid=False).filter_by(tenant_id=tenant.id).all()
         return render_template('makepayment.html', tenant=tenant, unpaid_statements=unpaid_statements)
 
 
