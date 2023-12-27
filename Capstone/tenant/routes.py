@@ -8,6 +8,7 @@ from ..utils.email_processor import compose_email
 from ..db import db
 from ..utils.password_hash import hash_password
 from ..utils.inputblacklist import sanitize_input
+import json
 
 
 # Blueprint for tenant
@@ -134,9 +135,23 @@ def tenant_signup():
 def tenant_profile(tenant_id):
     # render tenant profile page
     tenant = Tenant.query.filter_by(id=tenant_id).first()
-    unit = Unit.query.filter_by(id=tenant.unit_id).first()
+    if request.method == 'POST':
+        f_name = request.form.get('f_name')
+        l_name = request.form.get('l_name')
+        phonenumber = request.form.get('phonenumber')
+        email = request.form.get('email')
 
-    return render_template('tenant_profile.html', tenant=tenant, unit=unit)
+        tenant.first_name = f_name
+        tenant.last_name = l_name
+        tenant.phone_number = phonenumber
+        tenant.email = email
+
+        db.session.commit()
+
+        redirect(url_for('tenant_bp.tenant_profile', tenant_id=tenant.id))
+    else:
+        unit = Unit.query.filter_by(id=tenant.unit_id).first()
+        return render_template('tenant_profile.html', tenant=tenant, unit=unit)
 
 
 @tenant_bp.route('/tenant/<int:tenant_id>/payments')
@@ -153,14 +168,19 @@ def make_payment(tenant_id):
     # render make payment page
     tenant = Tenant.query.filter_by(id=tenant_id).first()
     if request.method == 'POST':
+
         try:
+            amount = tenant.unit.rent
+            card_number = request.form.get('cardNumber')
+            expiration_month = request.form.get('expMonth')
+            expiration_year = request.form.get('expYear')
+            security_code = request.form.get('securityCode')
+
             # Create an instance of the PaymentService class
             payment_service = PaymentService()
 
             # Make the payment request
-            payment_service.make_payment_request()
-
-            print(request)
+            response = payment_service.make_payment_request(amount, card_number, expiration_month, expiration_year, security_code)
 
             new_payment = Payment(
                 tenant_id=tenant.id,
@@ -181,7 +201,8 @@ def make_payment(tenant_id):
         except Exception as e:
             return jsonify({"status": "error", "message": str(e)})
     else:
-        return render_template('makepayment.html', tenant=tenant)
+        unpaid_statements = tenant.payments.filter_by(paid=False).all()
+        return render_template('makepayment.html', tenant=tenant, unpaid_statements=unpaid_statements)
 
 
 @tenant_bp.route('/tenant/<int:tenant_id>/<int:payment_id>')

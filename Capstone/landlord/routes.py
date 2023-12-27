@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 import secrets
 from ..utils.password_hash import hash_password
 from ..utils.inputblacklist import sanitize_input
+from ..utils.date_scan import scan_units
+
 
 # Blueprint for landlord
 landlord_bp = Blueprint(
@@ -160,9 +162,24 @@ def landlord_profile(landlord_id):
 
     # render landlord profile page with units table
     landlord = Landlord.query.filter_by(id=landlord_id).first()
-    units = landlord.units
+    if request.method == 'POST':
+        f_name = request.form.get('f_name')
+        l_name = request.form.get('l_name')
+        phonenumber = request.form.get('phonenumber')
+        email = request.form.get('email')
 
-    return render_template('landlord_profile.html', landlord=landlord, units=units)
+        landlord.first_name = f_name
+        landlord.last_name = l_name
+        landlord.phone_number = phonenumber
+        landlord.email = email
+
+        db.session.commit()
+
+        redirect(url_for('landlord_bp.landlord_profile', landlord_id=landlord.id))
+    else:
+        # render landlord profile page with units table
+        units = landlord.units
+        return render_template('landlord_profile.html', landlord=landlord, units=units)
 
 
 @landlord_bp.route('/landlord/<int:landlord_id>/tenants', methods=['GET'])
@@ -341,6 +358,13 @@ def landlord_payments(landlord_id):
     payments=landlord.payments
 
     return render_template('landlord_payments.html', landlord=landlord, payments=payments)
+
+@landlord_bp.route('/landlord/<int:landlord_id>/payments/scan', methods=['GET'])
+def landlord_scan(landlord_id):
+    landlord = Landlord.query.filter_by(id=landlord_id).first()
+    scan_units(landlord)
+
+    return redirect(url_for('landlord_bp.landlord_payments', landlord_id=landlord.id))
 
 
 @landlord_bp.route('/landlord/logout')
