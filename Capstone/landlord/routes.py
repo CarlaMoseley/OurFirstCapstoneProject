@@ -393,4 +393,4 @@ def landlord_scan(landlord_id):
 @landlord_bp.route('/landlord/logout')
 def landlord_logout():
     session.pop('landlord_id', None)  # Remove the landlord_id from the session
-    return redirect(url_for('landlord_bp.landlord_login'))
+    return redirect(url_for('home_bp.home'))

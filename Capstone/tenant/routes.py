@@ -237,7 +237,7 @@ def tenant_payment(tenant_id, payment_id):
     return render_template('tenant_payment.html', tenant=tenant, payment=payment)
 
 
-# @tenant_bp.route('/tenant/logout')
-# def tenant_logout():
-#     session.pop('tenant_id', None)  # Remove the tenant_id from the session
-#     return redirect(url_for('tenant_bp.tenant_login'))
+@tenant_bp.route('/tenant/logout')
+def tenant_logout():
+    session.pop('tenant_id', None)  # Remove the tenant_id from the session
+    return redirect(url_for('home_bp.home'))
