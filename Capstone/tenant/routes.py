@@ -8,7 +8,7 @@ from ..utils.email_processor import compose_email
 from ..db import db
 from ..utils.password_hash import hash_password
 from ..utils.inputblacklist import sanitize_input
-import json
+import pyotp
 
 
 # Blueprint for tenant
@@ -70,6 +70,27 @@ def tenant_login():
 
     # Render the login page for GET requests
     return render_template('tenant_login.html')
+
+
+@app.route('/tenant/2fa', methods=['GET', 'POST'])
+def tenant_two_factor_auth():
+    if request.method == 'POST':
+        # Verify the entered OTP
+        entered_otp = request.form.get('otp', '')
+        totp = pyotp.TOTP(session['secret'])
+        if totp.verify(entered_otp):
+            # OTP is valid, redirect to user profile or another protected route
+            return redirect(url_for('tenant_bp.tenant_profile'), tenant_id=tenant_id)
+        else:
+            # Invalid OTP, you may want to handle this case differently
+            return render_template('tenant_2fa.html', qr_code_url=session['qr_code_url'])
+
+    # Generate a new TOTP secret for the user
+    totp = pyotp.TOTP(pyotp.random_base32())
+    session['secret'] = totp.secret
+    session['qr_code_url'] = totp.provisioning_uri(name='@katashi1995', issuer_name='MACK')
+
+    return render_template('tenant_2fa.html', qr_code_url=session['qr_code_url'])
 
 
 @tenant_bp.route('/tenant/signup', methods=['GET', 'POST'])
@@ -182,13 +203,15 @@ def make_payment(tenant_id):
             # Make the payment request
             response = payment_service.make_payment_request(amount, card_number, expiration_month, expiration_year, security_code)
 
+            print(response)
+
             new_payment = Payment(
                 tenant_id=tenant.id,
                 unit_id=tenant.unit.id,
                 landlord_id=tenant.unit.landlord.id,
                 paid=True,
                 date=date.today(),
-                amount=tenant.unit.rent
+                amount=amount
             )
 
             db.session.add(new_payment)
@@ -201,7 +224,7 @@ def make_payment(tenant_id):
         except Exception as e:
             return jsonify({"status": "error", "message": str(e)})
     else:
-        unpaid_statements = tenant.payments.filter_by(paid=False).all()
+        unpaid_statements = Payment.query.filter_by(paid=False).filter(tenant_id=tenant.id).all()
         return render_template('makepayment.html', tenant=tenant, unpaid_statements=unpaid_statements)
 
 
