@@ -19,6 +19,19 @@ tenant_bp = Blueprint(
 )
 
 
+def generate_totp_uri(username):
+    # Generate a random TOTP secret
+    totp_secret = pyotp.random_base32()
+
+    # Create a TOTP instance
+    totp = pyotp.TOTP(totp_secret)
+
+    # Generate the provisioning URI
+    provisioning_uri = totp.provisioning_uri(name=username, issuer_name="MACK")
+
+    return provisioning_uri, totp_secret
+
+
 def check_credentials(username, password):
     tenant = Tenant.query.filter_by(username=username).first()
 
@@ -43,25 +56,42 @@ def tenant_login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-       
-       #Check user input against blacklist 
-        try: 
+
+        # Check user input against blacklist
+        try:
             sanitize_input(password, username)
         except ValueError as e:
             error_message = f"Invalid credentials: {str(e)}"
             return render_template('tenant_login.html', error_message=error_message)
-        
-        #Hashing appliccation
-        secured_hash_password = hash_password(password) 
-        
+
+        # Hashing application
+        secured_hash_password = hash_password(password)
+
         # Check if the user exists in the database
         user_exists, tenant_id = check_credentials(username, secured_hash_password)
 
         if user_exists:
+            # Check if TOTP setup is required for the user
+            totp_required = True  # Replace this with your logic to determine if TOTP is required
+            if totp_required:
+                # Generate TOTP URI and secret
+                totp_uri, totp_secret = generate_totp_uri(username)
+                print(totp_uri)
+                print(totp_secret)
+                tenant = Tenant.query.filter_by(username=username).first()
+                # Render login template with TOTP-related content
+                return render_template(
+                    'tenant_login.html',
+                    totp_setup=True,
+                    totp_uri=totp_uri,
+                    username=username,
+                    totp_secret=totp_secret,
+                    tenant=tenant
+                )
+
+            # If TOTP is not required, proceed with regular login
             session['tenant_id'] = tenant_id
-            # Redirect to the landlord profile page with the landlord_id
             session['last_activity'] = datetime.utcnow()
-            # Redirect to the tenant profile page with the tenant_id
             return redirect(url_for('tenant_bp.tenant_profile', tenant_id=tenant_id))
         else:
             # User does not exist or incorrect credentials, show an error message
@@ -71,26 +101,6 @@ def tenant_login():
     # Render the login page for GET requests
     return render_template('tenant_login.html')
 
-
-@app.route('/tenant/2fa', methods=['GET', 'POST'])
-def tenant_two_factor_auth():
-    if request.method == 'POST':
-        # Verify the entered OTP
-        entered_otp = request.form.get('otp', '')
-        totp = pyotp.TOTP(session['secret'])
-        if totp.verify(entered_otp):
-            # OTP is valid, redirect to user profile or another protected route
-            return redirect(url_for('tenant_bp.tenant_profile'), tenant_id=tenant_id)
-        else:
-            # Invalid OTP, you may want to handle this case differently
-            return render_template('tenant_2fa.html', qr_code_url=session['qr_code_url'])
-
-    # Generate a new TOTP secret for the user
-    totp = pyotp.TOTP(pyotp.random_base32())
-    session['secret'] = totp.secret
-    session['qr_code_url'] = totp.provisioning_uri(name='@katashi1995', issuer_name='MACK')
-
-    return render_template('tenant_2fa.html', qr_code_url=session['qr_code_url'])
 
 
 @tenant_bp.route('/tenant/signup', methods=['GET', 'POST'])
@@ -104,7 +114,6 @@ def tenant_signup():
         password = request.form.get('password')
         confirmpassword = request.form.get('confirmpassword')
         unit_id = request.form.get('id')
-        
         #Check user input against blacklist 
         try: 
             sanitize_input(password, username)

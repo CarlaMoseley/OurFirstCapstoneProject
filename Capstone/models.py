@@ -1,5 +1,6 @@
 from .db import db
 from sqlalchemy import Sequence
+from .utils import generate_totp_uri
 
 
 class User(db.Model):
@@ -39,6 +40,8 @@ class Tenant(User):
     __tablename__ = 'tenant'
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
     payments = db.relationship('Payment', backref='tenant', lazy=True)
+    def get_totp_uri(self):
+        return generate_totp_uri(self.username)
 
 class Expense(db.Model):
     __tablename__ = 'expense'
