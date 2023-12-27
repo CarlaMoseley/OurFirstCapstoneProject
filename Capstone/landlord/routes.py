@@ -7,6 +7,7 @@ from ..utils.password_hash import hash_password
 from ..utils.inputblacklist import sanitize_input
 from ..utils.date_scan import scan_units
 from datetime import timedelta
+import pyotp
 
 
 # Blueprint for landlord
@@ -36,7 +37,7 @@ def check_credentials(username, password):
 @landlord_bp.route('/landlord')
 def landlord_redirect():
     # if user is logged in, redirect to user profile page
-    # else, redirect to tenant login page
+    # else, redirect to landlord login page
     pass
 
 
@@ -50,7 +51,7 @@ def landlord_login():
             sanitize_input(password, username)
         except ValueError as e:
             error_message = f"Invalid credentials: {str(e)}"
-            return render_template('tenant_login.html', error_message=error_message)
+            return render_template('landlord_login.html', error_message=error_message)
 
         secured_hash_password = hash_password(password) 
 
@@ -91,7 +92,7 @@ def landlord_signup():
             sanitize_input(password, username)
         except ValueError as e:
             error_message = f"Invalid credentials: {str(e)}"
-            return redirect(url_for('tenant_bp.tenant_signup', error_message=error_message))
+            return redirect(url_for('landlord_bp.landlord_signup', error_message=error_message))
         
         secured_password = hash_password(password)
         secured_ConfirmPassword = hash_password(confirmpassword)
@@ -117,6 +118,26 @@ def landlord_signup():
         flash('Landlord registration successful!', 'success')
 
     return render_template('LandlordSignUp.html')
+
+@app.route('/landlord/2fa', methods=['GET', 'POST'])
+def landlord_two_factor_auth():
+    if request.method == 'POST':
+        # Verify the entered OTP
+        entered_otp = request.form.get('otp', '')
+        totp = pyotp.TOTP(session['secret'])
+        if totp.verify(entered_otp):
+            # OTP is valid, redirect to user profile or another protected route, get landlord_id from session
+            return redirect(url_for('landlord_bp.landlord_profile'), landlord_id=landlord_id)
+        else:
+            # Invalid OTP, you may want to handle this case differently
+            return render_template('landlord_2fa.html', qr_code_url=session['qr_code_url'])
+
+    # Generate a new TOTP secret for the user
+    totp = pyotp.TOTP(pyotp.random_base32())
+    session['secret'] = totp.secret
+    session['qr_code_url'] = totp.provisioning_uri(name='@katashi1995', issuer_name='MACK')
+
+    return render_template('landlord_2fa.html', qr_code_url=session['qr_code_url'])
 
 
 @landlord_bp.route('/landlord/<int:landlord_id>', methods=['GET','POST'])
