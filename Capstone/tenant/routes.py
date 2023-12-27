@@ -18,10 +18,6 @@ tenant_bp = Blueprint(
 )
 
 # Configure Flask-Session
-SESSION_TYPE = 'filesystem'
-PERMANENT_SESSION_LIFETIME = timedelta(seconds=10)
-app.config.from_object(__name__)
-Session(app)
 
 
 def check_credentials(username, secured_hash_password):

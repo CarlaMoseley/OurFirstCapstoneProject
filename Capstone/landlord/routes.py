@@ -1,17 +1,12 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session, flash
 from flask import current_app as app
+from flask_session import Session
 from ..db import db
 from ..models import Landlord, Unit, Expense
-<<<<<<< HEAD
-import hashlib
 from datetime import datetime, timedelta
 import secrets
-=======
 from ..utils.password_hash import hash_password
 from ..utils.inputblacklist import sanitize_input
-from datetime import timedelta
->>>>>>> 6bac631c31733831ae3f94fc398a9583066ddea9
-
 
 # Blueprint for landlord
 landlord_bp = Blueprint(
@@ -21,29 +16,34 @@ landlord_bp = Blueprint(
 )
 
 # Add this constant to define the session timeout period (in seconds)
+
 SESSION_TIMEOUT = 10
-app.secret_key = secrets.token_hex(16)  # This will generate a 32-character hexadecimal key
+SESSION_TYPE = 'filesystem'
+app.config.from_object(__name__)
+Session(app)
 
 
-@app.before_request
+@landlord_bp.before_request
 def check_session_timeout():
     # Check if the user is logged in
     landlord_id = session.get('landlord_id')
+    print(landlord_id)
     if landlord_id is not None:
+        # Check if the session has timed out due to inactivity
+        last_activity = session.get('last_activity')
+        print("last Activity", last_activity)
         # Update the last activity time for the user in the session
-        session.permanent = True
-        app.permanent_session_lifetime = timedelta(seconds=SESSION_TIMEOUT)
-        session['last_activity'] = datetime.utcnow()
-
-    # Check if the session has timed out due to inactivity
-    last_activity = session.get('last_activity')
-    print(last_activity)
-    print(datetime.utcnow())
-    if last_activity is not None and datetime.utcnow() - last_activity > timedelta(seconds=SESSION_TIMEOUT):
-        # Log out the user if the session has timed out
-        session.pop('landlord_id', None)
-        # flash('Session has timed out due to inactivity. Please log in again.', 'error')
-        redirect(url_for('landlord_bp.landlord_redirect'))
+        if last_activity is None:
+            print("Inside last_activity")
+            # Log out the user if the session has timed out
+            # session.pop('landlord_id', None)
+            flash('Session has timed out due to inactivity. Please log in again.', 'error')
+            return redirect(url_for('landlord_bp.landlord_login'))
+        else:
+            # If the session is still active, update the last activity time
+            session.permanent = True
+            app.permanent_session_lifetime = timedelta(seconds=SESSION_TIMEOUT)
+            session['last_activity'] = datetime.utcnow()
 
 
 def check_credentials(username, password):
@@ -72,7 +72,7 @@ def landlord_login():
             sanitize_input(password, username)
         except ValueError as e:
             error_message = f"Invalid credentials: {str(e)}"
-            return render_template('tenant_login.html', error_message=error_message)
+            return render_template('landlord_login.html', error_message=error_message)
 
         secured_hash_password = hash_password(password) 
 
@@ -82,8 +82,8 @@ def landlord_login():
         if user_exists:
             # Set the landlord_id in the session after successful login
             session['landlord_id'] = landlord_id
-
             # Redirect to the landlord profile page with the landlord_id
+            session['last_activity'] = datetime.utcnow()
             return redirect(url_for('landlord_bp.landlord_profile', landlord_id=landlord_id))
         else:
             # User does not exist or incorrect credentials, show an error message
