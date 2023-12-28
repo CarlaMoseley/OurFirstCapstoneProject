@@ -25,23 +25,23 @@ class PaymentService:
             print(f"Error Generating Auth Token: {str(e)}")
             return None
 
-    def make_payment_request(self):
+    def make_payment_request(self, amount, card_number, expiration_month, expiration_year, security_code):
         timestamp = int(time.time() * 1000)
         client_request_id = str(uuid.uuid4())
 
         # Replace this with your actual request body
         request_body = {
             "amount": {
-                "total": 12.04,
+                "total": amount,
                 "currency": "USD"
             },
             "source": {
                 "sourceType": "PaymentCard",
                 "card": {
-                    "cardData": "4005550000000019",
-                    "expirationMonth": "02",
-                    "expirationYear": "2035",
-                    "securityCode": "123"
+                    "cardData": card_number,
+                    "expirationMonth": expiration_month,
+                    "expirationYear": expiration_year,
+                    "securityCode": security_code
                 }
             },
             "transactionDetails": {

@@ -18,6 +18,7 @@
           <th data-column="rent">Rent</th>
           <th data-column="lease_start">Lease Start</th>
           <th data-column="rent_due">Payment Date</th>
+          <th data-column="tenant_password">Tenant OTP</th>
         <!-- Add more unit attributes as needed -->
         </tr>
       </thead>
@@ -29,6 +30,7 @@
             <td>{{ unit.rent }}</td>
             <td>{{ unit.lease_start }}</td>
             <td>{{ unit.rent_due }}</td>
+            <td>{{ unit.tenant_password }}</td>
           <!-- Add more unit attributes as needed -->
           </tr>
         {% endfor %}

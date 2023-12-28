@@ -42,3 +42,9 @@ def compose_email(email_recipient, email_type, **kwargs):
         body = f'You have received a payment on the unit at {kwargs["tenant"].unit.address} has received a payment to the amount of {kwargs["tenant"].unit.rent}. The amount has been transferred to your account.'
 
         send_email(emails, subject, email_body=body)
+    
+    elif email_type == 'rent_reminder':
+        subject = "You have an upcoming rent payment!"
+        body = f'You have an upcoming rent payment of {email_recipient.unit.rent} due on {kwargs["due_date"]}. Be sure to pay your balance before the due date to avoid incurring penalties.'
+
+        send_email(emails, subject, email_body=body)
