@@ -25,7 +25,8 @@ def check_for_late_payments(unit, due_date):
             tenant_id = tenant.id,
             amount = unit.rent,
             paid = False,
-            date = due_date
+            due_date = due_date,
+            date = None
         )
         db.session.add(new_payment)
     db.session.commit()

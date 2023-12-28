@@ -3,22 +3,21 @@
 {% block title %}Make Payment{% endblock %}
 
 {% block content %}
+{% if unpaid_statements %}
 <section id="Greeting"><h1>Make a Payment</h1></section>
 <div id="make_payment-box">
+
+>>>>>>> 63eba2a45840803f27cd76c5fccf846a9aa2ef5f
   <form id="paymentForm" action="{{ url_for('tenant_bp.make_payment', tenant_id=tenant.id) }}" method="post">
     
-    {% if unpaid_statements %}
+    
         <label for="paymentSelect">Select Unpaid Statement:</label>
         <select id="paymentSelect" name="payment_id">
             <option value="" selected disabled hidden>Select an unpaid statement</option>
             {% for payment in unpaid_statements %}
-                <option value="{{ payment.id }}">{{ payment.date }}</option>
+                <option value="{{ payment.id }}">{{ payment.due_date }}</option>
             {% endfor %}
         </select>
-    {% else %}
-        <!-- Hidden form field for payment_id -->
-        <input type="hidden" name="payment_id" id="paymentIdField" value="">
-    {% endif %}
 
     <!-- Tenant Information -->
     <div class="input-group">
@@ -206,5 +205,9 @@
     });
   </script>
 </div>
+{% else %}
+<h2>There are no outstanding payments!</h2>
+{% endif %}
+>>>>>>> 63eba2a45840803f27cd76c5fccf846a9aa2ef5f
   
 {% endblock %}

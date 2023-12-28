@@ -9,6 +9,7 @@ from ..db import db
 from ..utils.password_hash import hash_password
 from ..utils.inputblacklist import sanitize_input
 import pyotp
+import json
 
 
 # Blueprint for tenant
@@ -251,36 +252,39 @@ def make_payment(tenant_id):
             routing_number = request.form.get('routingNumber')
             payment_id = request.form.get('payment_id')
 
+            payment_service = PaymentService()
+            if not payment_id:
+                flash('No statement selected')
+                return redirect(url_for("tenant_bp.tenant_payments", tenant_id=tenant.id))
+
             if card_number:
-                # Create an instance of the PaymentService class to consume CC/DC payments
-                payment_service = PaymentService()
-
                 # Make the payment request
-                response = payment_service.make_payment_request(amount, card_number, expiration_month, expiration_year, security_code)
+                response = payment_service.make_cc_request(amount, card_number, expiration_month, expiration_year, security_code).json()
 
-                print(response.json())
             elif routing_number:
                 # consume ACH payment. There isn't actually any logic here, but we would put an PaymentService object here to do that
                 # make_payment_request should be able to accept these arguments as keyword arguments and the request should be consumed further on
-                payment_service = PaymentService()
-                pass
-            print(payment_id)
-            if payment_id:
-                payment = Payment.query.filter_by(id=payment_id).first()
-                payment.date = date.today()
-                payment.paid=True
-            else:
-                new_payment = Payment(
-                    tenant_id=tenant.id,
-                    unit_id=tenant.unit.id,
-                    landlord_id=tenant.unit.landlord.id,
-                    paid=True,
-                    date=date.today(),
-                    amount=amount
-                )
-                db.session.add(new_payment)
+                
+                response = payment_service.make_ach_request(amount, account_number, routing_number)
 
+            parsed_response = json.loads(response)
+
+            approval_status = parsed_response["paymentReceipt"]["processorResponseDetails"]["approvalStatus"]
+
+            if not approval_status == "APPROVED":
+                flash('Payment failed')
+                return redirect(url_for("tenant_bp.tenant_payments", tenant_id=tenant.id))
+
+
+
+            payment = Payment.query.filter_by(id=payment_id).first()
+            payment.date = date.today()
+            payment.paid=True
             db.session.commit()
+ 
+                
+
+            return redirect(url_for("tenant_bp.tenant_payments", tenant_id=tenant.id))
 
             compose_email(tenant, 'payment_success')
             compose_email(tenant.unit.landlord, 'landlord_receipt', tenant=tenant)
