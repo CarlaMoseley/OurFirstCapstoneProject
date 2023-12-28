@@ -247,25 +247,39 @@ def make_payment(tenant_id):
             expiration_month = request.form.get('expMonth')
             expiration_year = request.form.get('expYear')
             security_code = request.form.get('securityCode')
+            account_number = request.form.get('accountNumber')
+            routing_number = request.form.get('routingNumber')
+            payment_id = request.form.get('payment_id')
 
-            # Create an instance of the PaymentService class
-            payment_service = PaymentService()
+            if card_number:
+                # Create an instance of the PaymentService class to consume CC/DC payments
+                payment_service = PaymentService()
 
-            # Make the payment request
-            response = payment_service.make_payment_request(amount, card_number, expiration_month, expiration_year, security_code)
+                # Make the payment request
+                response = payment_service.make_payment_request(amount, card_number, expiration_month, expiration_year, security_code)
 
-            print(response)
+                print(response.json())
+            elif routing_number:
+                # consume ACH payment. There isn't actually any logic here, but we would put an PaymentService object here to do that
+                # make_payment_request should be able to accept these arguments as keyword arguments and the request should be consumed further on
+                payment_service = PaymentService()
+                pass
+            print(payment_id)
+            if payment_id:
+                payment = Payment.query.filter_by(id=payment_id).first()
+                payment.date = date.today()
+                payment.paid=True
+            else:
+                new_payment = Payment(
+                    tenant_id=tenant.id,
+                    unit_id=tenant.unit.id,
+                    landlord_id=tenant.unit.landlord.id,
+                    paid=True,
+                    date=date.today(),
+                    amount=amount
+                )
+                db.session.add(new_payment)
 
-            new_payment = Payment(
-                tenant_id=tenant.id,
-                unit_id=tenant.unit.id,
-                landlord_id=tenant.unit.landlord.id,
-                paid=True,
-                date=date.today(),
-                amount=amount
-            )
-
-            db.session.add(new_payment)
             db.session.commit()
 
             compose_email(tenant, 'payment_success')
