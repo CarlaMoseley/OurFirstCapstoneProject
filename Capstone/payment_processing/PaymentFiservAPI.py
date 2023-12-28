@@ -58,13 +58,12 @@ class PaymentService:
 
         # Replace this with the actual URL of the API endpoint
         url = "https://cert.api.fiservapps.com/ch/payments/v1/charges"
+        
+        api_key = "9y2JnAIowGH2WBccw8HjOdTlAt5ClV7w"
 
         # Construct the raw signature
-        raw_signature = f'{self.api_key}{client_request_id}{timestamp}{json_request_body}'
-
-        # Hash the raw signature using HMAC-SHA256
-        hashed_signature = hmac.new(self.secret.encode(), raw_signature.encode(), hashlib.sha256).digest()
-
+        raw_signature = f'{api_key}{client_request_id}{timestamp}{json_request_body}'
+        print(raw_signature)
         # Encode the hashed signature using Base64
         computed_hmac = self.generate_auth_token(raw_signature, self.secret)
 
@@ -72,7 +71,7 @@ class PaymentService:
         headers = {
             'Content-Type': 'application/json',
             'Client-Request-Id': client_request_id,
-            'Api-Key': self.api_key,
+            'Api-Key': "9y2JnAIowGH2WBccw8HjOdTlAt5ClV7w",
             'Timestamp': str(timestamp),
             'Auth-Token-Type': 'HMAC',
             'Authorization': computed_hmac
@@ -80,3 +79,4 @@ class PaymentService:
 
         # Make the API request
         return requests.post(url, headers=headers, json=request_body)
+        
