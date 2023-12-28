@@ -7,6 +7,19 @@
 
   <form id="paymentForm" action="{{ url_for('tenant_bp.make_payment', tenant_id=tenant.id) }}" method="post">
     
+    {% if unpaid_statements %}
+        <label for="paymentSelect">Select Unpaid Statement:</label>
+        <select id="paymentSelect" name="payment_id">
+            <option value="" selected disabled hidden>Select an unpaid statement</option>
+            {% for payment in unpaid_statements %}
+                <option value="{{ payment.id }}">{{ payment.date }}</option>
+            {% endfor %}
+        </select>
+    {% else %}
+        <!-- Hidden form field for payment_id -->
+        <input type="hidden" name="payment_id" id="paymentIdField" value="">
+    {% endif %}
+
     <!-- Tenant Information -->
     <h2>Tenant Information</h2>
     <label for="name">Name:</label>
@@ -161,5 +174,24 @@
     // Get the current year for the expiration year input
     var current_year = new Date().getFullYear();
     document.getElementById("expYear").setAttribute("min", current_year);
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var paymentSelect = document.getElementById('paymentSelect');
+        var paymentIdField = document.getElementById('paymentIdField');
+
+        // Check if incomplete payments exist
+        if (paymentSelect) {
+            // Show dropdown and add event listener
+            paymentSelect.style.display = 'block';
+
+            paymentSelect.addEventListener('change', function () {
+                // Update the hidden field with the selected payment ID
+                paymentIdField.value = paymentSelect.value;
+            });
+        } else {
+            // Set the hidden field value to an empty string
+            paymentIdField.value = '';
+        }
+    });
   </script>
 {% endblock %}
