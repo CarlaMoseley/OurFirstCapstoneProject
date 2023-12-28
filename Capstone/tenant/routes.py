@@ -78,21 +78,14 @@ def tenant_login():
                 totp_uri, totp_secret = generate_totp_uri(username)
                 print(totp_uri)
                 print(totp_secret)
-                tenant = Tenant.query.filter_by(username=username).first()
-                # Render login template with TOTP-related content
-                return render_template(
-                    'tenant_login.html',
-                    totp_setup=True,
-                    totp_uri=totp_uri,
-                    username=username,
-                    totp_secret=totp_secret,
-                    tenant=tenant
-                )
+
+                # Store the TOTP secret in the session for later verification
+                session['totp_secret'] = totp_secret
+                session['tenant_id'] = tenant_id
+                # Redirect to the TOTP setup page
+                return redirect(url_for('tenant_bp.setup_totp', totp_uri=totp_uri))
 
             # If TOTP is not required, proceed with regular login
-            session['tenant_id'] = tenant_id
-            session['last_activity'] = datetime.utcnow()
-            return redirect(url_for('tenant_bp.tenant_profile', tenant_id=tenant_id))
         else:
             # User does not exist or incorrect credentials, show an error message
             error_message = "Invalid credentials. Please try again."
@@ -101,6 +94,38 @@ def tenant_login():
     # Render the login page for GET requests
     return render_template('tenant_login.html')
 
+
+@tenant_bp.route('/tenant/setup_totp', methods=['GET', 'POST'])
+def setup_totp():
+    totp_uri = request.args.get('totp_uri')
+    # Retrieve the TOTP secret from the session
+    totp_secret = session.get('totp_secret')
+    tenant_id = session.get('tenant_id')
+
+    if not totp_secret:
+        # Redirect to the login page if TOTP secret is not available
+        return redirect(url_for('tenant_bp.tenant_login'))
+
+    if request.method == 'POST':
+        otp_number = request.form.get('OTP')
+        session['last_activity'] = datetime.utcnow()
+        # Verify the provided OTP against the TOTP secret
+        totp = pyotp.TOTP(totp_secret)
+        is_valid_otp = totp.verify(otp_number)
+
+        if is_valid_otp:
+            print('valid otp')
+            # OTP is valid, you can proceed with whatever action is needed
+            # (e.g., store the fact that TOTP is set up for this user)
+            return redirect(url_for('tenant_bp.tenant_profile', tenant_id=tenant_id))
+        else:
+            print('not valid')
+            # Invalid OTP, render the setup_totp page with an error message
+            error_message = "Invalid OTP. Please try again."
+            return render_template('tenant_setup_totp.html', totp_secret=totp_secret, totp_uri=totp_uri, error_message=error_message)
+
+    # Render the TOTP setup page with the QR code
+    return render_template('tenant_setup_totp.html', totp_secret=totp_secret, totp_uri=totp_uri)
 
 
 @tenant_bp.route('/tenant/signup', methods=['GET', 'POST'])
@@ -163,6 +188,14 @@ def tenant_signup():
 
 @tenant_bp.route('/tenant/<int:tenant_id>')
 def tenant_profile(tenant_id):
+    logged_in_tenant_id = session.get('tenant_id')
+
+    # Check if the logged-in landlord is authorized to view the requested profile
+    if logged_in_tenant_id is None or logged_in_tenant_id != tenant_id:
+        flash('You are not authorized to view this profile.', 'error')
+        session.clear()
+        return redirect(url_for('home_bp.home'))
+
     # render tenant profile page
     tenant = Tenant.query.filter_by(id=tenant_id).first()
     if request.method == 'POST':
@@ -195,6 +228,14 @@ def tenant_payments(tenant_id):
 
 @tenant_bp.route('/tenant/<int:tenant_id>/makepayment', methods=['GET', 'POST'])
 def make_payment(tenant_id):
+    logged_in_tenant_id = session.get('tenant_id')
+
+    # Check if the logged-in landlord is authorized to view the requested profile
+    if logged_in_tenant_id is None or logged_in_tenant_id != tenant_id:
+        flash('You are not authorized to view this profile.', 'error')
+        session.clear()
+        return redirect(url_for('home_bp.home'))
+
     # render make payment page
     tenant = Tenant.query.filter_by(id=tenant_id).first()
     if request.method == 'POST':
@@ -239,6 +280,14 @@ def make_payment(tenant_id):
 
 @tenant_bp.route('/tenant/<int:tenant_id>/<int:payment_id>')
 def tenant_payment(tenant_id, payment_id):
+    logged_in_tenant_id = session.get('tenant_id')
+
+    # Check if the logged-in landlord is authorized to view the requested profile
+    if logged_in_tenant_id is None or logged_in_tenant_id != tenant_id:
+        flash('You are not authorized to view this profile.', 'error')
+        session.clear()
+        return redirect(url_for('home_bp.home'))
+
     # render individual payment page
     tenant = Tenant.query.filter_by(id=tenant_id).first()
     payment = Payment.query.filter_by(id=payment_id).first

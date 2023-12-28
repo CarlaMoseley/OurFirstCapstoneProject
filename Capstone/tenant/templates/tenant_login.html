@@ -37,29 +37,14 @@
         </div>
     </form>
 
-    {% if totp_uri %}
-    <div class="totp-section">
-        <div id="qrcode"></div>
-        <p>Scan the QR code with your Google Authenticator app or enter the key manually: {{ tenant.totp_secret }}</p>
+    <div id="setup-totp-section">
+        {% include 'setup_totp.html' %}
     </div>
-    <script>
-        function loadQRCode(uri) {
-            var qrcode = new QRCode(document.getElementById("qrcode"), {
-                text: uri,
-                width: 128,
-                height: 128,
-            });
-        }
-    </script>
-    <script src="{{ url_for('static', filename='qrcode.min.js') }}" onload="loadQRCode('{{ totp_uri }}')"></script>
-    {% endif %}
 
     <p id="signup">Not a User? Sign Up</p>
 
     <script src="{{url_for('static', filename='login.js')}}"></script>
 </div>
-
-
 </body>
 
 </html>
