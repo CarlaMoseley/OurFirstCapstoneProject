@@ -62,5 +62,5 @@ class Payment(db.Model):
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
     amount = db.Column(db.Float, nullable=False)
     paid = db.Column(db.Boolean, nullable=False, default=True)
-    date = db.Column(db.Date, nullable=False, default=db.func.date(db.func.current_timestamp()))
+    date = db.Column(db.Date, nullable=True)
     due_date = db.Column(db.Date, nullable=False)

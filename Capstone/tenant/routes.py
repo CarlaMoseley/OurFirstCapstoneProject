@@ -213,23 +213,16 @@ def make_payment(tenant_id):
                 # make_payment_request should be able to accept these arguments as keyword arguments and the request should be consumed further on
                 payment_service = PaymentService()
                 pass
-            print(payment_id)
+
             if payment_id:
                 payment = Payment.query.filter_by(id=payment_id).first()
                 payment.date = date.today()
                 payment.paid=True
+                db.session.commit()
             else:
-                new_payment = Payment(
-                    tenant_id=tenant.id,
-                    unit_id=tenant.unit.id,
-                    landlord_id=tenant.unit.landlord.id,
-                    paid=True,
-                    date=date.today(),
-                    amount=amount
-                )
-                db.session.add(new_payment)
+                flash('No statement selected', 'error')
 
-            db.session.commit()
+                return redirect(url_for("tenant_bp.tenant_payments", tenant_id=tenant.id))
 
             compose_email(tenant, 'payment_success')
             compose_email(tenant.unit.landlord, 'landlord_receipt', tenant=tenant)
