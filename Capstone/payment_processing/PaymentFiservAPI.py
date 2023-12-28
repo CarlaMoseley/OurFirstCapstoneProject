@@ -25,7 +25,7 @@ class PaymentService:
             print(f"Error Generating Auth Token: {str(e)}")
             return None
 
-    def make_payment_request(self, amount, card_number, expiration_month, expiration_year, security_code):
+    def make_cc_request(self, amount, card_number, expiration_month, expiration_year, security_code):
         timestamp = int(time.time() * 1000)
         client_request_id = str(uuid.uuid4())
 
@@ -80,3 +80,38 @@ class PaymentService:
 
         # Make the API request
         return requests.post(url, headers=headers, json=request_body)
+    
+    def make_ach_request(self, amount, account_number, routing_number):
+        valid_routes = ["0" + str(i) for i in range(1,10)] + [str(i) for i in range(21,33)] + [str(i) for i in range(61,73)] + ['11', '12', '80']
+        validate_sum = (3*(int(routing_number[0])+int(routing_number[3])+int(routing_number[6])) + 7*(int(routing_number[1])+int(routing_number[4])+int(routing_number[7])) + (int(routing_number[2])+int(routing_number[5])+int(routing_number[8])))%10 
+        print(validate_sum)
+        print("we make it to the beginning of the request function")
+        if not validate_sum == 0:
+            print("we make it into the failed routing number thing")
+            # The routing number is invalid, the request should fail
+            approval_status = "NOT_APPROVED"
+        elif not routing_number[:2] in valid_routes:
+            # the routing number is invalid, the request should fail
+            print("we made it ")
+            approval_status = "NOT_APPROVED"
+        else:
+            # the routing number is valid, the request should pass
+            approval_status = "APPROVED"
+
+        print("we make it past the control flow statements")
+
+        response_body = {
+            "paymentReceipt": {
+                "approvedAmount": {
+                    "total": amount,
+                    "currency": "USD"
+                },
+            "processorResponseDetails": {
+                "approvalStatus": approval_status,
+                }
+            }
+        }
+
+        return json.dumps(response_body)
+        
+
