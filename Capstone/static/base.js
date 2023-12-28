@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(trimmedPath)
     
         if (trimmedPath === 'tenant') {
-            return 'url("https://i.pinimg.com/originals/7a/6f/28/7a6f2875a3180461809d2188e22382f3.jpg")';
+            return 'url("https://i.pinimg.com/originals/73/76/3a/73763a5abaefd12121f77b561b31267d.jpg")';
         } else if (trimmedPath === 'landlord') {
             console.log('read the image')
             return "url('https://i.pinimg.com/originals/e4/de/11/e4de11b369c2dc834df6fa49df8cb85e.jpg')";
