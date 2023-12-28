@@ -12,28 +12,46 @@ function closeNav() {
 
 function darkenElements() {
     const header = document.getElementById("header");
-    header.style.filter = "brightness(70%)";
-
     const unitInformation = document.getElementById("Unit-Information");
-    unitInformation.style.filter = "brightness(70%)";
-
     const suggestedTasks = document.getElementById("Suggested-Tasks");
-    suggestedTasks.style.filter = "brightness(70%)";
+    const makePaymentBox = document.getElementById("make_payment-box");
+    if(header && makePaymentBox){
+        header.style.filter = "brightness(70%)";
+        makePaymentBox.style.filter = "brightness(70%)";
+    }else if(header&&unitInformation&&suggestedTasks){
+        header.style.filter = "brightness(70%)";
+        unitInformation.style.filter = "brightness(70%)";
+        suggestedTasks.style.filter = "brightness(70%)";
+    }else if(header&&suggestedTasks){
+        header.style.filter = "brightness(70%)";
+        suggestedTasks.style.filter = "brightness(70%)";
+    }else{
+        header.style.filter = "brightness(70%)";
+        unitInformation.style.filter = "brightness(70%)";
+    }
 
-    // Add similar adjustments for other elements as needed
 }
 
 function resetElements() {
     const header = document.getElementById("header");
-    header.style.filter = "brightness(100%)";
-
     const unitInformation = document.getElementById("Unit-Information");
-    unitInformation.style.filter = "brightness(100%)";
-
     const suggestedTasks = document.getElementById("Suggested-Tasks");
-    suggestedTasks.style.filter = "brightness(100%)";
+    const makePaymentBox = document.getElementById("make_payment-box");
+    if(header && makePaymentBox){
+        header.style.filter = "brightness(100%)";
+        makePaymentBox.style.filter = "brightness(100%)";
+    }else if(header&&unitInformation&&suggestedTasks){
+        header.style.filter = "brightness(100%)";
+        unitInformation.style.filter = "brightness(100%)";
+        suggestedTasks.style.filter = "brightness(100%)";
+    }else if(header&&suggestedTasks){
+        header.style.filter = "brightness(100%)";
+        suggestedTasks.style.filter = "brightness(100%)";
+    }else{
+        header.style.filter = "brightness(100%)";
+        unitInformation.style.filter = "brightness(100%)";
+    }
 
-    // Add similar adjustments for other elements as needed
 }
 
 
