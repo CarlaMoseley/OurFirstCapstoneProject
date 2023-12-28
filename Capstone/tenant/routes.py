@@ -233,7 +233,7 @@ def make_payment(tenant_id):
 def tenant_payment(tenant_id, payment_id):
     # render individual payment page
     tenant = Tenant.query.filter_by(id=tenant_id).first()
-    payment = Payment.query.filter_by(id=payment_id).first
+    payment = Payment.query.filter_by(id=payment_id).first()
 
     return render_template('tenant_payment.html', tenant=tenant, payment=payment)
 

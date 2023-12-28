@@ -65,27 +65,21 @@ window.onclick = function(event) {
 document.addEventListener('DOMContentLoaded', function() {
     const backgroundElement = document.getElementById('header');
 
-    function getBackgroundImageURL() {
+    function setBackgroundImage() {
         const path = window.location.pathname.split('/');
         const trimmedPath = path[1].trim().toLowerCase();
         console.log(trimmedPath)
     
         if (trimmedPath === 'tenant') {
-            return 'url("https://i.pinimg.com/originals/73/76/3a/73763a5abaefd12121f77b561b31267d.jpg")';
+            backgroundElement.style.backgroundImage = 'url("/static/images/tenants-profile.jpg")';
         } else if (trimmedPath === 'landlord') {
-            console.log('read the image')
-            return "url('https://i.pinimg.com/originals/e4/de/11/e4de11b369c2dc834df6fa49df8cb85e.jpg')";
+            backgroundElement.style.backgroundImage = 'url("/static/images/landlord-profile.jpg")';
         } else {
             console.log('image not found')
-            return '';
+            return;
         }
     }
 
-    function setBackgroundImage() {
-        console.log('inBackgroundImage')
-        const imageURL = getBackgroundImageURL();
-        backgroundElement.style.backgroundImage = imageURL;
-    }
 
     setBackgroundImage();
 

@@ -97,7 +97,7 @@ body{
 }
 #Unit-Information table td{
     text-align: center;
-    padding: 0.5%;
+    padding: 0.5% auto;
     padding-top: 1%;
     padding-bottom: 1%;
 }
@@ -176,25 +176,39 @@ body{
 }
 
 /* Add this CSS to your existing stylesheet */
+/* Update this CSS in your existing stylesheet */
 #top-menu {
     min-height: 35px;
     display: flex;
     flex-direction: row;
     align-items: center;
-
 }
 
 #top-menu span,
-.dropdown span {
+.dropdown span,
+#profile {
     font-size: 20px;
     cursor: pointer;
-    border-right: solid 1px #727070;
     display: flex;
     padding: 15px;
+    border-right: 1px solid black;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
     align-items: center; /* Align text vertically in the middle */
     height: 100%;
 }
+
+
+#Logout {
+    margin-left: auto;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+    align-items: center; /* Align text vertically in the middle */
+    height: 100%;
+    border-left: 1px solid black ;
+    color: whitesmoke;
+    background-color: rgba(255, 11, 11, 0.562);
+}
+
+/* ... (existing styles) */
 
 
 .dropdown:hover #suggestedTasksDropdown {
@@ -244,9 +258,12 @@ input[type="date"]{
   /* The Close Button */
   .close {
     color: white;
+    margin-top: 0;
     float: right;
     font-size: 28px;
     font-weight: bold;
+    background-color: inherit;
+    max-width: 100px;
   }
   
   .close:hover,
@@ -254,10 +271,11 @@ input[type="date"]{
     color: black;
     text-decoration: none;
     cursor: pointer;
+    background-color: rgba(117, 167, 24, 0.904);
   }
 /* Modal Header */
 .modal-header {
-    padding: 2px 16px;
+    padding: 3%;
     background-color: rgba(150, 216, 27, 0.781);
     color: white;
   }

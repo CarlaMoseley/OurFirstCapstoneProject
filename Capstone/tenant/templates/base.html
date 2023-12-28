@@ -14,13 +14,14 @@
         <a href="{{ url_for('tenant_bp.tenant_profile', tenant_id=tenant.id) }}">Home</a>
         <a href="{{ url_for('tenant_bp.tenant_payments', tenant_id=tenant.id) }}">Payments</a>
         <a href="{{ url_for('tenant_bp.make_payment', tenant_id=tenant.id) }}">Make A Payment</a>
+
       </div>
       <section id="top-menu">
         <span onclick="openNav()">&#9776; Menu </span>
         <div class="dropdown">
           <span onclick="toggleDropdown()">Suggested Tasks</span>
           <div class="Suggested-Tasks-Quick-Links" id="suggestedTasksDropdown">
-            <a href="{{ url_for('tenant_bp.make_payment', tenant_id=tenant.id) }}">Make A Payment</a>
+            <a href="{{ url_for('tenant_bp.make_payment', tenant_id=tenant.id) }}">Make A Payment</a>  
           </div>
         </div>
         <span id="profile" onclick="showProfile()"><i class="fa fa-user" aria-hidden="true"></i></span>
@@ -40,6 +41,7 @@
             </div>
           </div>       
         </div>
+        <span id="Logout">Logout <i class="fa-solid fa-right-from-bracket"></i></span>
       </section>
         <div id="header"></div>
 

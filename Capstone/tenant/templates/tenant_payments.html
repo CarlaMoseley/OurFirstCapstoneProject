@@ -17,6 +17,7 @@
                 <th>Landlord Email</th>
                 <th>Unit Number</th>
                 <th>Address</th>
+                <th>Payment Details</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +32,7 @@
                     <td>{{ payment.landlord.email }}</td>
                     <td>{{ payment.unit.unit_number }}</td>
                     <td>{{ payment.unit.address }}</td>
+                    <td><a href="{{ url_for('tenant_bp.tenant_payment', tenant_id=tenant.id, payment_id=payment.id) }}">{{payment.id}}</a></td>
                 </tr>
             {% endfor %}
         </tbody>
