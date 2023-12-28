@@ -8,6 +8,7 @@ import secrets
 from ..utils.password_hash import hash_password
 from ..utils.inputblacklist import sanitize_input
 from ..utils.date_scan import scan_units
+from ..utils.random_gen import generate_random_string
 from datetime import timedelta
 import pyotp
 
@@ -236,7 +237,7 @@ def landlord_tenants(landlord_id):
     return render_template('landlord_tenants.html', landlord=landlord, tenants=tenants, units=units)
 
 
-@landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>', methods=['GET'])
+@landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>', methods=['GET', 'POST'])
 def landlord_unit_page(landlord_id, unit_id):
     logged_in_landlord_id = session.get('landlord_id')
 
@@ -248,6 +249,28 @@ def landlord_unit_page(landlord_id, unit_id):
     # render landlord unit page for a given unit
     landlord=Landlord.query.filter_by(id=landlord_id).first()
     unit=Unit.query.filter_by(id=unit_id).first()
+    if request.method == 'POST':
+        unit_number = request.form.get('unit_number')
+        address = request.form.get('address')
+        rent = request.form.get('rent') if request.form.get('rent') else None
+        lease_start = request.form.get('lease_start') if request.form.get('lease_start') else None
+        rent_due = request.form.get('rent_due') if request.form.get('rent_due') else None
+
+        if request.form.get('rent_this_unit_hidden'):
+            tenant_password = generate_random_string()
+        else:
+            tenant_password = None
+
+        unit.unit_number = unit_number
+        unit.address = address
+        unit.rent = rent
+        unit.lease_start = lease_start
+        unit.rent_due = rent_due
+        unit.tenant_password = tenant_password
+
+        db.session.commit()
+    
+    
 
     return render_template('landlord_unit_page.html', landlord=landlord, unit=unit)
 
@@ -406,4 +429,4 @@ def landlord_scan(landlord_id):
 @landlord_bp.route('/landlord/logout')
 def landlord_logout():
     session.pop('landlord_id', None)  # Remove the landlord_id from the session
-    return redirect(url_for('landlord_bp.landlord_login'))
+    return redirect(url_for('home_bp.home'))

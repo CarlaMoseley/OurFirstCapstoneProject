@@ -3,36 +3,103 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-  <h2>Home Page</h2>
-  <h2>Unit Information</h2>
-  <table id="unitsTable" border="1" class="sortable">
-    <thead>
-      <tr>
-        <th data-column="unit_number">Unit Number</th>
-        <th data-column="address">Address</th>
-        <th data-column="rent">Rent</th>
-        <th data-column="lease_start">Lease Start</th>
-        <th data-column="rent_due">Payment Date</th>
-        <!-- Add more unit attributes as needed -->
-      </tr>
-    </thead>
-    <tbody>
-      {% for unit in units %}
+  <section id="Greeting">
+  {% if landlord %}
+  <h1>Welcome, {{ landlord.first_name }} {{ landlord.last_name }}!</h1>
+  {% endif %}
+  </section>
+  <div id="Unit-Information">
+    <h2>Unit Information</h2>
+    <table id="unitsTable" class="sortable">
+      <thead>
         <tr>
-          <td>{{ unit.unit_number }}</td>
-          <td>{{ unit.address }}</td>
-          <td>{{ unit.rent }}</td>
-          <td>{{ unit.lease_start }}</td>
-          <td>{{ unit.rent_due }}</td>
-          <!-- Add more unit attributes as needed -->
+          <th data-column="unit_number">Unit Number</th>
+          <th data-column="address">Address</th>
+          <th data-column="rent">Rent</th>
+          <th data-column="lease_start">Lease Start</th>
+          <th data-column="rent_due">Payment Date</th>
+          <th data-column="tenant_password">Tenant OTP</th>
+        <!-- Add more unit attributes as needed -->
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {% for unit in units %}
+          <tr>
+            <td>{{ unit.unit_number }}</td>
+            <td>{{ unit.address }}</td>
+            <td>{{ unit.rent }}</td>
+            <td>{{ unit.lease_start }}</td>
+            <td>{{ unit.rent_due }}</td>
+            <td>{{ unit.tenant_password }}</td>
+          <!-- Add more unit attributes as needed -->
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  
+  <div id="Suggested-Tasks">
+    <h2>Suggested Tasks</h2>
+    <div class="task" id="create_expense">
+      <h2>Create New Expense</h2>
 
-  <!-- Button to Add a New Unit -->
-  <h2>Add New Unit</h2>
-  <a href="{{ url_for('landlord_bp.create_unit', landlord_id=landlord.id) }}"><button>Add New Unit</button></a>
+      <form action="{{ url_for('landlord_bp.create_expense', landlord_id=landlord.id) }}" method="post">
+        <label for="unit">Select Unit:</label>
+        <select id="unit" name="unit_id">
+          {% for unit in units %}
+            <option value="{{ unit.id }}" {% if selected_unit and unit.id == selected_unit.id %} selected {% endif %}>
+              {{ unit.unit_number or '' }} {{ unit.address}}
+            </option>
+          {% endfor %}
+        </select><br>
+    
+        <label for="cost">Cost:</label>
+        <input type="number" step="0.01" id="cost" name="cost" required>
+    
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea>
+        <label for="contractor">Contractor:</label>
+        <input type="text" id="contractor" name="contractor" required>
+    
+        <label for="contractor_contact">Contractor Contact:</label>
+        <input type="text" id="contractor_contact" name="contractor_contact" required>
+    
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+    
+        <button type="submit">Create Expense</button>
+      </form>
+    </div>
+    <div class="task" id="create_unit">
+      <h2>Create New Unit</h2>
+
+      <form action="{{ url_for('landlord_bp.create_unit', landlord_id=landlord.id) }}" method="POST">
+        <!-- Unit Number (String) -->
+        <label for="unit_number">Unit Number:</label>
+        <input type="text" id="unit_number" name="unit_number">
+
+        <!-- Address (String) -->
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" required>
+    
+        <!-- Rent (Float) -->
+        <label for="rent">Rent:</label>
+        <input type="number" step="0.01" id="rent" name="rent">
+    
+        <!-- Lease Start (Date) -->
+        <label for="lease_start">Lease Start:</label>
+        <input type="date" id="lease_start" name="lease_start">
+    
+        <!-- Rent Due (Integer between 1 and 31 with default of 1) -->
+        <label for="rent_due">Rent Due (1-31, default 1):</label>
+        <input type="number" id="rent_due" name="rent_due" min="1" max="31" value="1">
+    
+        <button type="submit">Create Unit</button>
+      </form>
+    </div>
+    <!--If there's time add stretch feature Contact Us-->>
+  </div>
+
 
   <script src="{{ url_for('static', filename='sorttable.js') }}"></script>
   <script>

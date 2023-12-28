@@ -5,9 +5,9 @@
 {% block content %}
   <h2>Unit {{ unit.id }}</h2>
 
-  <div class="container">
+  <div class="container" id="displayContainer">
     <h2>Unit Information</h2>
-    <div class="info">
+    <div class="info" id="displayInfo">
       <strong>Unit Number:</strong> {{ unit.unit_number }}<br>
       <strong>Address:</strong> {{ unit.address }}<br>
       <strong>Rent:</strong> {{ unit.rent }}<br>
@@ -16,6 +16,61 @@
     </div>
   </div>
 
+  <button id="editButton">Edit</button>
+
+  <form method="post" action="{{ url_for('landlord_bp.landlord_unit_page', landlord_id=landlord.id, unit_id=unit.id) }}" id="editForm" style="display: none;">
+    <h2>Edit Unit Information</h2>
+    <div class="edit-info">
+      <label for="unit_number">Unit Number:</label>
+      <input type="text" id="unit_number" name="unit_number" value="{{ unit.unit_number }}" {% if edit_mode or request.form.get('rent_this_unit') %}required{% endif %}><br>
+
+      <label for="address">Address:</label>
+      <input type="text" id="address" name="address" value="{{ unit.address }}" {% if edit_mode or request.form.get('rent_this_unit') %}required{% endif %}><br>
+
+      <label for="rent">Rent:</label>
+      <input type="text" id="rent" name="rent" value="{{ unit.rent }}" {% if edit_mode or request.form.get('rent_this_unit') %}required{% endif %}><br>
+
+      <label for="lease_start">Lease Start:</label>
+      <input type="date" id="lease_start" name="lease_start" value="{{ unit.lease_start }}" {% if edit_mode or request.form.get('rent_this_unit') %}required{% endif %}><br>
+
+      <label for="rent_due">Rent Due:</label>
+      <input type="text" id="rent_due" name="rent_due" value="{{ unit.rent_due }}" {% if edit_mode or request.form.get('rent_this_unit') %}required{% endif %}><br>
+    </div>
+
+    <div class="checkbox">
+      <input type="checkbox" id="rent_this_unit" name="rent_this_unit">
+      <label for="rent_this_unit">Rent this Unit</label>
+      <input type="hidden" id="rent_this_unit_hidden" name="rent_this_unit_hidden" value="false">
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+
   <a href="{{ url_for('landlord_bp.landlord_unit_payments', landlord_id=landlord.id, unit_id=unit.id) }}"><button>Payments</button></a>
   <a href="{{ url_for('landlord_bp.landlord_unit_expenses', landlord_id=landlord.id, unit_id=unit.id) }}"><button>Expenses</button></a>
+
+  <script>
+    var editButton = document.getElementById("editButton");
+    var displayContainer = document.getElementById("displayContainer");
+    var displayInfo = document.getElementById("displayInfo");
+    var editForm = document.getElementById("editForm");
+
+    editButton.addEventListener("click", function() {
+      if (editButton.innerText === "Edit") {
+        editButton.innerText = "Submit";
+        displayContainer.style.display = "none";
+        editForm.style.display = "block";
+      } else {
+        editButton.innerText = "Edit";
+        displayContainer.style.display = "block";
+        editForm.style.display = "none";
+      }
+    });
+
+    document.getElementById("rent_this_unit").addEventListener("change", function() {
+      var checkbox = document.getElementById("rent_this_unit");
+      var hiddenInput = document.getElementById("rent_this_unit_hidden");
+      hiddenInput.value = checkbox.checked;
+    });
+  </script>
 {% endblock %}

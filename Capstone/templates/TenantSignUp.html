@@ -30,7 +30,8 @@
             <input type="text" id="id" name="id" placeholder="ID" required="Yes">
             <input type="username" id="username" name="username" placeholder="Username" required="No">
             <input type="password" id="password" name="password" placeholder="Password" required="Yes">
-            <input type="password" id="confirmpassword" name="confirmpassword" class="enter"placeholder="Confirm Password" required="Yes">
+            <input type="password" id="confirmpassword" name="confirmpassword" class="enter" placeholder="Confirm Password" required="Yes" oninput="checkPasswordMatch()">
+            <div id="passwordMatch" style="color: red;"></div>
             <input type="submit" id="SignUp" value="Sign Up">
         </form>
         <div id = "login"> Already have an account? Login.</div>
