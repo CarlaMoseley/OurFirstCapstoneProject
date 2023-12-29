@@ -5,6 +5,7 @@ import time
 import json
 import uuid
 import requests
+from datetime import date
 
 
 class PaymentService:
@@ -24,6 +25,71 @@ class PaymentService:
         except Exception as e:
             print(f"Error Generating Auth Token: {str(e)}")
             return None
+        
+    def luhn(self, card_number):
+        singled_digits = list(card_number[-1::-2])
+        doubled_digits = ''.join([str(2*int(i)) for i in list(card_number[-2::-2])])
+
+        double_num = sum([int(i) for i in doubled_digits])
+        single_num = sum([int(i) for i in singled_digits])
+
+        return (double_num + single_num) % 10 == 0
+
+    def validate_cc_number(self, card_number):
+        cc_length = len(card_number)
+
+        if cc_length < 13 or cc_length > 16:
+            # no valid cards exist of this length
+            return False, None
+        
+        if card_number[0] == "4" and (cc_length == 16 or cc_length == 13):
+            card_type = "Visa"
+        elif int(card_number[:2]) in range(51,56) and cc_length == 16:
+            card_type = "MasterCard"
+        elif card_number[:2] in ["34", "37"] and cc_length == 15:
+            card_type = "Amex"
+        elif card_number[:5] == "6011" and cc_length == 16:
+            card_type = "Discover"
+        elif card_number[0] == "3" and cc_length == 16:
+            card_type = "JCB"
+        elif card_number[:5] in ["2123","1800"] and cc_length == 15:
+            card_type = "JCB"
+        elif card_number[:2] in ["36", "38"] and cc_length == 14:
+            card_type = "Diners Club"
+        elif int(card_number[:3]) in range(300,306) and cc_length == 14:
+            card_type = "Diners Club"
+        else:
+            return False, None
+        
+        return self.luhn(card_number), card_type
+        
+
+        
+    def make_dummy_cc_request(self, amount, card_number, expiration_month, expiration_year, security_code):
+        is_cc_valid, card_type = self.validate_cc_number(card_number)
+        last_cc_day = date(1, int(expiration_month)+1, int(expiration_year))
+        today = date.today()
+
+        if is_cc_valid and last_cc_day > today:
+            approval_status = 'APPROVED'
+        else:
+            approval_status = 'NOT_APPROVED'
+
+        response_body = {
+            "paymentReceipt": {
+                "approvedAmount": {
+                    "total": amount,
+                    "currency": "USD"
+                },
+            "processorResponseDetails": {
+                "approvalStatus": approval_status,
+                "cardType": card_type
+                }
+            }
+        }
+
+        return json.dumps(response_body)
+
 
     def make_cc_request(self, amount, card_number, expiration_month, expiration_year, security_code):
         timestamp = int(time.time() * 1000)
@@ -84,10 +150,7 @@ class PaymentService:
     def make_ach_request(self, amount, account_number, routing_number):
         valid_routes = ["0" + str(i) for i in range(1,10)] + [str(i) for i in range(21,33)] + [str(i) for i in range(61,73)] + ['11', '12', '80']
         validate_sum = (3*(int(routing_number[0])+int(routing_number[3])+int(routing_number[6])) + 7*(int(routing_number[1])+int(routing_number[4])+int(routing_number[7])) + (int(routing_number[2])+int(routing_number[5])+int(routing_number[8])))%10 
-        print(validate_sum)
-        print("we make it to the beginning of the request function")
         if not validate_sum == 0:
-            print("we make it into the failed routing number thing")
             # The routing number is invalid, the request should fail
             approval_status = "NOT_APPROVED"
         elif not routing_number[:2] in valid_routes:
@@ -98,7 +161,6 @@ class PaymentService:
             # the routing number is valid, the request should pass
             approval_status = "APPROVED"
 
-        print("we make it past the control flow statements")
 
         response_body = {
             "paymentReceipt": {
