@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter OTP</title>
+    <link rel="stylesheet" href="Capstone/tenant/static/tenant_otp_style.css">
+</head>
+<body>
+
+<div class="otp-container">
+    <h2>Enter OTP</h2>
+    <form method="post" action="{{ url_for('landlord_bp.landlord_otp') }}">
+        <input type="hidden" name="landlord_id" value="{{ landlord_id }}">
+        <label for="OTP">OTP:</label>
+        <input type="text" name="OTP" required>
+        <button type="submit">Submit OTP</button>
+    </form>
+</div>
+
+</body>
+</html>

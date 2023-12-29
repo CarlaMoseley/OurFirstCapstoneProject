@@ -18,6 +18,13 @@ tenant_bp = Blueprint(
     static_folder='static'
 )
 
+def get_totp_secret(tenant_id):
+    tenant = Tenant.query.get(tenant_id)
+    if tenant:
+        return True, tenant.id, tenant.secret_key
+    else:
+        return False, None, None
+
 
 def generate_totp_uri(username):
     # Generate a random TOTP secret
@@ -51,6 +58,30 @@ def tenant_redirect():
     return redirect(url_for('tenant_login'))
 
 
+@tenant_bp.route('/landlord/otp', methods=['POST'])
+def tenant_otp():
+    tenant_id = request.form.get('tenant_id')
+    otp_number = request.form.get('OTP')
+
+    # Retrieve the TOTP secret for the given landlord_id from the database
+    _, _, totp_secret = get_totp_secret(tenant_id)
+
+    totp = pyotp.TOTP(totp_secret)
+    is_valid_otp = totp.verify(otp_number)
+
+    if is_valid_otp:
+        print("in valid otp")
+        # OTP is valid, proceed with regular login
+        session['tenant_id'] = tenant_id
+        session['last_activity'] = datetime.utcnow()
+        print(tenant_id, "aadd")
+        return redirect(url_for('tenant_bp.tenant_profile', tenant_id=tenant_id))
+    else:
+        # Invalid OTP, show an error message
+        error_message = "Invalid OTP. Please try again."
+        return render_template('tenant_login.html', error_message=error_message)
+
+
 @tenant_bp.route('/tenant/login', methods=['GET', 'POST'])
 def tenant_login():
     if request.method == 'POST':
@@ -72,20 +103,9 @@ def tenant_login():
 
         if user_exists:
             # Check if TOTP setup is required for the user
-            totp_required = True  # Replace this with your logic to determine if TOTP is required
-            if totp_required:
-                # Generate TOTP URI and secret
-                totp_uri, totp_secret = generate_totp_uri(username)
-                print(totp_uri)
-                print(totp_secret)
+            return render_template('tenant_otp.html', tenant_id=tenant_id)
 
-                # Store the TOTP secret in the session for later verification
-                session['totp_secret'] = totp_secret
-                session['tenant_id'] = tenant_id
-                # Redirect to the TOTP setup page
-                return redirect(url_for('tenant_bp.setup_totp', totp_uri=totp_uri))
-
-            # If TOTP is not required, proceed with regular login
+        # If TOTP is not required, proceed with regular login
         else:
             # User does not exist or incorrect credentials, show an error message
             error_message = "Invalid credentials. Please try again."
@@ -98,33 +118,26 @@ def tenant_login():
 @tenant_bp.route('/tenant/setup_totp', methods=['GET', 'POST'])
 def setup_totp():
     totp_uri = request.args.get('totp_uri')
-    # Retrieve the TOTP secret from the session
     totp_secret = session.get('totp_secret')
-    tenant_id = session.get('tenant_id')
 
     if not totp_secret:
-        # Redirect to the login page if TOTP secret is not available
         return redirect(url_for('tenant_bp.tenant_login'))
 
     if request.method == 'POST':
         otp_number = request.form.get('OTP')
         session['last_activity'] = datetime.utcnow()
-        # Verify the provided OTP against the TOTP secret
         totp = pyotp.TOTP(totp_secret)
         is_valid_otp = totp.verify(otp_number)
 
         if is_valid_otp:
-            print('valid otp')
             # OTP is valid, you can proceed with whatever action is needed
-            # (e.g., store the fact that TOTP is set up for this user)
-            return redirect(url_for('tenant_bp.tenant_profile', tenant_id=tenant_id))
+            session.clear()
+            return redirect(url_for('tenant_bp.tenant_login'))
         else:
-            print('not valid')
             # Invalid OTP, render the setup_totp page with an error message
             error_message = "Invalid OTP. Please try again."
-            return render_template('tenant_setup_totp.html', totp_secret=totp_secret, totp_uri=totp_uri, error_message=error_message)
+            return render_template('tenant_setup_totp.html', totp_secret=totp_secret, totp_uri=totp_uri)
 
-    # Render the TOTP setup page with the QR code
     return render_template('tenant_setup_totp.html', totp_secret=totp_secret, totp_uri=totp_uri)
 
 
@@ -161,11 +174,15 @@ def tenant_signup():
             flash('One Time Unit Password from landlord is required', 'error')
             return redirect(url_for('tenant_bp.tenant_signup'))
 
+
         # Check if the unit_id exists in the Unit table
         unit = Unit.query.filter_by(tenant_password=unit_password).first()
         if unit is None:
             flash(f'Unit with One Time Password {unit_password} does not exist', 'error')
             return redirect(url_for('tenant_bp.tenant_signup'))
+
+        # Generate TOTP information during signup
+        totp_uri, totp_secret = generate_totp_uri(username)
 
         new_tenant = Tenant(
             first_name=f_name,
@@ -180,9 +197,10 @@ def tenant_signup():
         unit.tenant_password = None
         db.session.commit()
 
+        session['totp_secret'] = totp_secret
         # Redirect to a success page or another route
         flash('Tenant registration successful!', 'success')
-
+        return redirect(url_for('tenant_bp.setup_totp', totp_uri=totp_uri))
     # tenant sign up page
     return render_template('TenantSignUp.html')
 

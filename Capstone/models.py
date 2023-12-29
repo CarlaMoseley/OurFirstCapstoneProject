@@ -14,11 +14,14 @@ class User(db.Model):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=True)
     phone_number = db.Column(db.String(15), unique=True, nullable=False)
+    secret_key = db.Column(db.String(64), nullable=True)
+
 
 class Landlord(User):
     __tablename__ = 'landlord'
     units = db.relationship('Unit', backref='landlord', lazy=True)
     payments = db.relationship('Payment', backref='landlord', lazy=True)
+
 
 class Unit(db.Model):
     __tablename__ = 'unit'
@@ -36,12 +39,12 @@ class Unit(db.Model):
     payments = db.relationship('Payment', backref='unit', lazy=True)
     expenses = db.relationship('Expense', backref='unit', lazy=True)
 
+
 class Tenant(User):
     __tablename__ = 'tenant'
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
     payments = db.relationship('Payment', backref='tenant', lazy=True)
-    def get_totp_uri(self):
-        return generate_totp_uri(self.username)
+
 
 class Expense(db.Model):
     __tablename__ = 'expense'
@@ -54,6 +57,7 @@ class Expense(db.Model):
     contractor = db.Column(db.String(100), nullable=True)
     contractor_contact = db.Column(db.String(65))
     date = db.Column(db.Date, nullable=False)
+
 
 class Payment(db.Model):
     __tablename__ = 'payment'

@@ -40,9 +40,12 @@ SESSION_TYPE = 'filesystem'
 app.config.from_object(__name__)
 Session(app)
 
+
 @app.before_request
 def check_session_timeout():
     last_activity = session.get('last_activity')
+    print("app before req")
+    print(last_activity)
 
     if last_activity is not None and datetime.utcnow() > last_activity + timedelta(seconds=SESSION_TIMEOUT):
         # Log out the user if the session has timed out
@@ -54,11 +57,19 @@ def check_session_timeout():
 def check_credentials(username, password):
     landlord = Landlord.query.filter_by(username=username).first()
     if not landlord:
-        return False, None
+        return False, None, None  # Add a placeholder for totp_secret
     if landlord.password == password:
-        return True, landlord.id
+        return True, landlord.id, landlord.secret_key
     else:
-        return False, None
+        return False, None, None
+
+
+def get_totp_secret(landlord_id):
+    landlord = Landlord.query.get(landlord_id)
+    if landlord:
+        return True, landlord.id, landlord.secret_key
+    else:
+        return False, None, None
 
 
 @landlord_bp.route('/landlord', methods=['GET', 'POST'])
@@ -80,27 +91,13 @@ def landlord_login():
             error_message = f"Invalid credentials: {str(e)}"
             return render_template('landlord_login.html', error_message=error_message)
 
-        secured_hash_password = hash_password(password)
-
         # Check if the user exists in the database
-        user_exists, landlord_id = check_credentials(username, secured_hash_password)
+        user_exists, landlord_id, totp_secret = check_credentials(username, hash_password(password))
 
         if user_exists:
-            # Check if TOTP setup is required for the user
-            totp_required = True  # Replace this with your logic to determine if TOTP is required
-            if totp_required:
-                # Generate TOTP URI and secret
-                totp_uri, totp_secret = generate_totp_uri(username)
-                print(totp_uri)
-                print(totp_secret)
+            # Prompt the user for OTP during login
+            return render_template('landlord_otp.html', landlord_id=landlord_id)
 
-                # Store the TOTP secret in the session for later verification
-                session['totp_secret'] = totp_secret
-                session['landlord_id'] = landlord_id
-                # Redirect to the TOTP setup page
-                return redirect(url_for('landlord_bp.setup_totp', totp_uri=totp_uri))
-
-            # If TOTP is not required, proceed with regular login
         else:
             # User does not exist or incorrect credentials, show an error message
             error_message = "Invalid credentials. Please try again."
@@ -111,12 +108,35 @@ def landlord_login():
     return render_template('landlord_login.html')
 
 
+@landlord_bp.route('/landlord/otp', methods=['POST'])
+def landlord_otp():
+    landlord_id = request.form.get('landlord_id')
+    otp_number = request.form.get('OTP')
+
+    # Retrieve the TOTP secret for the given landlord_id from the database
+    _, _, totp_secret = get_totp_secret(landlord_id)
+
+    totp = pyotp.TOTP(totp_secret)
+    is_valid_otp = totp.verify(otp_number)
+
+    if is_valid_otp:
+        print("in valid otp")
+        # OTP is valid, proceed with regular login
+        session['landlord_id'] = landlord_id
+        session['last_activity'] = datetime.utcnow()
+        print(landlord_id, "aadd")
+        return redirect(url_for('landlord_bp.landlord_profile', landlord_id=landlord_id))
+    else:
+        # Invalid OTP, show an error message
+        error_message = "Invalid OTP. Please try again."
+        return render_template('landlord_login.html', error_message=error_message)
+
+
 @landlord_bp.route('/landlord/setup_totp', methods=['GET', 'POST'])
 def setup_totp():
     totp_uri = request.args.get('totp_uri')
     # Retrieve the TOTP secret from the session
     totp_secret = session.get('totp_secret')
-    landlord_id = session.get('landlord_id')
 
     if not totp_secret:
         # Redirect to the login page if TOTP secret is not available
@@ -130,15 +150,14 @@ def setup_totp():
         is_valid_otp = totp.verify(otp_number)
 
         if is_valid_otp:
-            print('valid otp')
             # OTP is valid, you can proceed with whatever action is needed
             # (e.g., store the fact that TOTP is set up for this user)
-            return redirect(url_for('landlord_bp.landlord_profile', landlord_id=landlord_id))
+            session.clear()
+            return redirect(url_for('landlord_bp.landlord_login'))
         else:
-            print('not valid')
             # Invalid OTP, render the setup_totp page with an error message
             error_message = "Invalid OTP. Please try again."
-            return render_template('landlord_setup_totp.html', totp_secret=totp_secret, totp_uri=totp_uri, error_message=error_message)
+            return render_template('landlord_setup_totp.html', totp_secret=totp_secret, totp_uri=totp_uri)
 
     # Render the TOTP setup page with the QR code
     return render_template('landlord_setup_totp.html', totp_secret=totp_secret, totp_uri=totp_uri)
@@ -155,20 +174,22 @@ def landlord_signup():
         password = request.form.get('password')
         confirmpassword = request.form.get('confirmpassword')
 
-        try: 
+        try:
             sanitize_input(password, username)
         except ValueError as e:
             error_message = f"Invalid credentials: {str(e)}"
             return redirect(url_for('landlord_bp.landlord_signup', error_message=error_message))
-        
+
         secured_password = hash_password(password)
         secured_ConfirmPassword = hash_password(confirmpassword)
 
         if secured_password != secured_ConfirmPassword:
             error_message = "Password does not match"
             flash(error_message, 'error')
-            #redirect back to signup page
             return redirect(url_for('landlord_bp.landlord_signup'))
+
+        # Generate TOTP information during signup
+        totp_uri, totp_secret = generate_totp_uri(username)
 
         new_landlord = Landlord(
             first_name=f_name,
@@ -176,13 +197,17 @@ def landlord_signup():
             phone_number=phonenumber,
             email=email,
             username=username,
-            password=secured_password
+            password=secured_password,
+            secret_key=totp_secret  # Store TOTP secret in the database
         )
+
         db.session.add(new_landlord)
         db.session.commit()
 
-        # Redirect to a success page or another route
-        flash('Landlord registration successful!', 'success')
+        session['totp_secret'] = totp_secret
+
+        # Redirect to the login page with TOTP URI
+        return redirect(url_for('landlord_bp.setup_totp', totp_uri=totp_uri))
 
     return render_template('LandlordSignUp.html')
 
@@ -192,7 +217,8 @@ def landlord_profile(landlord_id):
     logged_in_landlord_id = session.get('landlord_id')
 
     # Check if the logged-in landlord is authorized to view the requested profile
-    if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
+    if logged_in_landlord_id is None or int(logged_in_landlord_id) != landlord_id:
+        print("Doesnt match the landlord id")
         flash('You are not authorized to view this profile.', 'error')
         session.clear()
         return redirect(url_for('home_bp.home'))
@@ -240,6 +266,7 @@ def landlord_tenants(landlord_id):
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>', methods=['GET', 'POST'])
 def landlord_unit_page(landlord_id, unit_id):
     logged_in_landlord_id = session.get('landlord_id')
+    print(logged_in_landlord_id)
 
     # Check if the logged-in landlord is authorized to view the requested profile
     if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
