@@ -19,7 +19,7 @@ tenant_bp = Blueprint(
     static_folder='static'
 )
 
-def get_totp_secret(tenant_id):
+def get_tenant_secret(tenant_id):
     tenant = Tenant.query.get(tenant_id)
     if tenant:
         return True, tenant.id, tenant.secret_key
@@ -59,13 +59,13 @@ def tenant_redirect():
     return redirect(url_for('tenant_login'))
 
 
-@tenant_bp.route('/landlord/otp', methods=['POST'])
+@tenant_bp.route('/tenant/otp', methods=['POST'])
 def tenant_otp():
     tenant_id = request.form.get('tenant_id')
     otp_number = request.form.get('OTP')
 
     # Retrieve the TOTP secret for the given landlord_id from the database
-    _, _, totp_secret = get_totp_secret(tenant_id)
+    _, _, totp_secret = get_tenant_secret(tenant_id)
 
     totp = pyotp.TOTP(totp_secret)
     is_valid_otp = totp.verify(otp_number)

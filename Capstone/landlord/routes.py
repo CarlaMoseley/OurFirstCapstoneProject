@@ -44,8 +44,6 @@ Session(app)
 @app.before_request
 def check_session_timeout():
     last_activity = session.get('last_activity')
-    print("app before req")
-    print(last_activity)
 
     if last_activity is not None and datetime.utcnow() > last_activity + timedelta(seconds=SESSION_TIMEOUT):
         # Log out the user if the session has timed out
@@ -64,7 +62,7 @@ def check_credentials(username, password):
         return False, None, None
 
 
-def get_totp_secret(landlord_id):
+def get_landlord_secret(landlord_id):
     landlord = Landlord.query.get(landlord_id)
     if landlord:
         return True, landlord.id, landlord.secret_key
@@ -110,11 +108,12 @@ def landlord_login():
 
 @landlord_bp.route('/landlord/otp', methods=['POST'])
 def landlord_otp():
+    print("we posted to landlord/otp")
     landlord_id = request.form.get('landlord_id')
     otp_number = request.form.get('OTP')
 
     # Retrieve the TOTP secret for the given landlord_id from the database
-    _, _, totp_secret = get_totp_secret(landlord_id)
+    _, _, totp_secret = get_landlord_secret(landlord_id)
 
     totp = pyotp.TOTP(totp_secret)
     is_valid_otp = totp.verify(otp_number)
