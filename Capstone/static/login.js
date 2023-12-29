@@ -19,8 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const path = window.location.pathname.split('/');
         const trimmedPath = path[1].trim().toLowerCase(); // Trim and convert to lowercase
     
-        console.log(trimmedPath);
-    
         if (trimmedPath === 'tenant') {
             backgroundElement.style.backgroundImage= 'url("/static/images/tenants-start.jpg")';
         } else if (trimmedPath === 'landlord') {

@@ -80,6 +80,7 @@ window.onclick = function(event) {
   }
 }
 
+
 document.addEventListener('DOMContentLoaded', function() {
     const backgroundElement = document.getElementById('header');
 
@@ -100,6 +101,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     setBackgroundImage();
-
-    window.addEventListener('popstate', setBackgroundImage);
 });

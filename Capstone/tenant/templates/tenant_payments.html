@@ -32,7 +32,7 @@
                     <td>{{ payment.landlord.email }}</td>
                     <td>{{ payment.unit.unit_number }}</td>
                     <td>{{ payment.unit.address }}</td>
-                    <td><a href="{{ url_for('tenant_bp.tenant_payment', tenant_id=tenant.id, payment_id=payment.id) }}">{{payment.id}}</a></td>
+                    <td><a href="{{ url_for('tenant_bp.tenant_payment', tenant_id=tenant.id, payment_id=payment.id) }}" style="text-decoration: none;">{{payment.id}}</a></td>
                 </tr>
             {% endfor %}
         </tbody>

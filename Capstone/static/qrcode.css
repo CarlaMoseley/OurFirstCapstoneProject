@@ -1,0 +1,59 @@
+#otp-body{
+    font-family: 'Times New Roman', Times, serif;
+    background: linear-gradient(-45deg, #93a5cf, #e4efe9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Center the totp-section vertically */
+    margin: 0; /* Remove default body margin */
+}
+
+.totp-section {
+    background-color: #ffffffd7;
+    border-radius: 1em;
+    box-shadow: 2px 2px 2px rgb(32, 32, 32);
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    max-width: 600px;
+}
+
+#Scan {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#qrcode {
+    width: 75%;
+    max-width: 300px;
+    margin: 0 auto; /* Center the QR code horizontally */
+    height: auto;
+}
+
+#otpform {
+    margin-top: 20px; /* Add space between the QR code and the form */
+}
+
+#OTP{
+    width: 70%; /* Make the input and label fill the width of the form */
+    margin-bottom: 10px; /* Add space between each input */
+    padding: 2%;
+    border-radius: 1em 1em;
+}
+
+#otp{
+    width: 35%;
+    padding: 10px;
+    border: none;
+    border-radius: 1em;
+    cursor: pointer;
+    color: aliceblue;
+    background-color: #93a5cf;
+    transition: background-color 1s ease-in-out;
+}
+
+#otp:hover {
+    background-color: #e4efe9;
+    color: rgb(3, 49, 49);
+}

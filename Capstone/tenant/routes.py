@@ -63,6 +63,7 @@ def tenant_login():
             sanitize_input(password, username)
         except ValueError as e:
             error_message = f"Invalid credentials: {str(e)}"
+            flash(error_message, 'error')
             return render_template('tenant_login.html', error_message=error_message)
 
         # Hashing application
@@ -90,6 +91,7 @@ def tenant_login():
         else:
             # User does not exist or incorrect credentials, show an error message
             error_message = "Invalid credentials. Please try again."
+            flash(error_message, 'error')
             return render_template('tenant_login.html', error_message=error_message)
 
     # Render the login page for GET requests
@@ -123,6 +125,7 @@ def setup_totp():
             print('not valid')
             # Invalid OTP, render the setup_totp page with an error message
             error_message = "Invalid OTP. Please try again."
+            flash(error_message, 'error')
             return render_template('tenant_setup_totp.html', totp_secret=totp_secret, totp_uri=totp_uri, error_message=error_message)
 
     # Render the TOTP setup page with the QR code
@@ -145,6 +148,7 @@ def tenant_signup():
             sanitize_input(password, username)
         except ValueError as e:
             error_message = f"Invalid credentials: {str(e)}"
+            flash(error_message, 'error')
             return redirect(url_for('tenant_bp.tenant_signup', error_message=error_message))
                         
         #hashing password and confirmpassword

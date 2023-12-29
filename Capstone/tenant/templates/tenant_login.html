@@ -9,13 +9,15 @@
 </head>
 
 <body>
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% for category, message in messages %}
-<div class="alert {{ category }}">
-    {{ message }}
+<div id="error-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="{{category}}" >
+                {{message}}<span class="closebtn" onclick="this.parentElement.style.display='none';">x</span>
+            </div>
+        {% endfor %}
+    {% endwith %}
 </div>
-{% endfor %}
-{% endwith %}
 
 <div class="container">
     <form action="{{ url_for('tenant_bp.tenant_login') }}" method="post">
