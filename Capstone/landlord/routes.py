@@ -35,7 +35,7 @@ def generate_totp_uri(username):
 
 
 # Add this constant to define the session timeout period (in seconds)
-SESSION_TIMEOUT = 300
+SESSION_TIMEOUT = 100000
 SESSION_TYPE = 'filesystem'
 app.config.from_object(__name__)
 Session(app)

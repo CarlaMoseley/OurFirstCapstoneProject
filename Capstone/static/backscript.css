@@ -75,13 +75,22 @@ input[type="submit"]:hover {
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 1000; /* Ensure it's above other elements */
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
 .error {
     padding: 20px;
-    background-color: #f44336;
+    background-color: #f44336; /* Red */
+    color: white;
+    margin-bottom: 15px;
+    text-align: left; /* Center text */
+    width: 100%;
+}
+.success{
+    padding: 20px;
+    background-color: #36f44f;
     color: white;
     margin-bottom: 15px;
     text-align: left;

@@ -3,11 +3,13 @@
 {% block title %}Unit Payments{% endblock %}
 
 {% block content %}
-  <h2>Unit Information</h2>
-  <p>Unit Number: {{ unit.unit_number }}</p>
-  <p>Address: {{ unit.address }}</p>
-
-  <h2>Payments</h2>
+  <section id="Greeting">
+    <h1>Payments</h1>
+    <h2>Unit Information</h2>
+    <p>Unit Number: {{ unit.unit_number }}</p>
+    <p>Address: {{ unit.address }}</p>
+  </section>
+  <div id="Unit-Information">
   <table id="unitPaymentsTable" class="sortable">
     <thead>
       <tr>
@@ -30,7 +32,7 @@
       {% endfor %}
     </tbody>
   </table>
-
+  </div>
   <script src="{{ url_for('static', filename='sorttable.js') }}"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {

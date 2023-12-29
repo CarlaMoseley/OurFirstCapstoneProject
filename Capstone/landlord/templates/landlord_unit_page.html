@@ -3,16 +3,35 @@
 {% block title %}Unit {{ unit.id }}{% endblock %}
 
 {% block content %}
-  <h2>Unit {{ unit.id }}</h2>
+  <section id="Greeting"><h1>Unit {{ unit.id }}</h1></section>
 
   <div class="container" id="displayContainer">
-    <h2>Unit Information</h2>
+    <section id="Greeting"><h1>Unit Information</h1></section>
     <div class="info" id="displayInfo">
-      <strong>Unit Number:</strong> {{ unit.unit_number }}<br>
-      <strong>Address:</strong> {{ unit.address }}<br>
-      <strong>Rent:</strong> {{ unit.rent }}<br>
-      <strong>Lease Start:</strong> {{ unit.lease_start }}<br>
-      <strong>Rent Due:</strong> {{ unit.rent_due }}
+      <div id="Unit-Information">
+      <table>
+        <tr>
+          <td>Unit Number:</td>
+          <td>{{ unit.unit_number }}</td>
+        </tr>
+        <tr>
+          <td>Address</td>
+          <td>{{ unit.address }}</td>
+        </tr>
+        <tr>
+          <td>Rent</td>
+          <td>{{ unit.rent }}</td>
+        </tr>
+        <tr>
+          <td>Lease Start:</td>
+          <td>{{ unit.lease_start }}</td>
+        </tr>
+        <tr>
+          <td>Rent Due:</td>
+          <td>{{ unit.rent_due }}</td>
+        </tr>
+      </table>
+      </div>
     </div>
   </div>
 
