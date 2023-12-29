@@ -6,9 +6,9 @@
   <section id="Greeting"><h1>Unit {{ unit.id }}</h1></section>
 
   <div class="container" id="displayContainer">
-    <section id="Greeting"><h1>Unit Information</h1></section>
     <div class="info" id="displayInfo">
       <div id="Unit-Information">
+      <h2>Unit Information</h2>
       <table>
         <tr>
           <td>Unit Number:</td>
@@ -31,11 +31,12 @@
           <td>{{ unit.rent_due }}</td>
         </tr>
       </table>
+      <button id="editButton" >Edit</button>
       </div>
     </div>
   </div>
 
-  <button id="editButton">Edit</button>
+
 
   <form method="post" action="{{ url_for('landlord_bp.landlord_unit_page', landlord_id=landlord.id, unit_id=unit.id) }}" id="editForm" style="display: none;">
     <h2>Edit Unit Information</h2>
@@ -54,15 +55,17 @@
 
       <label for="rent_due">Rent Due:</label>
       <input type="text" id="rent_due" name="rent_due" value="{{ unit.rent_due }}" {% if edit_mode or request.form.get('rent_this_unit') %}required{% endif %}><br>
+      
+      <div class="checkbox">
+        <label for="rent_this_unit">Rent this Unit</label>
+        <input type="checkbox" id="rent_this_unit" name="rent_this_unit">
+        <input type="hidden" id="rent_this_unit_hidden" name="rent_this_unit_hidden" value="false">
+      </div>
+    
     </div>
 
-    <div class="checkbox">
-      <input type="checkbox" id="rent_this_unit" name="rent_this_unit">
-      <label for="rent_this_unit">Rent this Unit</label>
-      <input type="hidden" id="rent_this_unit_hidden" name="rent_this_unit_hidden" value="false">
-    </div>
 
-    <button type="submit">Submit</button>
+    <button type="submit" id="submit">Submit</button>
   </form>
 
   <a href="{{ url_for('landlord_bp.landlord_unit_payments', landlord_id=landlord.id, unit_id=unit.id) }}"><button>Payments</button></a>
