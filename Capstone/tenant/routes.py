@@ -262,13 +262,11 @@ def make_payment(tenant_id):
                 return redirect(url_for("tenant_bp.tenant_payments", tenant_id=tenant.id))
 
             if card_number:
-                # Make the payment request
-                response = payment_service.make_cc_request(amount, card_number, expiration_month, expiration_year, security_code).json()
+                # payment service makes a cc request
+                response = payment_service.make_dummy_cc_request(amount, card_number, expiration_month, expiration_year, security_code)
 
             elif routing_number:
-                # consume ACH payment. There isn't actually any logic here, but we would put an PaymentService object here to do that
-                # make_payment_request should be able to accept these arguments as keyword arguments and the request should be consumed further on
-                
+                # payment service makes an ach request                
                 response = payment_service.make_ach_request(amount, account_number, routing_number)
 
             parsed_response = json.loads(response)
@@ -280,15 +278,11 @@ def make_payment(tenant_id):
                 return redirect(url_for("tenant_bp.tenant_payments", tenant_id=tenant.id))
 
 
-
             payment = Payment.query.filter_by(id=payment_id).first()
             payment.date = date.today()
             payment.paid=True
             db.session.commit()
  
-                
-
-            return redirect(url_for("tenant_bp.tenant_payments", tenant_id=tenant.id))
 
             compose_email(tenant, 'payment_success')
             compose_email(tenant.unit.landlord, 'landlord_receipt', tenant=tenant)

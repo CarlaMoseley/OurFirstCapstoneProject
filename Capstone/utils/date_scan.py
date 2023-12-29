@@ -16,7 +16,7 @@ def scan_units(landlord):
 
 def check_for_late_payments(unit, due_date):
     for payment in unit.payments:
-        if payment.date >= due_date:
+        if payment.due_date >= due_date:
             return
     for tenant in unit.tenants:
         new_payment = Payment(

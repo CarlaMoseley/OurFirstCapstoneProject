@@ -24,7 +24,7 @@
       </thead>
       <tbody>
         {% for unit in units %}
-  <tr onclick= "window.location='{{ url_for(landlord_bp.landlord_unit_page, landlord_id=landlord.id, unit_id=unit.id) }}';" style="cursor: pointer;">
+        <tr onclick="window.location='{{ url_for(landlord_bp.landlord_unit_page, landlord_id=landlord.id, unit_id=unit.id) }}';" style="cursor: pointer;">
     <td>{{ unit.unit_number }}</td>
     <td>{{ unit.address }}</td>
     <td>{{ unit.rent }}</td>
