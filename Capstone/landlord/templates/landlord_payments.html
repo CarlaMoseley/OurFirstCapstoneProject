@@ -10,7 +10,7 @@
       <tr>
         <th data-column="amount">Amount</th>
         <th data-column="paid">Paid</th>
-        <th data-column="date">Date</th>
+        <th data-column="due_date">Due Date</th>
         <th data-column="tenant_first_name">Tenant First Name</th>
         <th data-column="tenant_last_name">Tenant Last Name</th>
         <th data-column="unit_number">Unit Number</th>
@@ -22,7 +22,7 @@
         <tr>
           <td>${{ payment.amount }}</td>
           <td>{{ payment.paid }}</td>
-          <td>{{ payment.date }}</td>
+          <td>{{ payment.due_date }}</td>
           <td>{{ payment.tenant.first_name }}</td>
           <td>{{ payment.tenant.last_name }}</td>
           <td>{{ payment.unit.unit_number }}</td>

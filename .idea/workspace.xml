@@ -5,12 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="047f6c1c-d90a-4cc0-a17c-499490e820a7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Capstone/landlord/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/landlord/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/landlord/templates/landlord_payments.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/landlord/templates/landlord_payments.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Capstone/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/payment_processing/PaymentFiservAPI.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/payment_processing/PaymentFiservAPI.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Capstone/tenant/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/tenant/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/tenant/templates/makepayment.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/tenant/templates/makepayment.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/tenant/templates/tenant_payments.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/tenant/templates/tenant_payments.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/utils/date_scan.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/utils/date_scan.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flask_session/1b11184080bfc326d90447dcd13efb36" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/flask_session/2029240f6d1128be89ddc32729463129" beforeDir="false" afterPath="$PROJECT_DIR$/flask_session/2029240f6d1128be89ddc32729463129" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flask_session/97646aa4c5ecec1fe30f21891a8d2086" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flask_session/316719abd08da79fa7bc0e57f3996d91" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flask_session/b658355422d26d0f75388f3a047268e4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flask_session/c06520ebe570e81b4e8722e5abad8e1f" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flask_session/e5466e54b9f0f5843eafd3a238de113c" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +52,7 @@
     "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "manan",
+    "git-widget-placeholder": "Merging manan",
     "last_opened_file_path": "C:/Users/f96gakm/Desktop/Capstone/todolist-flask-/Capstone/tenant/static"
   }
 }]]></component>

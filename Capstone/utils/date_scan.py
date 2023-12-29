@@ -16,7 +16,7 @@ def scan_units(landlord):
 
 def check_for_late_payments(unit, due_date):
     for payment in unit.payments:
-        if payment.date >= due_date:
+        if payment.due_date >= due_date:
             return
     for tenant in unit.tenants:
         new_payment = Payment(
@@ -25,7 +25,8 @@ def check_for_late_payments(unit, due_date):
             tenant_id = tenant.id,
             amount = unit.rent,
             paid = False,
-            date = due_date
+            due_date = due_date,
+            date = None
         )
         db.session.add(new_payment)
     db.session.commit()
