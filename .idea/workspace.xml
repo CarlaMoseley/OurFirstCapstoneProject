@@ -5,9 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="047f6c1c-d90a-4cc0-a17c-499490e820a7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Capstone/tenant/templates/tenant_login.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/tenant/templates/tenant_login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/landlord/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/landlord/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/landlord/templates/landlord_payments.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/landlord/templates/landlord_payments.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/payment_processing/PaymentFiservAPI.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/payment_processing/PaymentFiservAPI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/tenant/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/tenant/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/tenant/templates/makepayment.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/tenant/templates/makepayment.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/tenant/templates/tenant_payments.html" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/tenant/templates/tenant_payments.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/utils/date_scan.py" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/utils/date_scan.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flask_session/1b11184080bfc326d90447dcd13efb36" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/flask_session/2029240f6d1128be89ddc32729463129" beforeDir="false" afterPath="$PROJECT_DIR$/flask_session/2029240f6d1128be89ddc32729463129" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flask_session/e9c56e6095368cc698c74ea6e30a7f99" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flask_session/316719abd08da79fa7bc0e57f3996d91" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flask_session/b658355422d26d0f75388f3a047268e4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flask_session/c06520ebe570e81b4e8722e5abad8e1f" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flask_session/e5466e54b9f0f5843eafd3a238de113c" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,12 +52,14 @@
     "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "manan",
-    "last_opened_file_path": "C:/Users/f96gakm/Desktop/Capstone/todolist-flask-/Capstone/templates"
+    "git-widget-placeholder": "Merging manan",
+    "last_opened_file_path": "C:/Users/f96gakm/Desktop/Capstone/todolist-flask-/Capstone/tenant/static"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\f96gakm\Desktop\Capstone\todolist-flask-\Capstone\tenant\static" />
+      <recent name="C:\Users\f96gakm\Desktop\Capstone\todolist-flask-\Capstone\tenant\templates" />
       <recent name="C:\Users\f96gakm\Desktop\Capstone\todolist-flask-\Capstone\templates" />
       <recent name="C:\Users\f96gakm\Desktop\Capstone\todolist-flask-\Capstone\static" />
     </key>
@@ -106,6 +119,18 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Capstone/landlord/routes.py</url>
+          <line>397</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Capstone/landlord/routes.py</url>
+          <line>400</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
