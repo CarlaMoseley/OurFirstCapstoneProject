@@ -108,7 +108,6 @@ def landlord_login():
 
 @landlord_bp.route('/landlord/otp', methods=['POST'])
 def landlord_otp():
-    print("we posted to landlord/otp")
     landlord_id = request.form.get('landlord_id')
     otp_number = request.form.get('OTP')
 
@@ -119,11 +118,9 @@ def landlord_otp():
     is_valid_otp = totp.verify(otp_number)
 
     if is_valid_otp:
-        print("in valid otp")
         # OTP is valid, proceed with regular login
         session['landlord_id'] = landlord_id
         session['last_activity'] = datetime.utcnow()
-        print(landlord_id, "aadd")
         return redirect(url_for('landlord_bp.landlord_profile', landlord_id=landlord_id))
     else:
         # Invalid OTP, show an error message
@@ -213,7 +210,7 @@ def landlord_signup():
 
 @landlord_bp.route('/landlord/<int:landlord_id>', methods=['GET','POST'])
 def landlord_profile(landlord_id):
-    logged_in_landlord_id = session.get('landlord_id')
+    logged_in_landlord_id = int(session.get('landlord_id'))
 
     # Check if the logged-in landlord is authorized to view the requested profile
     if logged_in_landlord_id is None or int(logged_in_landlord_id) != landlord_id:
@@ -246,7 +243,7 @@ def landlord_profile(landlord_id):
 
 @landlord_bp.route('/landlord/<int:landlord_id>/tenants', methods=['GET'])
 def landlord_tenants(landlord_id):
-    logged_in_landlord_id = session.get('landlord_id')
+    logged_in_landlord_id = int(session.get('landlord_id'))
 
     # Check if the logged-in landlord is authorized to view the requested profile
     if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
@@ -264,8 +261,7 @@ def landlord_tenants(landlord_id):
 
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>', methods=['GET', 'POST'])
 def landlord_unit_page(landlord_id, unit_id):
-    logged_in_landlord_id = session.get('landlord_id')
-    print(logged_in_landlord_id)
+    logged_in_landlord_id = int(session.get('landlord_id'))
 
     # Check if the logged-in landlord is authorized to view the requested profile
     if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
@@ -303,7 +299,7 @@ def landlord_unit_page(landlord_id, unit_id):
 
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>/expenses', methods=['GET'])
 def landlord_unit_expenses(landlord_id, unit_id):
-    logged_in_landlord_id = session.get('landlord_id')
+    logged_in_landlord_id = int(session.get('landlord_id'))
 
     # Check if the logged-in landlord is authorized to view the requested profile
     if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
@@ -320,7 +316,7 @@ def landlord_unit_expenses(landlord_id, unit_id):
 
 @landlord_bp.route('/landlord/<int:landlord_id>/<int:unit_id>/payments', methods=['GET'])
 def landlord_unit_payments(landlord_id, unit_id):
-    logged_in_landlord_id = session.get('landlord_id')
+    logged_in_landlord_id = int(session.get('landlord_id'))
 
     # Check if the logged-in landlord is authorized to view the requested profile
     if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
@@ -337,13 +333,13 @@ def landlord_unit_payments(landlord_id, unit_id):
 
 @landlord_bp.route('/landlord/<int:landlord_id>/createunit', methods=['GET', 'POST'])
 def create_unit(landlord_id):
-    logged_in_landlord_id = session.get('landlord_id')
+    logged_in_landlord_id = int(session.get('landlord_id'))
 
     # Check if the logged-in landlord is authorized to view the requested profile
     if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
         flash('You are not authorized to view this profile.', 'error')
         session.clear()
-        return redirect(url_for('landlord_bp.home'))
+        return redirect(url_for('home_bp.home'))
     # render create unit page
     landlord=Landlord.query.filter_by(id=landlord_id).first()
     if request.method == 'GET':
@@ -374,7 +370,7 @@ def create_unit(landlord_id):
 
 @landlord_bp.route('/landlord/<int:landlord_id>/expenses', methods=['GET'])
 def landlord_expenses(landlord_id):
-    logged_in_landlord_id = session.get('landlord_id')
+    logged_in_landlord_id = int(session.get('landlord_id'))
 
     # Check if the logged-in landlord is authorized to view the requested profile
     if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
@@ -394,7 +390,7 @@ def landlord_expenses(landlord_id):
 
 @landlord_bp.route('/landlord/<int:landlord_id>/createexpense', methods=['GET', 'POST'])
 def create_expense(landlord_id):
-    logged_in_landlord_id = session.get('landlord_id')
+    logged_in_landlord_id = int(session.get('landlord_id'))
 
     # Check if the logged-in landlord is authorized to view the requested profile
     if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:
@@ -431,7 +427,7 @@ def create_expense(landlord_id):
 
 @landlord_bp.route('/landlord/<int:landlord_id>/payments', methods=['GET'])
 def landlord_payments(landlord_id):
-    logged_in_landlord_id = session.get('landlord_id')
+    logged_in_landlord_id = int(session.get('landlord_id'))
 
     # Check if the logged-in landlord is authorized to view the requested profile
     if logged_in_landlord_id is None or logged_in_landlord_id != landlord_id:

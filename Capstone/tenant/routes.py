@@ -71,11 +71,9 @@ def tenant_otp():
     is_valid_otp = totp.verify(otp_number)
 
     if is_valid_otp:
-        print("in valid otp")
         # OTP is valid, proceed with regular login
         session['tenant_id'] = tenant_id
         session['last_activity'] = datetime.utcnow()
-        print(tenant_id, "aadd")
         return redirect(url_for('tenant_bp.tenant_profile', tenant_id=tenant_id))
     else:
         # Invalid OTP, show an error message
@@ -208,7 +206,7 @@ def tenant_signup():
 
 @tenant_bp.route('/tenant/<int:tenant_id>')
 def tenant_profile(tenant_id):
-    logged_in_tenant_id = session.get('tenant_id')
+    logged_in_tenant_id = int(session.get('tenant_id'))
 
     # Check if the logged-in landlord is authorized to view the requested profile
     if logged_in_tenant_id is None or logged_in_tenant_id != tenant_id:
@@ -248,7 +246,7 @@ def tenant_payments(tenant_id):
 
 @tenant_bp.route('/tenant/<int:tenant_id>/makepayment', methods=['GET', 'POST'])
 def make_payment(tenant_id):
-    logged_in_tenant_id = session.get('tenant_id')
+    logged_in_tenant_id = int(session.get('tenant_id'))
 
     # Check if the logged-in landlord is authorized to view the requested profile
     if logged_in_tenant_id is None or logged_in_tenant_id != tenant_id:
@@ -311,7 +309,7 @@ def make_payment(tenant_id):
 
 @tenant_bp.route('/tenant/<int:tenant_id>/<int:payment_id>')
 def tenant_payment(tenant_id, payment_id):
-    logged_in_tenant_id = session.get('tenant_id')
+    logged_in_tenant_id = int(session.get('tenant_id'))
 
     # Check if the logged-in landlord is authorized to view the requested profile
     if logged_in_tenant_id is None or logged_in_tenant_id != tenant_id:
