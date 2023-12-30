@@ -18,13 +18,12 @@
           <th data-column="rent">Rent</th>
           <th data-column="lease_start">Lease Start</th>
           <th data-column="rent_due">Payment Date</th>
-          <th data-column="tenant_password">Tenant OTP</th>
         <!-- Add more unit attributes as needed -->
         </tr>
       </thead>
       <tbody>
         {% for unit in units %}
-  <tr onclick="window.location='{{ url_for('landlord_bp.landlord_unit_page', landlord_id=landlord.id, unit_id=unit.id) }}';" style="cursor: pointer;">
+        <tr onclick="window.location='{{ url_for('landlord_bp.landlord_unit_page', landlord_id=landlord.id, unit_id=unit.id) }}';" style="cursor: pointer;">
     <td>{{ unit.unit_number }}</td>
     <td>{{ unit.address }}</td>
     <td>{{ unit.rent }}</td>
@@ -97,7 +96,6 @@
         <button type="submit">Create Unit</button>
       </form>
     </div>
-    <!--If there's time add stretch feature Contact Us-->>
   </div>
 
 

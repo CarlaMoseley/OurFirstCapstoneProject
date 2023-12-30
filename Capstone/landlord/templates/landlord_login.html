@@ -26,6 +26,11 @@
         <p><input type="password" placeholder="Enter Password" name="password" id="password" required></p>
         <p><button type="submit" id="login">Login</button></p>
     </form>
+
+    <div id="setup-totp-section">
+        {% include 'landlord_setup_totp.html' %}
+    </div>
+
     <p id="signup">Not a User? Sign Up</p>
     <script src="{{url_for('static', filename='login.js')}}"></script>
 </div>

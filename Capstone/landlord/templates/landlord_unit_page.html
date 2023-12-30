@@ -3,20 +3,46 @@
 {% block title %}Unit {{ unit.id }}{% endblock %}
 
 {% block content %}
-  <h2>Unit {{ unit.id }}</h2>
+  <section id="Greeting"><h1>Unit {{ unit.id }}</h1></section>
 
   <div class="container" id="displayContainer">
-    <h2>Unit Information</h2>
     <div class="info" id="displayInfo">
-      <strong>Unit Number:</strong> {{ unit.unit_number }}<br>
-      <strong>Address:</strong> {{ unit.address }}<br>
-      <strong>Rent:</strong> {{ unit.rent }}<br>
-      <strong>Lease Start:</strong> {{ unit.lease_start }}<br>
-      <strong>Rent Due:</strong> {{ unit.rent_due }}
+      <div id="Unit-Information">
+      <h2>Unit Information</h2>
+      <table>
+        <tr>
+          <td>Unit Number:</td>
+          <td>{{ unit.unit_number }}</td>
+        </tr>
+        <tr>
+          <td>Address</td>
+          <td>{{ unit.address }}</td>
+        </tr>
+        <tr>
+          <td>Rent</td>
+          <td>{{ unit.rent }}</td>
+        </tr>
+        <tr>
+          <td>Lease Start:</td>
+          <td>{{ unit.lease_start }}</td>
+        </tr>
+        <tr>
+          <td>Rent Due:</td>
+          <td>{{ unit.rent_due }}</td>
+        </tr>
+        {% if unit.tenant_password %}
+        <tr>
+          <td>Tenant Sign Up Key:</td>
+          <td>{{ unit.tenant_password }}</td>
+        </tr>
+        {% endif %}
+      </table>
+      <button id="editButton" >Edit</button>
+      </div>
     </div>
   </div>
 
-  <button id="editButton">Edit</button>
+
 
   <form method="post" action="{{ url_for('landlord_bp.landlord_unit_page', landlord_id=landlord.id, unit_id=unit.id) }}" id="editForm" style="display: none;">
     <h2>Edit Unit Information</h2>
@@ -35,15 +61,17 @@
 
       <label for="rent_due">Rent Due:</label>
       <input type="text" id="rent_due" name="rent_due" value="{{ unit.rent_due }}" {% if edit_mode or request.form.get('rent_this_unit') %}required{% endif %}><br>
+      
+      <div class="checkbox">
+        <label for="rent_this_unit">Rent this Unit</label>
+        <input type="checkbox" id="rent_this_unit" name="rent_this_unit">
+        <input type="hidden" id="rent_this_unit_hidden" name="rent_this_unit_hidden" value="false">
+      </div>
+    
     </div>
 
-    <div class="checkbox">
-      <input type="checkbox" id="rent_this_unit" name="rent_this_unit">
-      <label for="rent_this_unit">Rent this Unit</label>
-      <input type="hidden" id="rent_this_unit_hidden" name="rent_this_unit_hidden" value="false">
-    </div>
 
-    <button type="submit">Submit</button>
+    <button type="submit" id="submit">Submit</button>
   </form>
 
   <a href="{{ url_for('landlord_bp.landlord_unit_payments', landlord_id=landlord.id, unit_id=unit.id) }}"><button>Payments</button></a>

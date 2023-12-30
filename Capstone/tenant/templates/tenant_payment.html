@@ -3,17 +3,50 @@
 {% block title %}Payment Details{% endblock %}
 
 {% block content %}
-  <h2>Payment Details</h2>
-  <div>
-    <strong>Amount:</strong> {{ payment.amount }}<br>
-    <strong>Paid:</strong> {% if payment.paid %}Yes{% else %}<a href="{{ url_for('make_payment', payment_id=payment.id) }}">Make Payment</a>{% endif %}<br>
-    <strong>Date:</strong> {{ payment.date }}<br>
-    <strong>Landlord:</strong> {{ payment.landlord.first_name }} {{ payment.landlord.last_name }}<br>
-    <strong>Contact:</strong> {{ payment.landlord.phone_number }}<br>
-    <strong>Email:</strong> {{ payment.landlord.email }}<br>
-    {% if payment.unit.unit_number %}
-      <strong>Unit Number:</strong> {{ payment.unit.unit_number }}<br>
+<section id="Greeting"><h1>Payment Details</h1></section>
+  <div id="Unit-Information">
+    <table id="tenant-unit-table">
+      <tr>
+        <td>Amount:</td>
+        <td>{{ payment.amount }}</td>
+    </tr>
+    {%if payment.paid %}
+          <tr>
+              <td>Paid:</td>
+              <td>Yes</td>
+          </tr>
+    {% else %}
+        <tr>
+          <td>Paid:</td>
+          <td><a href="{{ url_for('tenant_bp.make_payment', tenant_id=tenant.id) }}">No, Make a payment?</a></td>
+        </tr>  
     {% endif %}
-    <strong>Address:</strong> {{ payment.unit.address }}<br>
+    <tr>
+        <td>Date:</td>
+        <td>{{payment.date}}</td>
+    </tr>
+    <tr>
+        <td>Landlord:</td>
+        <td>{{ payment.landlord.first_name }} {{ payment.landlord.last_name }}</td>
+    </tr>
+    <tr>
+      <td>Contact:</td>
+      <td>{{ payment.landlord.phone_number }}</td>
+    </tr>
+    <tr>
+      <td>Email:</td>
+      <td>{{ payment.landlord.email }}</td>
+    </tr>
+    {% if payment.unit.unit_number %}
+      <tr>
+        <td>Unit Number:</td>
+        <td>{{ payment.unit.unit_number }}</td>
+      </tr>
+    {% endif %}
+    <tr>
+      <td>Address:</td>
+      <td>{{ payment.unit.address }}</td>
+    </tr>
+  </table>
   </div>
 {% endblock %}

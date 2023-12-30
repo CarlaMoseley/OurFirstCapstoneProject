@@ -51,7 +51,7 @@ body {
   /* Control the left side */
   .left {
     left: 0;
-    background-image: url("https://cdngeneral.rentcafe.com/dmslivecafe/3/552097/the-case-building-apartment-building-exterior-view-during-sunset.jpg?crop=(0,0,300,200)&cropxunits=300&cropyunits=200&quality=85&");
+    background-image: url("images/tenants-start.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     transition: transform 0.5s ease-in-out; /* Adding a smooth transition effect */
@@ -76,7 +76,7 @@ body {
   /* Control the right side */
 .right {
     right: 0;
-    background-image: url("https://d2vfmc14ehtaht.cloudfront.net/9550632135c787760e/bfbff661e7cf2c284e39c72f919ac945cef309a8.jpg"); 
+    background-image: url("images/landlord-right-start.jpg"); 
     background-repeat: no-repeat;
     background-size: cover;
     transition: transform 0.5s ease-in-out; /* Adding a smooth transition effect */

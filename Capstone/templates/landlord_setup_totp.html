@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Setup TOTP</title>
-    <!--    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='qrcode.css') }}">
 
     <script src="{{url_for('static', filename='qrcode.min.js')}}"></script>
     <script>
@@ -13,8 +13,8 @@
             function loadQRCode(uri) {
                 var qrcode = new QRCode(document.getElementById("qrcode"), {
                     text: uri,
-                    width: 128,
-                    height: 128,
+                    width: 300,
+                    height: 300,
                 });
             }
             loadQRCode('{{ totp_uri }}');
@@ -22,23 +22,17 @@
     </script>
 </head>
 
-<body>
+<body id="otp-body">
 {% if totp_uri %}
 <div class="totp-section">
+    <p id="Scan">Scan the QR code with your Google Authenticator app or enter the key manually: {{ totp_secret }}</p>
     <div id="qrcode"></div>
-    <p>Scan the QR code with your Google Authenticator app or enter the key manually: {{ totp_secret }}</p>
 
-    <form action="{{ url_for('landlord_bp.setup_totp') }}" method="post">
-        <div class="section3">
-            <label for="OTP">OTP</label>
+    <form action="{{ url_for('landlord_bp.setup_totp') }}" method="post" id="otpform">
             <input type="text" placeholder="Enter OTP Number" name="OTP" id="OTP" required>
-        </div>
-        <div class="section4">
-            <button type="submit">Submit OTP</button>
-        </div>
+            <button type="submit" id="otp">Submit OTP</button>
     </form>
 </div>
 {% endif %}
 </body>
-
 </html>

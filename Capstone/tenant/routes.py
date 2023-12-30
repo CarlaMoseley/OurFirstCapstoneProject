@@ -8,6 +8,7 @@ from ..utils.email_processor import compose_email
 from ..db import db
 from ..utils.password_hash import hash_password
 from ..utils.inputblacklist import sanitize_input
+from ..utils.date_scan import generate_due_date
 import pyotp
 import json
 
@@ -21,6 +22,7 @@ tenant_bp = Blueprint(
 
 def get_tenant_secret(tenant_id):
     tenant = Tenant.query.get(tenant_id)
+    print(tenant, tenant.id)
     if tenant:
         return True, tenant.id, tenant.secret_key
     else:
@@ -64,10 +66,13 @@ def tenant_otp():
     tenant_id = request.form.get('tenant_id')
     otp_number = request.form.get('OTP')
 
-    # Retrieve the TOTP secret for the given landlord_id from the database
-    _, _, totp_secret = get_tenant_secret(tenant_id)
+    # Retrieve the TOTP secret for the given tenant_id from the database
+    a, b, totp_secret = get_tenant_secret(tenant_id)
+    print(a, b, totp_secret)
 
     totp = pyotp.TOTP(totp_secret)
+
+    
     is_valid_otp = totp.verify(otp_number)
 
     if is_valid_otp:
@@ -92,6 +97,7 @@ def tenant_login():
             sanitize_input(password, username)
         except ValueError as e:
             error_message = f"Invalid credentials: {str(e)}"
+            flash(error_message, 'error')
             return render_template('tenant_login.html', error_message=error_message)
 
         # Hashing application
@@ -108,6 +114,7 @@ def tenant_login():
         else:
             # User does not exist or incorrect credentials, show an error message
             error_message = "Invalid credentials. Please try again."
+            flash(error_message, 'error')
             return render_template('tenant_login.html', error_message=error_message)
 
     # Render the login page for GET requests
@@ -135,6 +142,7 @@ def setup_totp():
         else:
             # Invalid OTP, render the setup_totp page with an error message
             error_message = "Invalid OTP. Please try again."
+            flash(error_message, 'error')
             return render_template('tenant_setup_totp.html', totp_secret=totp_secret, totp_uri=totp_uri)
 
     return render_template('tenant_setup_totp.html', totp_secret=totp_secret, totp_uri=totp_uri)
@@ -156,6 +164,7 @@ def tenant_signup():
             sanitize_input(password, username)
         except ValueError as e:
             error_message = f"Invalid credentials: {str(e)}"
+            flash(error_message, 'error')
             return redirect(url_for('tenant_bp.tenant_signup', error_message=error_message))
                         
         #hashing password and confirmpassword
@@ -190,7 +199,8 @@ def tenant_signup():
             email=email,
             username=username,
             password=secured_password,
-            unit_id=unit.id
+            unit_id=unit.id,
+            secret_key=totp_secret
         )
         db.session.add(new_tenant)
         unit.tenant_password = None
@@ -206,10 +216,10 @@ def tenant_signup():
 
 @tenant_bp.route('/tenant/<int:tenant_id>')
 def tenant_profile(tenant_id):
-    logged_in_tenant_id = int(session.get('tenant_id'))
+    logged_in_tenant_id = session.get('tenant_id')
 
     # Check if the logged-in landlord is authorized to view the requested profile
-    if logged_in_tenant_id is None or logged_in_tenant_id != tenant_id:
+    if logged_in_tenant_id is None or logged_in_tenant_id != str(tenant_id):
         flash('You are not authorized to view this profile.', 'error')
         session.clear()
         return redirect(url_for('home_bp.home'))
@@ -232,11 +242,19 @@ def tenant_profile(tenant_id):
         redirect(url_for('tenant_bp.tenant_profile', tenant_id=tenant.id))
     else:
         unit = Unit.query.filter_by(id=tenant.unit_id).first()
-        return render_template('tenant_profile.html', tenant=tenant, unit=unit)
+        return render_template('tenant_profile.html', tenant=tenant, unit=unit, next_due_payment=generate_due_date(unit, date.today()))
 
 
 @tenant_bp.route('/tenant/<int:tenant_id>/payments')
 def tenant_payments(tenant_id):
+    logged_in_tenant_id = session.get('tenant_id')
+
+    # Check if the logged-in tenant is authorized to view the requested profile
+    if logged_in_tenant_id is None or logged_in_tenant_id != str(tenant_id):
+        flash('You are not authorized to view this profile.', 'error')
+        session.clear()
+        return redirect(url_for('home_bp.home'))
+    
     # render tenant payments page
     tenant = Tenant.query.filter_by(id=tenant_id).first()
     payments = tenant.payments
@@ -246,10 +264,10 @@ def tenant_payments(tenant_id):
 
 @tenant_bp.route('/tenant/<int:tenant_id>/makepayment', methods=['GET', 'POST'])
 def make_payment(tenant_id):
-    logged_in_tenant_id = int(session.get('tenant_id'))
+    logged_in_tenant_id = session.get('tenant_id')
 
-    # Check if the logged-in landlord is authorized to view the requested profile
-    if logged_in_tenant_id is None or logged_in_tenant_id != tenant_id:
+    # Check if the logged-in tenant is authorized to view the requested profile
+    if logged_in_tenant_id is None or logged_in_tenant_id != str(tenant_id):
         flash('You are not authorized to view this profile.', 'error')
         session.clear()
         return redirect(url_for('home_bp.home'))
@@ -309,17 +327,17 @@ def make_payment(tenant_id):
 
 @tenant_bp.route('/tenant/<int:tenant_id>/<int:payment_id>')
 def tenant_payment(tenant_id, payment_id):
-    logged_in_tenant_id = int(session.get('tenant_id'))
+    logged_in_tenant_id = session.get('tenant_id')
 
-    # Check if the logged-in landlord is authorized to view the requested profile
-    if logged_in_tenant_id is None or logged_in_tenant_id != tenant_id:
+    # Check if the logged-in tenant is authorized to view the requested profile
+    if logged_in_tenant_id is None or logged_in_tenant_id != str(tenant_id):
         flash('You are not authorized to view this profile.', 'error')
         session.clear()
         return redirect(url_for('home_bp.home'))
 
     # render individual payment page
     tenant = Tenant.query.filter_by(id=tenant_id).first()
-    payment = Payment.query.filter_by(id=payment_id).first
+    payment = Payment.query.filter_by(id=payment_id).first()
 
     return render_template('tenant_payment.html', tenant=tenant, payment=payment)
 

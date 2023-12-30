@@ -28,3 +28,7 @@ def home():
     # user selects tenant or landlord
     return render_template('start.html')
 
+# Define the 404 error handler
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
