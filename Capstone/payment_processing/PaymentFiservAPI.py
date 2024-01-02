@@ -67,7 +67,12 @@ class PaymentService:
         
     def make_dummy_cc_request(self, amount, card_number, expiration_month, expiration_year, security_code):
         is_cc_valid, card_type = self.validate_cc_number(card_number)
-        last_cc_day = date(int(expiration_year), int(expiration_month)+1, 1)
+        month = int(expiration_month)
+        year = int(expiration_year)
+        if month == 12:
+            last_cc_day = date(year + 1, 1, 1)
+        else:
+            last_cc_day = date(year, month + 1, 1)
         today = date.today()
 
         if is_cc_valid and last_cc_day > today:
