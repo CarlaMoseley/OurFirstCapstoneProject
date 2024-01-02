@@ -23,6 +23,15 @@
 </head>
 
 <body id="otp-body">
+    <div id="error-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="{{category}}" >
+                    {{message}}<span class="closebtn" onclick="this.parentElement.style.display='none';">x</span>
+                </div>
+            {% endfor %}
+        {% endwith %}
+    </div>
 {% if totp_uri %}
 <div class="totp-section">
     <p id="Scan">Scan the QR code with your Google Authenticator app or enter the key manually: {{ totp_secret }}</p>
