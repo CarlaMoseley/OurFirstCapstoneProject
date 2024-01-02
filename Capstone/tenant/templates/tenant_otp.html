@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enter OTP</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='tenant_otp_style.css') }}">
+    <meta http-equiv="Content-Security-Policy" 
+    content=" default-src 'self';
+        script-src 'self' 'unsafe-inline';
+        style-src 'self' 'unsafe-inline';
+        font-src 'self' data:;
+        img-src 'self' * data:;
+    ">
 </head>
 <body>
 
