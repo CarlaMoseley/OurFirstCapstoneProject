@@ -103,7 +103,6 @@
     <select id="paymentMethod" name="paymentMethod" onchange="changePaymentFields()" required>
       <option value="creditDebit">Credit Card/Debit Card</option>
       <option value="ach">ACH/eCheck</option>
-      <option value="digitalWallet">Digital Wallet</option>
     </select>
   </div>
 
@@ -129,11 +128,6 @@
 
       <label for="routingNumber">Routing Number:</label>
       <input type="text" id="routingNumber" name="routingNumber" pattern="\d{9}" title="Please enter a valid 9-digit routing number" required>
-    </div>
-
-    <!-- Digital Wallet Fields (Add fields as needed) -->
-    <div id="digitalWalletFields" style="display: none;">
-      <!-- Digital Wallet-specific fields go here -->
     </div>
 
     <button type="submit">Submit Payment</button>
