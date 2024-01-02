@@ -10,11 +10,13 @@ function closeNav() {
     resetElements();
 }
 
+
 function darkenElements() {
     const header = document.getElementById("header");
     const unitInformation = document.getElementById("Unit-Information");
     const suggestedTasks = document.getElementById("Suggested-Tasks");
     const makePaymentBox = document.getElementById("make_payment-box");
+    const scanButton = document.getElementById("scan_button");
     if(header && makePaymentBox){
         header.style.filter = "brightness(70%)";
         makePaymentBox.style.filter = "brightness(70%)";
@@ -25,6 +27,10 @@ function darkenElements() {
     }else if(header&&suggestedTasks){
         header.style.filter = "brightness(70%)";
         suggestedTasks.style.filter = "brightness(70%)";
+    }else if(header&&unitInformation&&scanButton){
+        header.style.filter = "brightness(70%)";
+        unitInformation.style.filter = "brightness(70%)";
+        scanButton.style.filter = "brightness(70%)";
     }else{
         header.style.filter = "brightness(70%)";
         unitInformation.style.filter = "brightness(70%)";
@@ -37,6 +43,7 @@ function resetElements() {
     const unitInformation = document.getElementById("Unit-Information");
     const suggestedTasks = document.getElementById("Suggested-Tasks");
     const makePaymentBox = document.getElementById("make_payment-box");
+    const scanButton = document.getElementById("scan_button");
     if(header && makePaymentBox){
         header.style.filter = "brightness(100%)";
         makePaymentBox.style.filter = "brightness(100%)";
@@ -47,6 +54,10 @@ function resetElements() {
     }else if(header&&suggestedTasks){
         header.style.filter = "brightness(100%)";
         suggestedTasks.style.filter = "brightness(100%)";
+    }else if(header&&unitInformation&&scanButton){
+        header.style.filter = "brightness(100%)";
+        unitInformation.style.filter = "brightness(100%)";
+        scanButton.style.filter = "brightness(100%)";
     }else{
         header.style.filter = "brightness(100%)";
         unitInformation.style.filter = "brightness(100%)";

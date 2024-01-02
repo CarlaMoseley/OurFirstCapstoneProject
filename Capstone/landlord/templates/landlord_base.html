@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{url_for('static', filename='base.css')}}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/MACK.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-" crossorigin="anonymous" />
     <meta http-equiv="Content-Security-Policy" 
     content="default-src 'self';
@@ -16,7 +17,7 @@
 </head>
 <body>
   <div id="sidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="javascript:void(0)" class="closebutton" onclick="closeNav()">&times;</a>
     <a href="{{ url_for('landlord_bp.landlord_profile', landlord_id=landlord.id) }}">Home</a>
     <a href="{{ url_for('landlord_bp.landlord_expenses', landlord_id=landlord.id) }}">Expenses</a>
     <a href="{{ url_for('landlord_bp.landlord_tenants', landlord_id=landlord.id) }}">Tenants</a>
