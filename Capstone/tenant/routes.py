@@ -58,7 +58,11 @@ def check_credentials(username, password):
 def tenant_redirect():
     # if user is logged in, redirect to user profile page
     # else, redirect to tenant login page
-    return redirect(url_for('tenant_login'))
+    tenant_id = session.get('tenant_id')
+    if tenant_id != None:
+        return redirect(url_for('tenant_bp.tenant_profile', tenant_id=tenant_id))
+    else:
+        return redirect(url_for('home_bp.home'))
 
 
 @tenant_bp.route('/tenant/otp', methods=['POST'])

@@ -74,7 +74,11 @@ def get_landlord_secret(landlord_id):
 def landlord_redirect():
     # if user is logged in, redirect to user profile page
     # else, redirect to landlord login page
-    pass
+    landlord_id = session.get('landlord_id')
+    if landlord_id != None:
+        return redirect(url_for('landlord_bp.landlord_profile', landlord_id=landlord_id))
+    else:
+        return redirect(url_for('home_bp.home'))
 
 
 @landlord_bp.route('/landlord/login', methods=['GET', 'POST'])
